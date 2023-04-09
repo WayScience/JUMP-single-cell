@@ -1,0 +1,19 @@
+name: jump_sc
+channels:
+  - conda-forge
+dependencies:
+  - conda-forge::python
+  - conda-forge::jupyter
+  - conda-forge::jupyterlab
+  - conda-forge::ipykernel
+  - conda-forge::nb_conda_kernels
+  - conda-forge::jupyter_contrib_nbextensions
+  - conda-forge::pandas
+  - conda-forge::scipy
+  - conda-forge::numpy
+  - conda-forge::scikit-learn
+  - conda-forge::plotnine
+  - conda-forge::umap-learn
+  - conda-forge::matplotlib
+  - pip:
+    - git+https://github.com/cytomining/cytotable@f336d26baf96b8b3d9ed6ca07f617895030bf038
