@@ -12,6 +12,7 @@
 
 import boto3
 import pathlib
+import cloudpathlib
 import pandas as pd
 
 
@@ -87,11 +88,10 @@ source_batch_dictionary
 # Get plate ids
 source_plate_dictionary = {}
 source_plate_info = []
-for source in source_batch_dictionary:
+for source, source_batches in source_batch_dictionary.items():
     source_plate_dictionary[source] = {}
-    source_batches = source_batch_dictionary[source]
-    
-    for batch in source_batches:        
+    for batch in source_batches:
+        # Note backend_directory = "workspace/backend/"
         prefix_string_per_batch = f"{jump_id}/{source}/{backend_directory}{batch}/"
 
         source_prefix_where_plates_exist_client = client.list_objects(
@@ -114,7 +114,7 @@ for source in source_batch_dictionary:
 
 
 # Compile JUMP data manifest
-jump_df = pd.DataFrame(source_plate_info, columns=["soure", "batch", "plate", "sqlite_file"])
+jump_df = pd.DataFrame(source_plate_info, columns=["source", "batch", "plate", "sqlite_file"])
 
 # Append perturbation type to this dataframe
 # Load metadata from https://github.com/jump-cellpainting/datasets
@@ -124,7 +124,7 @@ perturbation_cols = ["Metadata_Source", "Metadata_Batch", "Metadata_Plate"]
 jump_df = (
     jump_df.merge(
         perturbation_type_df,
-        left_on=["soure", "batch", "plate"],
+        left_on=["source", "batch", "plate"],
         right_on=perturbation_cols,
         how="outer"
     )

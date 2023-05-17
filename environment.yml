@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - conda-forge::python
+  - conda-forge::boto3
   - conda-forge::jupyter
   - conda-forge::jupyterlab
   - conda-forge::ipykernel
@@ -16,4 +17,4 @@ dependencies:
   - conda-forge::umap-learn
   - conda-forge::matplotlib
   - pip:
-    - git+https://github.com/cytomining/cytotable@f336d26baf96b8b3d9ed6ca07f617895030bf038
+    - cytotable==0.0.1

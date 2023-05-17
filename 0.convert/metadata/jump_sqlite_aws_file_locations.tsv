@@ -1,4 +1,4 @@
-soure	batch	plate	sqlite_file	Metadata_PlateType
+source	batch	plate	sqlite_file	Metadata_PlateType
 source_1	Batch1_20221004	UL000109	s3://cellpainting-gallery/cpg0016-jump/source_1/workspace/backend/Batch1_20221004/UL000109/UL000109.sqlite	COMPOUND_EMPTY
 source_1	Batch1_20221004	UL001641	s3://cellpainting-gallery/cpg0016-jump/source_1/workspace/backend/Batch1_20221004/UL001641/UL001641.sqlite	COMPOUND
 source_1	Batch1_20221004	UL001643	s3://cellpainting-gallery/cpg0016-jump/source_1/workspace/backend/Batch1_20221004/UL001643/UL001643.sqlite	COMPOUND
