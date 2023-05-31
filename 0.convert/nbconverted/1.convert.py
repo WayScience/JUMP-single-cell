@@ -14,6 +14,8 @@ import pathlib
 import pandas as pd
 
 import cytotable
+from parsl.config import Config
+from parsl.executors import HighThroughputExecutor
 
 
 # In[2]:
@@ -41,9 +43,21 @@ manifest_df.head()
 # In[5]:
 
 
-what = cytotable.convert(
-    source_path="/".join(manifest_df.sqlite_file[2].split("/")[0:-1]),
-    dest_path="test.parquet",
-    dest_datatype="parquet"
+parsl_config = Config(
+    executors=[
+        HighThroughputExecutor()
+    ]
 )
+
+
+# In[ ]:
+
+
+get_ipython().run_cell_magic('time', '', 'what = cytotable.convert(\n    source_path="/".join(manifest_df.sqlite_file[2].split("/")[0:-1]),\n    dest_path="test2.parquet",\n    dest_datatype="parquet",\n    chunk_size=150000,\n    parsl_config=parsl_config,\n    preset="cellprofiler_sqlite_pycytominer"\n)\n')
+
+
+# In[ ]:
+
+
+
 
