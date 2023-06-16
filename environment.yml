@@ -17,4 +17,5 @@ dependencies:
   - conda-forge::umap-learn
   - conda-forge::matplotlib
   - pip:
-    - cytotable==0.0.1
+    - git+https://github.com/d33bs/cytotable@c6e0046e76986f9aa837b441186b621fe06b8189
+    - duckdb==0.8.0
