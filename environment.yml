@@ -296,10 +296,13 @@ dependencies:
       - azure-storage-blob==12.16.0
       - bcrypt==4.0.1
       - cachetools==5.3.1
+      - cfgv==3.3.1
       - cloudpathlib==0.13.0
       - cytotable==0.0.1
       - dill==0.3.6
+      - distlib==0.3.6
       - duckdb==0.7.1
+      - filelock==3.12.2
       - globus-sdk==3.23.0
       - google-api-core==2.11.1
       - google-auth==2.21.0
@@ -308,9 +311,12 @@ dependencies:
       - google-crc32c==1.5.0
       - google-resumable-media==2.5.0
       - googleapis-common-protos==1.59.1
+      - identify==2.5.24
       - isodate==0.6.1
+      - nodeenv==1.8.0
       - paramiko==3.2.0
       - parsl==2023.7.3
+      - pre-commit==3.3.3
       - protobuf==4.23.4
       - pyarrow==11.0.0
       - pyasn1==0.5.0
@@ -327,4 +333,5 @@ dependencies:
       - types-requests==2.31.0.1
       - types-six==1.16.21.8
       - types-urllib3==1.26.25.13
+      - virtualenv==20.23.1
 prefix: /home/camo/anaconda3/envs/jump_sc
