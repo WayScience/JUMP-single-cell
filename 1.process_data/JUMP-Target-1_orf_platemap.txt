@@ -95,7 +95,7 @@ D21	ccsbBroad304_06221
 D22	ccsbBroad304_03976
 D23	ccsbBroad304_05821
 D24	ccsbBroad304_05555
-E01
+E01	
 E02	ccsbBroad304_03625
 E03	ccsbBroad304_14827
 E04	ccsbBroad304_02416
@@ -146,7 +146,7 @@ F24	ccsbBroad304_00331
 G01	ccsbBroad304_10934
 G02	ccsbBroad304_02705
 G03	ccsbBroad304_01398
-G04
+G04	
 G05	ccsbBroad304_03155
 G06	ccsbBroad304_02415
 G07	ccsbBroad304_01690
@@ -219,7 +219,7 @@ J01	ccsbBroad304_01602
 J02	ccsbBroad304_00576
 J03	ccsbBroad304_05785
 J04	ccsbBroad304_14572
-J05
+J05	
 J06	ccsbBroad304_02831
 J07	ccsbBroad304_14597
 J08	ccsbBroad304_06343
@@ -270,7 +270,7 @@ L04	ccsbBroad304_06221
 L05	ccsbBroad304_01216
 L06	ccsbBroad304_07557
 L07	ccsbBroad304_02258
-L08
+L08	
 L09	ccsbBroad304_01144
 L10	ccsbBroad304_00055
 L11	ccsbBroad304_14770
