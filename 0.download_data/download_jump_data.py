@@ -48,4 +48,4 @@ download_map = "jump_dataset.csv"
 save_location = f"{root_dir}/big_drive"
 
 # Download the data using a bash script
-subprocess.run(["bash", "download_jump_data.sh", download_map, save_location])
+subprocess.run(["bash", "download_from_aws.sh", download_map, save_location])
