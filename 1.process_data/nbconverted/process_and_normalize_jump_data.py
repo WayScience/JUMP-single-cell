@@ -48,7 +48,7 @@ if root_dir is None:
 # Input paths
 big_drive_path = f"{root_dir}/big_drive"
 sqlite_data_path = f"{big_drive_path}/data"
-ref_path = f"{root_dir}/reference_plate_data"
+ref_path = f"{root_dir}/1.process_data/reference_plate_data"
 barcode_platemap = f"{ref_path}/barcode_platemap.csv"
 
 # Output paths
@@ -73,6 +73,46 @@ barcode_df = pd.read_csv(barcode_platemap)
 
 
 # # Process cell data
+
+# ## Define functions
+
+# In[ ]:
+
+
+# Add the 'Metadata' prefix to column names
+def add_metadata_prefix_to_column_names(df):
+    """
+    Parameters
+    ----------
+    df: pandas Dataframe
+
+    Returns
+    -------
+    df: pandas Dataframe
+        A dataframe with the column names prefixed with the string 'Metadata'
+    """
+
+    df.rename(columns=lambda x: f"Metadata_{x}", inplace=True)
+    return df
+
+# Fill in broad_sample "DMSO" for NaN and prefix the column names
+def fill_dmso(df):
+    """
+    Parameters
+    ----------
+    df: pandas Dataframe
+        A dataframe of the platemap data and a corresponding 'broad_sample' column
+
+    Returns
+    -------
+    df: pandas Dataframe
+    A dataframe with without empty broad_samples and renamed columns
+    """
+
+    df["broad_sample"] = df["broad_sample"].fillna("DMSO")
+    df = add_metadata_prefix_to_column_names(df)
+    return df
+
 
 # ## Map reference data
 
@@ -104,18 +144,8 @@ platemeta2cols = {name: df.loc[df["broad_sample"].isnull()]["well_position"].tol
 # In[ ]:
 
 
-def rename_columns(df):
-    df.rename(columns=lambda x: "Metadata_" + x, inplace=True)
-    return df
-
-# Fill in broad_sample "DMSO" for NaN
-def fill_dmso(df):
-    df["broad_sample"] = df["broad_sample"].fillna("DMSO")
-    df = rename_columns(df)
-    return df
-
 # Rename colunns in plate metadata
-barcode_map = {df_name: rename_columns(df) for df_name, df in barcode_map.items()}
+barcode_map = {df_name: add_metadata_prefix_to_column_names(df) for df_name, df in barcode_map.items()}
 
 # Fill the broad_sample missing values with DMSO for the plate metadata
 platemeta2df = {df_name: fill_dmso(df) for df_name, df in platemeta2df.items()}
@@ -123,7 +153,7 @@ platemeta2df = {df_name: fill_dmso(df) for df_name, df in platemeta2df.items()}
 
 # ## Merge and Normalize plate data
 
-# In[ ]:
+# In[1]:
 
 
 # Record the start time
@@ -188,7 +218,7 @@ end_time = time.time()
 
 # ## Specify the time taken
 
-# In[1]:
+# In[2]:
 
 
 t_minutes = (end_time - start_time) // 60
