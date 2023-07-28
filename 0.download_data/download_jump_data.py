@@ -2,14 +2,14 @@ r"""°°°
 # Download sqlite plate data from aws
 Note, this script was not rerun to display the outputs for the sake of time. To download the data, you must be signed into your aws account
 °°°"""
-# |%%--%%| <TM56DRUlQQ|7T0gePh3Zn>
+#|%%--%%| <7T0gePh3Zn|ddhh5egm7R>
 r"""°°°
 ## Imports
 °°°"""
-# |%%--%%| <7T0gePh3Zn|XqllLfeEBZ>
+# |%%--%%| <ddhh5egm7R|XqllLfeEBZ>
 
+import pathlib
 import subprocess
-import pathlib.Path
 
 # |%%--%%| <XqllLfeEBZ|q52bES5PJV>
 r"""°°°
@@ -42,10 +42,13 @@ r"""°°°
 # |%%--%%| <DgPm3tAEsr|NDX1gPfGsN>
 
 # Specify the data path for downloading the data
-download_map = "jump_dataset.csv"
+download_map = "jump_paths.csv"
 
 # Specify the location to save the data
-save_location = f"{root_dir}/big_drive"
+save_location = f"{root_dir}/big_drive/data"
+
+# Create the necessary directories if non-existent
+pathlib.Path(save_location).mkdir(parents=True, exist_ok=True)
 
 # Download the data using a bash script
 subprocess.run(["bash", "download_from_aws.sh", download_map, save_location])

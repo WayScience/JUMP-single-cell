@@ -4,8 +4,8 @@
 # Define the CSV file path that specifies the download location
 csv_file=$1
 
-# Column number (starting from 1)
-column_number=3
+# Column number (starting from 0)
+column_number=1
 
 # Read the CSV file line by line
 while IFS=',' read -r -a row; do
