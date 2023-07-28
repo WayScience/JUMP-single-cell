@@ -3,13 +3,20 @@ channels:
   - conda-forge
 dependencies:
   - conda-forge::python=3.9
+  - pandas
+  - numpy
+  - matplotlib
+  - scikit-learn
+  - scipy=1.8.1
+  - pathlib2
+  - scikit-learn
   - pip
   - pip:
-    - pathlib2
-    - numpy
-    - pandas
-    - matplotlib
+    #- pathlib2
+    #- numpy
+    #- pandas
+    #- matplotlib
     - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
-    - scipy==1.8.1
-    - scikit-learn
+    #- scipy==1.8.1
+    #- scikit-learn
 
