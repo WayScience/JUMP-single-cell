@@ -9,11 +9,21 @@
 
 
 import pandas as pd
+import pathlib
+
+
+# ## Create the output path if it doesn't exist
+
+# In[2]:
+
+
+output_path = pathlib.Path("data")
+output_path.mkdir(parents=True, exist_ok=True)
 
 
 # ## Store the plate paths
 
-# In[2]:
+# In[3]:
 
 
 source = "source_4"
@@ -25,15 +35,15 @@ object_names = ["BR00116991", "BR00116992", "BR00116993", "BR00116994", "BR00116
 sqlite_file = [f"{data_locations}/{obj_name}/{obj_name}.sqlite" for obj_name in object_names]
 
 manifest_df = pd.DataFrame(
-            {"plate": object_names,
-            "sqlite_file": sqlite_file,
-            })
+        {"plate": object_names,
+         "sqlite_file": sqlite_file,
+         })
 
 
 # ## Save the paths data
 
-# In[3]:
+# In[4]:
 
 
-manifest_df.to_csv("jump_paths.csv", index=False, header=False)
+manifest_df.to_csv(output_path / "jump_dataset_location_manifest.csv", index=False)
 

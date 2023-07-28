@@ -1,19 +1,20 @@
-r"""°°°
-# Creates and stores the aws s3 plate data paths
-°°°"""
-#|%%--%%| <BjXwKHb2UD|Sj3yqPgfXf>
-r"""°°°
-## Imports
-°°°"""
-#|%%--%%| <Sj3yqPgfXf|7CjICyvASe>
+#!/usr/bin/env python
+# coding: utf-8
+
+# # Creates and stores the aws s3 plate data paths
+
+# ## Imports
+
+# In[1]:
+
 
 import pandas as pd
 
-#|%%--%%| <7CjICyvASe|oxnis1s37X>
-r"""°°°
-## Store the plate paths
-°°°"""
-#|%%--%%| <oxnis1s37X|0jG0Szi8qZ>
+
+# ## Store the plate paths
+
+# In[2]:
+
 
 source = "source_4"
 batch = "2020_11_04_CPJUMP1"
@@ -28,10 +29,11 @@ manifest_df = pd.DataFrame(
             "sqlite_file": sqlite_file,
             })
 
-#|%%--%%| <0jG0Szi8qZ|vGbVlO6ord>
-r"""°°°
-## Save the paths data
-°°°"""
-#|%%--%%| <vGbVlO6ord|B670chhgfO>
 
-manifest_df.to_csv("jump_paths.csv", index=False, header=False)
+# ## Save the paths data
+
+# In[3]:
+
+
+manifest_df.to_csv("jump_dataset_location_manifest.csv", index=False, header=False)
+
