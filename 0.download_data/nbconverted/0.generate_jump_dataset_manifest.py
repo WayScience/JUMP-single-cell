@@ -8,8 +8,10 @@
 # In[1]:
 
 
-import pandas as pd
 import pathlib
+
+import pandas as pd
+import requests
 
 
 # ## Create the output path if it doesn't exist
@@ -30,9 +32,22 @@ source = "source_4"
 batch = "2020_11_04_CPJUMP1"
 data_locations = f"s3://cellpainting-gallery/cpg0000-jump-pilot/{source}/workspace/backend/{batch}"
 
-object_names = ["BR00116991", "BR00116992", "BR00116993", "BR00116994", "BR00116995", "BR00116996", "BR00116997", "BR00116998", "BR00116999", "BR00117000", "BR00117001", "BR00117002", "BR00117003", "BR00117004", "BR00117005", "BR00117006", "BR00117008", "BR00117009", "BR00117010", "BR00117011", "BR00117012", "BR00117013", "BR00117015", "BR00117016", "BR00117017", "BR00117019", "BR00117020", "BR00117021", "BR00117022", "BR00117023", "BR00117024", "BR00117025", "BR00117026", "BR00117050", "BR00117051", "BR00117052", "BR00117053", "BR00117054", "BR00117055", "BR00118039", "BR00118040", "BR00118041", "BR00118042", "BR00118043", "BR00118044", "BR00118045", "BR00118046", "BR00118047", "BR00118048", "BR00118049", "BR00118050"]
+# Repository owner
+repo_owner = "jump-cellpainting"
 
-sqlite_file = [f"{data_locations}/{obj_name}/{obj_name}.sqlite" for obj_name in object_names]
+# Repository name
+repo_name = "pilot-cpjump1-data"
+
+# Path to directory in the repo
+directory_path = f"profiles/{batch}"
+
+response = requests.get(f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{directory_path}")
+data = response.json()
+
+# Use the directory names from the repo to specicy the plate names
+object_names = [item['name'] for item in data if item['type'] == 'dir']
+
+sqlite_file = [f"{data_locations}/{obj_name['name']}/{obj_name['name']}.sqlite" for obj_name in data if obj_name['type'] == 'dir']
 
 manifest_df = pd.DataFrame(
         {"plate": object_names,
