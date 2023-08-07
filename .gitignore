@@ -1,2 +1,7 @@
-.DS_Store
+*.py
+!/**/nbconverted/*.py
+**/.jukit/
 .ipynb_checkpoints/
+.virtual_documents/
+__pycache__/
+!/**/utils/*.py
