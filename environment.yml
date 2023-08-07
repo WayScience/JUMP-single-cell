@@ -6,17 +6,16 @@ dependencies:
   - pandas
   - numpy
   - matplotlib
-  - scikit-learn
+  - scikit-learn=1.1.1 # Version to allow Roshan's sklearn models to predict probabilities correctly
   - scipy=1.8.1
   - pathlib2
   - scikit-learn
+  - requests
   - pip
   - pip:
-    #- pathlib2
-    #- numpy
-    #- pandas
-    #- matplotlib
     - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
-    #- scipy==1.8.1
-    #- scikit-learn
-
+    # For creating my python environment:
+    #- pynvim
+    #- ipython
+    #- pre-commit
+    #- notebook
