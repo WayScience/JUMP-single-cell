@@ -11,12 +11,44 @@
 import pathlib
 
 import pandas as pd
-import requests
+
+
+# ## Find the root of the git repo on the host system
+
+# In[2]:
+
+
+# Get the current working directory
+cwd = pathlib.Path.cwd()
+
+if (cwd / ".git").is_dir():
+    root_dir = cwd
+
+else:
+    root_dir = None
+    for parent in cwd.parents:
+        if (parent / ".git").is_dir():
+            root_dir = parent
+            break
+
+# Check if a Git root directory was found
+if root_dir is None:
+    raise FileNotFoundError("No Git root directory found.")
+
+
+# ## Load a dataframe of plate names from the reference data
+
+# In[3]:
+
+
+filename = "barcode_platemap.csv"
+plate_name_path = f"{root_dir}/reference_plate_data/{filename}"
+plate_namedf = pd.read_csv(plate_name_path)
 
 
 # ## Create the output path if it doesn't exist
 
-# In[2]:
+# In[4]:
 
 
 output_path = pathlib.Path("data")
@@ -25,29 +57,17 @@ output_path.mkdir(parents=True, exist_ok=True)
 
 # ## Store the plate paths
 
-# In[3]:
+# In[5]:
 
 
 source = "source_4"
 batch = "2020_11_04_CPJUMP1"
 data_locations = f"s3://cellpainting-gallery/cpg0000-jump-pilot/{source}/workspace/backend/{batch}"
 
-# Repository owner
-repo_owner = "jump-cellpainting"
-
-# Repository name
-repo_name = "pilot-cpjump1-data"
-
-# Path to directory in the repo
-directory_path = f"profiles/{batch}"
-
-response = requests.get(f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{directory_path}")
-data = response.json()
-
 # Use the directory names from the repo to specicy the plate names
-object_names = [item['name'] for item in data if item['type'] == 'dir']
+object_names = [item['Assay_Plate_Barcode'] for _, item in plate_namedf.iterrows()]
 
-sqlite_file = [f"{data_locations}/{obj_name['name']}/{obj_name['name']}.sqlite" for obj_name in data if obj_name['type'] == 'dir']
+sqlite_file = [f"{data_locations}/{obj_name}/{obj_name}.sqlite" for obj_name in object_names]
 
 manifest_df = pd.DataFrame(
         {"plate": object_names,
@@ -57,7 +77,7 @@ manifest_df = pd.DataFrame(
 
 # ## Save the paths data
 
-# In[4]:
+# In[6]:
 
 
 manifest_df.to_csv(output_path / "jump_dataset_location_manifest.csv", index=False)
