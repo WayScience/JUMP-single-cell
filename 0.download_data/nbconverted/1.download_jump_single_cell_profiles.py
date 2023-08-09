@@ -6,7 +6,7 @@
 
 # ## Imports
 
-# In[ ]:
+# In[1]:
 
 
 import pathlib
@@ -16,7 +16,7 @@ import subprocess
 # ## Find the root of the git directory
 # This allows file paths to be referenced in a system agnostic way
 
-# In[ ]:
+# In[2]:
 
 
 # Get the current working directory
@@ -39,14 +39,14 @@ if root_dir is None:
 
 # ## Download the plate sqlite data from AWS S3
 
-# In[1]:
+# In[3]:
 
 
 # Specify the data path for downloading the data
 download_map = "data/jump_dataset_location_manifest.csv"
 
 # Specify the location to save the data
-save_location = f"{root_dir}/big_drive/data"
+save_location = f"{root_dir}/big_drive/sc_data"
 
 # The script for downloading sqlite files from aws
 aws_download_script = "download_from_aws.sh"
