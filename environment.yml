@@ -2,20 +2,16 @@ name: jump_sc
 channels:
   - conda-forge
 dependencies:
-  - conda-forge::python
-  - conda-forge::boto3
-  - conda-forge::jupyter
-  - conda-forge::jupyterlab
-  - conda-forge::ipykernel
-  - conda-forge::nb_conda_kernels
-  - conda-forge::jupyter_contrib_nbextensions
-  - conda-forge::pandas
-  - conda-forge::scipy
-  - conda-forge::numpy
-  - conda-forge::scikit-learn
-  - conda-forge::plotnine
-  - conda-forge::umap-learn
-  - conda-forge::matplotlib
+  - conda-forge::python=3.9
+  - pandas
+  - numpy
+  - matplotlib
+  - scikit-learn=1.1.1 # Version to allow Roshan's sklearn models to predict probabilities correctly
+  - scipy=1.8.1
+  - pathlib2
+  - scikit-learn
+  - requests
+  - seaborn
+  - pip
   - pip:
-    - git+https://github.com/d33bs/cytotable@c6e0046e76986f9aa837b441186b621fe06b8189
-    - duckdb==0.8.0
+    - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
