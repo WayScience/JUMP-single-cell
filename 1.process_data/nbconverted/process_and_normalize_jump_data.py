@@ -5,11 +5,12 @@
 
 # ## Imports
 
-# In[ ]:
+# In[1]:
 
 
 import time
 from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from pycytominer import normalize
@@ -19,7 +20,7 @@ from pycytominer.cyto_utils.cells import SingleCells
 # ## Find the root of the git directory
 # This allows file paths to be referenced in a system agnostic way
 
-# In[ ]:
+# In[2]:
 
 
 # Get the current working directory
@@ -42,13 +43,13 @@ if root_dir is None:
 
 # ## Define Paths
 
-# In[ ]:
+# In[3]:
 
 
 # Input paths
 big_drive_path = f"{root_dir}/big_drive"
-sqlite_data_path = f"{big_drive_path}/data"
-ref_path = f"{root_dir}/1.process_data/reference_plate_data"
+sqlite_data_path = f"{big_drive_path}/sc_data"
+ref_path = f"{root_dir}/reference_plate_data"
 barcode_platemap = f"{ref_path}/barcode_platemap.csv"
 
 # Output paths
@@ -58,14 +59,14 @@ normalized_path = Path(f"{big_drive_path}/normalized_sc_data")
 
 # ## Create directories if non-existent
 
-# In[ ]:
+# In[4]:
 
 
 output_cell_count_path.mkdir(parents=True, exist_ok=True)
 normalized_path.mkdir(parents=True, exist_ok=True)
 
 
-# In[ ]:
+# In[5]:
 
 
 # Create dataframe from barcode platemap
@@ -76,7 +77,7 @@ barcode_df = pd.read_csv(barcode_platemap)
 
 # ## Define functions
 
-# In[ ]:
+# In[6]:
 
 
 # Add the 'Metadata' prefix to column names
@@ -116,7 +117,7 @@ def fill_dmso(df):
 
 # ## Map reference data
 
-# In[ ]:
+# In[7]:
 
 
 # Merge on the broad_sample column
@@ -141,19 +142,19 @@ platemeta2cols = {name: df.loc[df["broad_sample"].isnull()]["well_position"].tol
 
 # ## Rename columns and fill control values
 
-# In[ ]:
+# In[8]:
 
 
 # Rename colunns in plate metadata
 barcode_map = {df_name: add_metadata_prefix_to_column_names(df) for df_name, df in barcode_map.items()}
 
-# Fill the broad_sample missing values with DMSO for the plate metadata
+# Fill the broad_sample missing values with DMSO for the plate metadata. This does not affect the CRISPR and ORF plates, since the platemaps have no matching DMSO broad samples
 platemeta2df = {df_name: fill_dmso(df) for df_name, df in platemeta2df.items()}
 
 
 # ## Merge and Normalize plate data
 
-# In[1]:
+# In[9]:
 
 
 # Record the start time
@@ -193,14 +194,15 @@ for idx, row in barcode_df.iterrows():
     # Merge single cells
     sc_df = sc.merge_single_cells(platemap=platemeta_df)
 
-    # Merge the dataframes based on the broad_sample column
+    # Merge the dataframes based on the broad_sample column, again there will not be matching DMSO broad samples for the CRISPR and ORF plates
     sc_df = pd.merge(sc_df, broad_mapdf, how="left", on=merge_col)
 
-    # We only change the columns if the plate does not contain empty wells
+    # We only change the columns if the plate does not contain empty wells.
+    # The wells that don't have a broad_sample are assigned "no_treatment" for the metadata columns
     if plate_map != "JUMP-Target-1_compound_platemap":
         sc_df.loc[sc_df["Metadata_Well"].isin(platemeta2cols[plate_map]), broad_mapdf.columns] = "no_treatment"
 
-    # Normalize the data
+    # Normalize the data using the negative control as a reference
     normalize(
         profiles=sc_df,
         features="infer",
@@ -218,7 +220,7 @@ end_time = time.time()
 
 # ## Specify the time taken
 
-# In[2]:
+# In[10]:
 
 
 t_minutes = (end_time - start_time) // 60
