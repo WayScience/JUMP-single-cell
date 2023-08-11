@@ -11,11 +11,7 @@ dependencies:
   - pathlib2
   - scikit-learn
   - requests
+  - seaborn
   - pip
   - pip:
     - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
-    # For creating my python environment:
-    #- pynvim
-    #- ipython
-    #- pre-commit
-    #- notebook
