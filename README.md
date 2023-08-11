@@ -22,3 +22,9 @@ The platemaps files in this folder can be found using this aws link:
 Similarly the barcode file `barcode_platemap.csv` came from dropbox.
 
 After merging the single cells, each of the features of the plate data were normalized by pycytominer and converted to parquet files.
+
+## 2.evaluate_data
+
+In this step, we perform inferencing with the pre-trained shuffled and unshuffled logistic regression models from the phenotypic profiling repository `https://github.com/WayScience/phenotypic_profiling_model/tree/main`.
+We generate predicted probabilities for each cell expressing one of the fifteen possible phenotypes.
+This data in addition to the other single cell metadata is stored as a parquet file.
