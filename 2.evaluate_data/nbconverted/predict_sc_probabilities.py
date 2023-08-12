@@ -62,8 +62,7 @@ def load_joblib_from_url(url):
     """
 
     response = requests.get(url)
-    content = response.content
-    file_object = io.BytesIO(content)
+    file_object = io.BytesIO(response.content)
 
     if ".csv" in url:
         file_object = gzip.GzipFile(fileobj=file_object)
@@ -79,7 +78,8 @@ def load_joblib_from_url(url):
 
 
 # The paths of the models
-model_paths = ["https://github.com/WayScience/phenotypic_profiling_model/raw/main/2.train_model/models/multi_class_models/final__CP.joblib", "https://github.com/WayScience/phenotypic_profiling_model/raw/main/2.train_model/models/multi_class_models/shuffled_baseline__CP.joblib"]
+base_model_path = "https://github.com/WayScience/phenotypic_profiling_model/raw/main/2.train_model/models/multi_class_models"
+model_paths = [f"{base_model_path}/final__CP.joblib", f"{base_model_path}/shuffled_baseline__CP.joblib"]
 
 # The path of the data used for the data used for inferencing in the phenotypic_profiling_model repo
 data_path = "https://github.com/WayScience/phenotypic_profiling_model/raw/main/0.download_data/data/labeled_data.csv.gz"
@@ -108,9 +108,6 @@ models = {model_path.split("/")[-1].split("__")[0]: load_joblib_from_url(model_p
 # Original dataset used to select features for models
 data = load_joblib_from_url(data_path)
 
-# Data columns from original dataset
-all_cols = data.columns
-
 
 # ## Inference
 
@@ -118,7 +115,7 @@ all_cols = data.columns
 
 
 # Extract CP features from all columns depending on desired dataset
-feature_cols = [col for col in all_cols if "CP__" in col]
+feature_cols = [col for col in data.columns if "CP__" in col]
 feature_cols = [string.replace("CP_", "Nuclei") if "CP" in string else string for string in feature_cols]
 feature_cols = pd.Index(feature_cols)
 model_preds = []
