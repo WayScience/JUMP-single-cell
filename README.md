@@ -28,3 +28,7 @@ After merging the single cells, each of the features of the plate data were norm
 In this step, we perform inferencing with the pre-trained shuffled and unshuffled logistic regression models from the phenotypic profiling repository `https://github.com/WayScience/phenotypic_profiling_model/tree/main`.
 We generate predicted probabilities for each cell expressing one of the fifteen possible phenotypes.
 This data in addition to the other single-cell metadata is stored as a parquet file.
+
+## 3.analyze_data
+
+To understand each treatments ability to induce each of the 15 phenotypes, we perform post hoc testing with the probabilities between each of the treatments and the control (DMSO). These probabilities were generated in `2.evaluate_data`. In each of these tests we compute the median to determine the directionality of significance among treatments. We later use the Bonferonni correction to adjust the significance level in the visualization step of the anlaysis.
