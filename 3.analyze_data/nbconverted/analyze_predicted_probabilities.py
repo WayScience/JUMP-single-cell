@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# # Test treatement probabilities for each phenotype
+
 # In[1]:
 
 
@@ -69,20 +71,18 @@ treatment_paths = {"compound":
 # In[4]:
 
 
-filename = "comparison_results.parquet"
+comparison_results_output_filename = "comparison_results.parquet"
 output_path = pathlib.Path(f"{big_drive_path}/statistical_test_comparisons")
 output_path.mkdir(parents=True, exist_ok=True)
 
-
-# In[5]:
-
-
+# Fill blank broad samples in the broad_sample column with DMSO.
+# These samples are represented as DMSO in the platemap, but as nans when loaded as a DataFrame
 treatment_paths["compound"]["platemap"]["broad_sample"].fillna("DMSO", inplace=True)
 
 
 # ## Mann-whitney U wrapper function
 
-# In[6]:
+# In[5]:
 
 
 def perform_mannwhitneyu_median(_dmso_probs, _treatment_probs):
@@ -107,7 +107,7 @@ def perform_mannwhitneyu_median(_dmso_probs, _treatment_probs):
 
 # ## Dunn wrapper function
 
-# In[7]:
+# In[6]:
 
 
 def perform_dunn_median(_dmso_probs, _treatment_probs):
@@ -138,7 +138,7 @@ def perform_dunn_median(_dmso_probs, _treatment_probs):
 
 # ## Defining tests and aggregation metric names
 
-# In[8]:
+# In[7]:
 
 
 comp_functions = {"dunn_test":
@@ -149,7 +149,7 @@ comp_functions = {"dunn_test":
                    "comparison_metric": "median_difference"}}
 
 
-# In[9]:
+# In[8]:
 
 
 treatments = sig_test.get_treatment_comparison(comp_functions, treatment_paths, probadf)
@@ -157,9 +157,9 @@ treatments = sig_test.get_treatment_comparison(comp_functions, treatment_paths, 
 
 # ## Save the comparisons data
 
-# In[10]:
+# In[9]:
 
 
 treatments = pd.DataFrame(treatments)
-treatments.to_parquet(output_path / filename)
+treatments.to_parquet(output_path / comparison_results_output_filename)
 

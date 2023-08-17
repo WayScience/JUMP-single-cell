@@ -31,4 +31,7 @@ This data in addition to the other single-cell metadata is stored as a parquet f
 
 ## 3.analyze_data
 
-To understand each treatments ability to induce each of the 15 phenotypes, we perform post hoc testing with the probabilities between each of the treatments and the control (DMSO). These probabilities were generated in `2.evaluate_data`. In each of these tests we compute the median to determine the directionality of significance among treatments. We later use the Bonferonni correction to adjust the significance level in the visualization step of the anlaysis.
+To understand each treatments ability to induce each of the 15 phenotypes, we perform post hoc testing with the probabilities between each of the treatments and the control (DMSO).
+These probabilities were generated in `2.evaluate_data`.
+In each of these tests we compute the median to determine the directionality of significance among treatments.
+We later use the Bonferonni correction to adjust the significance level in the visualization step of the anlaysis.
