@@ -12,6 +12,8 @@ dependencies:
   - scikit-learn
   - requests
   - seaborn
+  - scikit-posthocs
   - pip
   - pip:
+    # For creating my python environment:
     - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
