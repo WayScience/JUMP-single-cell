@@ -4,7 +4,7 @@
 # # Compare phenotypic expression among treatments with volcano plot visualizations
 # We compare phenotypic expression for each (phenotype, statistical test, model type, treatment type) combination
 
-# In[1]:
+# In[ ]:
 
 
 import pathlib
@@ -17,7 +17,7 @@ import seaborn as sns
 
 # ## Find the root of the git repo on the host system
 
-# In[2]:
+# In[ ]:
 
 
 # Get the current working directory
@@ -40,16 +40,15 @@ if root_dir is None:
 
 # ## Define the input dataframe from the parquet path
 
-# In[3]:
+# In[ ]:
 
 
-drive_path = f"{root_dir}/big_drive"
-compdf = pd.read_parquet(f"{drive_path}/statistical_test_comparisons/comparison_results.parquet")
+compdf = pd.read_parquet("statistical_test_comparisons/comparison_results.parquet")
 
 
 # ## Define and create output path
 
-# In[4]:
+# In[ ]:
 
 
 output_path = pathlib.Path("figures")
@@ -57,7 +56,7 @@ output_path = pathlib.Path("figures")
 output_path.mkdir(parents=True, exist_ok=True)
 
 
-# In[5]:
+# In[1]:
 
 
 # Bernoulli adjustment
