@@ -72,7 +72,7 @@ treatment_paths = {"compound":
 
 
 comparison_results_output_filename = "comparison_results.parquet"
-output_path = pathlib.Path(f"{big_drive_path}/statistical_test_comparisons")
+output_path = pathlib.Path("statistical_test_comparisons")
 output_path.mkdir(parents=True, exist_ok=True)
 
 # Fill blank broad samples in the broad_sample column with DMSO.
@@ -141,7 +141,7 @@ def perform_dunn_median(_dmso_probs, _treatment_probs):
 # In[7]:
 
 
-comp_functions = {"dunn_test":
+comp_functions = {"dunn":
                   {"statistical_test_function": perform_dunn_median,
                    "comparison_metric": "median_difference"},
                   "mann_whitney_u":
