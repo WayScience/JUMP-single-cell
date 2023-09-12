@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Test treatement probabilities for each phenotype
+# # Test treatement probabilities and negative control probabilities for each phenotype
 
 # In[1]:
 
@@ -52,18 +52,22 @@ big_drive_path = f"{root_dir}/big_drive"
 sqlite_data_path = f"{big_drive_path}/sc_data"
 ref_path = f"{root_dir}/reference_plate_data"
 proba_path = f"{big_drive_path}/probability_sc_data/model_probabilities.parquet"
+bar_plate_path = f"{ref_path}/barcode_platemap.csv"
 sig_test_path = "utils/significance_testing"
+
+# Define barcode platemap dataframe
+barcode_platemapdf = pd.read_csv(bar_plate_path)
 
 # Define the probabilities dataframe
 probadf = pd.read_parquet(proba_path)
 
 # Metadata and platemap paths and the name of the treatment_columns for each treatment type
 treatment_paths = {"compound":
-               {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_metadata_targets.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_platemap.txt", sep="\t"), "treatment_column": "pert_iname"},
+                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_metadata_targets.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_platemap.txt", sep="\t"), "treatment_column": "pert_iname", "Plate_Map_Name": "JUMP-Target-1_compound_platemap"},
                "crispr":
-               {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_platemap.txt", sep="\t"), "treatment_column": "target_sequence"},
+                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_platemap.txt", sep="\t"), "treatment_column": "target_sequence", "Plate_Map_Name": "JUMP-Target-1_crispr_platemap"},
                "orf":
-               {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_platemap.txt", sep="\t"), "treatment_column": "gene"}}
+                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_platemap.txt", sep="\t"), "treatment_column": "gene", "Plate_Map_Name": "JUMP-Target-1_orf_platemap"}}
 
 
 # ## Define and create the output paths
@@ -78,6 +82,7 @@ output_path.mkdir(parents=True, exist_ok=True)
 # Fill blank broad samples in the broad_sample column with DMSO.
 # These samples are represented as DMSO in the platemap, but as nans when loaded as a DataFrame
 treatment_paths["compound"]["platemap"]["broad_sample"].fillna("DMSO", inplace=True)
+treatment_paths["compound"]["metadata"]["broad_sample"].fillna("DMSO", inplace=True)
 
 
 # ## Mann-whitney U wrapper function
@@ -152,10 +157,10 @@ comp_functions = {"dunn":
 # In[8]:
 
 
-treatments = sig_test.get_treatment_comparison(comp_functions, treatment_paths, probadf)
+treatments = sig_test.get_treatment_comparison(comp_functions, treatment_paths, probadf, barcode_platemapdf)
 
 
-# ## Save the comparisons data
+# ## Save the output of the treatment
 
 # In[9]:
 
