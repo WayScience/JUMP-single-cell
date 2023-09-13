@@ -12,7 +12,7 @@ import sys
 import numpy as np
 import pandas as pd
 from scikit_posthocs import posthoc_dunn
-from scipy.stats import mannwhitneyu
+from scipy.stats import mannwhitneyu, ttest_ind
 
 # Import significance test utils
 sys.path.append("utils")
@@ -110,9 +110,33 @@ def perform_mannwhitneyu_median(_dmso_probs, _treatment_probs):
     return zip(["comparison_metric_value", "p_value"], [med_diff, test_result[1]])
 
 
-# ## Dunn wrapper function
+# ## T test wrapper function
 
 # In[6]:
+
+
+def perform_t_test(_dmso_probs, _treatment_probs):
+    """
+    Parameters
+    ----------
+    _dmso_probs: Pandas Series
+        The down-sampled predicted probilities of DMSO for a treatment type and phenotype.
+
+    _treatment_probs: Pandas Series
+        The predicted probabilities of the treatment.
+
+    Returns
+    -------
+    A zipped object which represents can be referenced by p_value and a comparison_metric_value, which are later on represented in the resulting dictionary.
+    """
+
+    stat, p_value = ttest_ind(_dmso_probs, _treatment_probs, alternative="two-sided", random_state=0)
+    return zip(["comparison_metric_value", "p_value"], [stat, p_value])
+
+
+# ## Dunn wrapper function
+
+# In[7]:
 
 
 def perform_dunn_median(_dmso_probs, _treatment_probs):
@@ -143,7 +167,7 @@ def perform_dunn_median(_dmso_probs, _treatment_probs):
 
 # ## Defining tests and aggregation metric names
 
-# In[7]:
+# In[8]:
 
 
 comp_functions = {"dunn":
@@ -151,10 +175,13 @@ comp_functions = {"dunn":
                    "comparison_metric": "median_difference"},
                   "mann_whitney_u":
                   {"statistical_test_function": perform_mannwhitneyu_median,
-                   "comparison_metric": "median_difference"}}
+                   "comparison_metric": "median_difference"},
+                  "t_test":
+                  {"statistical_test_function": perform_t_test,
+                   "comparison_metric": "t_statistic"}}
 
 
-# In[8]:
+# In[9]:
 
 
 treatments = sig_test.get_treatment_comparison(comp_functions, treatment_paths, probadf, barcode_platemapdf)
@@ -162,7 +189,7 @@ treatments = sig_test.get_treatment_comparison(comp_functions, treatment_paths, 
 
 # ## Save the output of the treatment
 
-# In[9]:
+# In[10]:
 
 
 treatments = pd.DataFrame(treatments)
