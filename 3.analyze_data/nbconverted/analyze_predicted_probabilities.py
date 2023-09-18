@@ -94,10 +94,10 @@ def perform_mannwhitneyu_median(_dmso_probs, _treatment_probs):
     """
     Parameters
     ----------
-    _dmso_probs: Pandas Series
+    _dmso_probs: pandas.Series
         The down-sampled predicted probilities of DMSO for a treatment type and phenotype.
 
-    _treatment_probs: Pandas Series
+    _treatment_probs: pandas.Series
         The predicted probabilities of the treatment.
 
     Returns
@@ -119,10 +119,10 @@ def perform_t_test(_dmso_probs, _treatment_probs):
     """
     Parameters
     ----------
-    _dmso_probs: Pandas Series
+    _dmso_probs: pandas.Series
         The down-sampled predicted probilities of DMSO for a treatment type and phenotype.
 
-    _treatment_probs: Pandas Series
+    _treatment_probs: pandas.Series
         The predicted probabilities of the treatment.
 
     Returns
@@ -144,10 +144,10 @@ def perform_dunn_median(_dmso_probs, _treatment_probs):
     Parameters
     import numpy as np
     ----------
-    _dmso_probs: Pandas Series
+    _dmso_probs: pandas.Series
         The down-sampled predicted probilities of DMSO for a treatment type and phenotype.
 
-    _treatment_probs: Pandas Series
+    _treatment_probs: pandas.Series
         The predicted probabilities of the treatment.
 
     Returns
@@ -170,6 +170,8 @@ def perform_dunn_median(_dmso_probs, _treatment_probs):
 # In[8]:
 
 
+# Create a dictionary where the keys represent the name of the comparison or test, and the values are dictionaries
+# the subdictionaries refer to the wrapper function for creating the comparison, and the metric name of the comparison being made
 comp_functions = {"dunn":
                   {"statistical_test_function": perform_dunn_median,
                    "comparison_metric": "median_difference"},
