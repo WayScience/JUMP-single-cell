@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Test treatement probabilities for each phenotype
+# # Test treatement probabilities and negative control probabilities for each phenotype
 
 # In[1]:
 
@@ -12,7 +12,7 @@ import sys
 import numpy as np
 import pandas as pd
 from scikit_posthocs import posthoc_dunn
-from scipy.stats import mannwhitneyu
+from scipy.stats import mannwhitneyu, ttest_ind
 
 # Import significance test utils
 sys.path.append("utils")
@@ -52,18 +52,22 @@ big_drive_path = f"{root_dir}/big_drive"
 sqlite_data_path = f"{big_drive_path}/sc_data"
 ref_path = f"{root_dir}/reference_plate_data"
 proba_path = f"{big_drive_path}/probability_sc_data/model_probabilities.parquet"
+bar_plate_path = f"{ref_path}/barcode_platemap.csv"
 sig_test_path = "utils/significance_testing"
+
+# Define barcode platemap dataframe
+barcode_platemapdf = pd.read_csv(bar_plate_path)
 
 # Define the probabilities dataframe
 probadf = pd.read_parquet(proba_path)
 
 # Metadata and platemap paths and the name of the treatment_columns for each treatment type
 treatment_paths = {"compound":
-               {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_metadata_targets.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_platemap.txt", sep="\t"), "treatment_column": "pert_iname"},
+                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_metadata_targets.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_platemap.txt", sep="\t"), "treatment_column": "pert_iname", "Plate_Map_Name": "JUMP-Target-1_compound_platemap"},
                "crispr":
-               {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_platemap.txt", sep="\t"), "treatment_column": "target_sequence"},
+                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_platemap.txt", sep="\t"), "treatment_column": "target_sequence", "Plate_Map_Name": "JUMP-Target-1_crispr_platemap"},
                "orf":
-               {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_platemap.txt", sep="\t"), "treatment_column": "gene"}}
+                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_platemap.txt", sep="\t"), "treatment_column": "gene", "Plate_Map_Name": "JUMP-Target-1_orf_platemap"}}
 
 
 # ## Define and create the output paths
@@ -72,12 +76,13 @@ treatment_paths = {"compound":
 
 
 comparison_results_output_filename = "comparison_results.parquet"
-output_path = pathlib.Path(f"{big_drive_path}/statistical_test_comparisons")
+output_path = pathlib.Path("statistical_test_comparisons")
 output_path.mkdir(parents=True, exist_ok=True)
 
 # Fill blank broad samples in the broad_sample column with DMSO.
 # These samples are represented as DMSO in the platemap, but as nans when loaded as a DataFrame
 treatment_paths["compound"]["platemap"]["broad_sample"].fillna("DMSO", inplace=True)
+treatment_paths["compound"]["metadata"]["broad_sample"].fillna("DMSO", inplace=True)
 
 
 # ## Mann-whitney U wrapper function
@@ -89,10 +94,10 @@ def perform_mannwhitneyu_median(_dmso_probs, _treatment_probs):
     """
     Parameters
     ----------
-    _dmso_probs: Pandas Series
+    _dmso_probs: pandas.Series
         The down-sampled predicted probilities of DMSO for a treatment type and phenotype.
 
-    _treatment_probs: Pandas Series
+    _treatment_probs: pandas.Series
         The predicted probabilities of the treatment.
 
     Returns
@@ -105,9 +110,33 @@ def perform_mannwhitneyu_median(_dmso_probs, _treatment_probs):
     return zip(["comparison_metric_value", "p_value"], [med_diff, test_result[1]])
 
 
-# ## Dunn wrapper function
+# ## T test wrapper function
 
 # In[6]:
+
+
+def perform_t_test(_dmso_probs, _treatment_probs):
+    """
+    Parameters
+    ----------
+    _dmso_probs: pandas.Series
+        The down-sampled predicted probilities of DMSO for a treatment type and phenotype.
+
+    _treatment_probs: pandas.Series
+        The predicted probabilities of the treatment.
+
+    Returns
+    -------
+    A zipped object which represents can be referenced by p_value and a comparison_metric_value, which are later on represented in the resulting dictionary.
+    """
+
+    stat, p_value = ttest_ind(_dmso_probs, _treatment_probs, alternative="two-sided", random_state=0)
+    return zip(["comparison_metric_value", "p_value"], [stat, p_value])
+
+
+# ## Dunn wrapper function
+
+# In[7]:
 
 
 def perform_dunn_median(_dmso_probs, _treatment_probs):
@@ -115,10 +144,10 @@ def perform_dunn_median(_dmso_probs, _treatment_probs):
     Parameters
     import numpy as np
     ----------
-    _dmso_probs: Pandas Series
+    _dmso_probs: pandas.Series
         The down-sampled predicted probilities of DMSO for a treatment type and phenotype.
 
-    _treatment_probs: Pandas Series
+    _treatment_probs: pandas.Series
         The predicted probabilities of the treatment.
 
     Returns
@@ -138,26 +167,31 @@ def perform_dunn_median(_dmso_probs, _treatment_probs):
 
 # ## Defining tests and aggregation metric names
 
-# In[7]:
+# In[8]:
 
 
-comp_functions = {"dunn_test":
+# Create a dictionary where the keys represent the name of the comparison or test, and the values are dictionaries
+# the subdictionaries refer to the wrapper function for creating the comparison, and the metric name of the comparison being made
+comp_functions = {"dunn":
                   {"statistical_test_function": perform_dunn_median,
                    "comparison_metric": "median_difference"},
                   "mann_whitney_u":
                   {"statistical_test_function": perform_mannwhitneyu_median,
-                   "comparison_metric": "median_difference"}}
+                   "comparison_metric": "median_difference"},
+                  "t_test":
+                  {"statistical_test_function": perform_t_test,
+                   "comparison_metric": "t_statistic"}}
 
-
-# In[8]:
-
-
-treatments = sig_test.get_treatment_comparison(comp_functions, treatment_paths, probadf)
-
-
-# ## Save the comparisons data
 
 # In[9]:
+
+
+treatments = sig_test.get_treatment_comparison(comp_functions, treatment_paths, probadf, barcode_platemapdf)
+
+
+# ## Save the output of the treatment
+
+# In[10]:
 
 
 treatments = pd.DataFrame(treatments)

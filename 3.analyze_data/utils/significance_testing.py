@@ -12,10 +12,9 @@ def store_comparisons(_comp_functions, _treatments, _dmso_probs, _treatment_prob
     _treatments: Dictionary of Lists
         The treatment results, which contains keys corresponding to the statistical test, the comparison metric, the p value, and the comparison metric value among other keys specified by comp_names.
 
-    _dmso_probs: Pandas Series
+    _dmso_probs: pandas.Series
         The down-sampled predicted probilities of DMSO for a treatment type and phenotype.
-
-    _treatment_probs: Pandas Series
+    _treatment_probs: pandas.Series
         The predicted probabilities of the treatment
 
     **_comp_names: Keywork arguments
@@ -44,7 +43,35 @@ def store_comparisons(_comp_functions, _treatments, _dmso_probs, _treatment_prob
 
     return _treatments
 
-def get_treatment_comparison(_comp_functions, _treatment_paths, _probadf):
+def filter_wells_by_cell_count(_df, _cutoff):
+    """
+    Parameters
+    ----------
+    _df: pandas.Dataframe
+        The dataframe which contains the well, which will be potentially removed
+
+    _cutoff: Integer
+        The number of cells a well must have to remain in the dataframe
+
+    Returns
+    -------
+    _df: pandas.Dataframe
+        The filtered dataframe with only wells that have more cells than the cutoff
+    """
+
+    # Find the number of cells in each well
+    well_counts = _df["Metadata_Well"].value_counts()
+
+    # Find the wells that contain more cells than the cutoff
+    wells_kept = well_counts[well_counts > _cutoff].index
+
+    # Keep only the cells that contain more cells than the cutoff
+    _df = _df.loc[_df["Metadata_Well"].isin(wells_kept)]
+
+    return _df
+
+
+def get_treatment_comparison(_comp_functions, _treatment_paths, _probadf, _barcode_platemapdf, _control_cutoff = 50, _treat_cutoff = 50):
     """
     Parameters
     ----------
@@ -56,11 +83,20 @@ def get_treatment_comparison(_comp_functions, _treatment_paths, _probadf):
 
     _treatment_paths: Dictionary of Dictionaries
         The keys of this dictionary are strings of the treatment types {compound, crispr, orf}.
-        The dictionaries corresponding to each of these keys have the keys {metadata, platemap, treatment_column}.
+        The dictionaries corresponding to each of these keys have the keys {metadata, platemap, treatment_column, Plate_Map_Name}.
         The metadata dataframe can be accessed with the metadata key, the platemap dataframe can be accessed with the platemap key, and the name of the treatment column can be accessed with the treatment_column key.
 
-    _probadf: Dataframe
+    _probadf: pandas.Dataframe
         The predicted probabilities and associated metadata for each cell
+
+    _barcode_platemapdf: pandas.Dataframe
+        Maps the plate to the treatment type
+
+    _control_cutoff: Integer
+        The minimum number of cells required for a negative control well to be included in the comparison
+
+    _treat_cutoff: Integer
+        The minimum number of cells required for a treatment well (excluding negative control wells) to be included in the comparison
 
     Returns
     -------
@@ -70,40 +106,70 @@ def get_treatment_comparison(_comp_functions, _treatment_paths, _probadf):
 
     treatments = defaultdict(list)
 
-    # Find the DMSO probabilities for each phenotype using the broad_sample and the well_position
-    dmso_broad_filt = ((_treatment_paths["compound"]["platemap"]["broad_sample"] == "DMSO"))
-    dmso_broad_wells = _treatment_paths["compound"]["platemap"].loc[dmso_broad_filt]["well_position"]
-
     # Store the phenotype columns
     phenotype_cols = [col for col in _probadf.columns if "Metadata" not in col]
 
-    for model_type in _probadf["Metadata_model_type"].unique():
-        filtered_probadf = _probadf.loc[_probadf["Metadata_model_type"] == model_type]
-        dmso_probas = filtered_probadf.loc[filtered_probadf["Metadata_Well"].isin(dmso_broad_wells)][phenotype_cols]
+    # Columns names to drop after merging data
+    drop_cols = ["Assay_Plate_Barcode", "well_position"]
 
-        for treat_type_name, treat_data in _treatment_paths.items():
+    # Iterate through the treatment data for each treatment type
+    for treat_type_name, treat_data in _treatment_paths.items():
 
-            # Find the treatments that correspond to each well using the broad_sample
-            common_broaddf = pd.merge(treat_data["metadata"], treat_data["platemap"], how="inner", on="broad_sample")
-            common_broaddf = common_broaddf[["well_position", treat_data["treatment_column"]]]
+        # Get the data corresponding to the current treatment type
+        treat_type_platemap = _barcode_platemapdf.loc[_barcode_platemapdf["Plate_Map_Name"] == treat_data["Plate_Map_Name"]]
 
-            for _, row in common_broaddf.iterrows():
+        # Retrieve the data that correspond to the plate names, where the plate names correspond to the treatment type
+        filtered_probadf = pd.merge(_probadf, treat_type_platemap, how="inner", left_on="Metadata_plate", right_on="Assay_Plate_Barcode")
 
-                # Find the treatment probabilities that correspond to each well, and therefore each treatment
-                treat_probas = filtered_probadf.loc[filtered_probadf["Metadata_Well"] == row["well_position"]]
+        # Find the treatments that correspond to each well using the broad_sample
+        common_broaddf = pd.merge(treat_data["metadata"], treat_data["platemap"], how="inner", on="broad_sample")
 
-                num_cells = len(treat_probas)
+        # Combine the probability and treatment data using the well
+        common_broaddf = pd.merge(filtered_probadf, common_broaddf, how="inner", left_on="Metadata_Well", right_on="well_position")
 
-                # If there are no probability values that match the given well for some reason analyze the next treatment
-                if num_cells > 0:
+        # Drop redundant columns for the merge operations
+        common_broaddf.drop(columns=drop_cols, inplace=True)
 
-                    # Sample the dmso probabilities to reduce computation and make the sample sizes between groups equal
-                    samp_dmsodf = dmso_probas.sample(n=num_cells, random_state=0)
+        # Specify the types of negative controls
+        negcondf = common_broaddf.loc[common_broaddf["control_type"] == "negcon"]
+        no_negcondf = common_broaddf.loc[common_broaddf["control_type"] != "negcon"]
 
-                    # Iterate through each possible phenotype
-                    for pheno in phenotype_cols:
+        # Create comparison groups
+        iter_group = set(zip(no_negcondf["Metadata_plate"], no_negcondf["Metadata_model_type"], no_negcondf[treat_data["treatment_column"]]))
 
-                        treatments = store_comparisons(_comp_functions, treatments, samp_dmsodf[pheno], treat_probas[pheno], phenotype=pheno, treatment_type=treat_type_name, treatment=row[treat_data["treatment_column"]], model_type=model_type)
+        # Iterate through each group
+        for plate, model_type, utreat in iter_group:
+
+            # Specify the treatment and negative control dataframes
+            treatdf = no_negcondf.loc[(no_negcondf["Metadata_plate"] == plate) & (no_negcondf["Metadata_model_type"] == model_type) & (no_negcondf[treat_data["treatment_column"]] == utreat)]
+            negdf = negcondf.loc[(negcondf["Metadata_plate"] == plate) & (negcondf["Metadata_model_type"] == model_type)]
+
+            # Remove wells if the cell count is below the corresponding threshold
+            treatdf = filter_wells_by_cell_count(treatdf, _treat_cutoff)
+            negdf = filter_wells_by_cell_count(negdf, _control_cutoff)
+
+            # Compute the number of cells for each group
+            treat_cell_count = len(treatdf)
+            negcon_cell_count = len(negdf)
+            min_cell_count = min(treat_cell_count, negcon_cell_count)
+
+            # If there are no probability values that match the given well for some reason analyze the next treatment
+            if (min_cell_count > 0):
+
+                # Sample the treatment dataframe if the cell count for the treatments is larger than for the controls
+                if treat_cell_count > negcon_cell_count:
+                    samp_treat = treatdf.sample(n=min_cell_count, random_state=0)
+                    samp_neg = negdf
+
+                # Otherwise, sample the negative control
+                else:
+                    samp_neg = negdf.sample(n=min_cell_count, random_state=0)
+                    samp_treat = treatdf
+
+                # Iterate through each possible phenotype and update the treatments variable
+                for pheno in phenotype_cols:
+
+                    treatments = store_comparisons(_comp_functions, treatments, samp_neg[pheno], samp_treat[pheno], phenotype=pheno, treatment_type=treat_type_name, treatment=utreat, model_type=model_type, cell_count=min_cell_count)
 
     return treatments
 
