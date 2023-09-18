@@ -12,9 +12,9 @@ def store_comparisons(_comp_functions, _treatments, _dmso_probs, _treatment_prob
     _treatments: Dictionary of Lists
         The treatment results, which contains keys corresponding to the statistical test, the comparison metric, the p value, and the comparison metric value among other keys specified by comp_names.
 
-    _dmso_probs: Pandas Series
+    _dmso_probs: pandas.Series
         The down-sampled predicted probilities of DMSO for a treatment type and phenotype.
-    _treatment_probs: Pandas Series
+    _treatment_probs: pandas.Series
         The predicted probabilities of the treatment
 
     **_comp_names: Keywork arguments
@@ -47,7 +47,7 @@ def filter_wells_by_cell_count(_df, _cutoff):
     """
     Parameters
     ----------
-    _df: pandas Dataframe
+    _df: pandas.Dataframe
         The dataframe which contains the well, which will be potentially removed
 
     _cutoff: Integer
@@ -55,7 +55,7 @@ def filter_wells_by_cell_count(_df, _cutoff):
 
     Returns
     -------
-    _df: pandas dataframe
+    _df: pandas.Dataframe
         The filtered dataframe with only wells that have more cells than the cutoff
     """
 
@@ -86,10 +86,10 @@ def get_treatment_comparison(_comp_functions, _treatment_paths, _probadf, _barco
         The dictionaries corresponding to each of these keys have the keys {metadata, platemap, treatment_column, Plate_Map_Name}.
         The metadata dataframe can be accessed with the metadata key, the platemap dataframe can be accessed with the platemap key, and the name of the treatment column can be accessed with the treatment_column key.
 
-    _probadf: pandas Dataframe
+    _probadf: pandas.Dataframe
         The predicted probabilities and associated metadata for each cell
 
-    _barcode_platemapdf: pandas Dataframe
+    _barcode_platemapdf: pandas.Dataframe
         Maps the plate to the treatment type
 
     _control_cutoff: Integer
