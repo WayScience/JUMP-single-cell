@@ -1,37 +1,44 @@
 # JUMP-single-cell
 
-Single cell analysis of the JUMP Cell Painting consortium data.
-Please ensure adequate storage as the sqlite plate data is approximately 1.1 TB large.
+## Data
 
-## 0.download_data
+In this repository, we apply the [phenotypic profiling model](https://github.com/WayScience/phenotypic_profiling_model), which predicts phenotypic class of single cells using nuclei features, on the [JUMP-Target pilot data](https://github.com/jump-cellpainting/JUMP-Target) from the [JUMP consortium](https://jump-cellpainting.broadinstitute.org/).
 
-This folder contains the code and metadata file to download the plate data from aws.
-For more information on how the plate paths were generated please review the `0.generate_jump_dataset_manifest.ipynb` file.
+In this dataset, there are 51 plates that are associated with one of three treatment types:
 
-To download the data, first run `0.generate_jump_dataset_manifest.ipynb`, to generate the paths data, then run `1.download_jump_single_cell_profiles.ipynb` to download the plate data.
+- Compound
+- CRISPR
+- ORF
 
-## 1.process_data
+Each treatment has it's own platemap and metadata file that can be found in the [reference_plate_data](./reference_plate_data/) folder.
+A barcode platemap is include which associates each plate to the correct platemap file.
 
-In this step, we merged the single cell data using pycytominer, and the reference plate data located in the `reference_plate_data` folder in the root of the git directory.
-The metadata files in this folder can be located by following this aws link:
-`https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0000-jump-pilot/source_4/workspace/metadata/external_metadata/`
+There are a total of **20,959,860 single cells** between all plates.
 
-The platemaps files in this folder can be found using this aws link:
-`https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0000-jump-pilot/source_4/workspace/metadata/platemaps/2020_11_04_CPJUMP1/platemap/`
+To reproduce this project, please ensure adequate storage as the CellProfiler SQLite database files is approximately 1.1 TB large.
 
-Similarly the barcode file `barcode_platemap.csv` came from dropbox.
+## Goal
 
-After merging the single cells, each of the features of the plate data were normalized by pycytominer and converted to parquet files.
+Traditionally, image-based analyses aggregate single-cell features which removes outliers that could be interesting biology.
+By predicting phenotypes for single-cells with the phenotypic profiling model, we hope to uncover patterns of biology that wouldn't be uncovered with the traditional methodology.
 
-## 2.evaluate_data
+## Repository Structure
 
-In this step, we perform inferencing with the pre-trained shuffled and unshuffled logistic regression models from the phenotypic profiling repository `https://github.com/WayScience/phenotypic_profiling_model/tree/main`.
-We generate predicted probabilities for each cell expressing one of the fifteen possible phenotypes.
-This data in addition to the other single-cell metadata is stored as a parquet file.
+| Module | Purpose | Description |
+| :---- | :----- | :---------- |
+| [0.download_data](./0.download_data/) | Download JUMP-Target SQLite files | Download CellProfiler SQLite outputs for 51 plates from AWS |
+| [1.process_data](./1.process_data/) | Process SQLite files | Using pycytominer, the SQLite outputs are converted to CSV features are merged into single-cells and normalized |
+| [2.evaluate_data](./2.evaluate_data/) | Apply phenotypic profiling model | Phenotypic predictions are generated for single-cells using the phenotypic profiling model |
+| [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | Multiple analyses are performed to validate the phenotypic predicted class for each treatment compared to control |
+| [reference_plate_data](./reference_plate_data/) | Platemaps per treatment type | This folder holds the platemap files with metadata based on treatment and the barcode platemap file |
 
-## 3.analyze_data
+## Main environment
 
-To understand each treatments ability to induce each of the 15 phenotypes, we perform post hoc testing with the probabilities between each of the treatments and the control (DMSO).
-These probabilities were generated in `2.evaluate_data`.
-In each of these tests we compute the median to determine the directionality of significance among treatments.
-We later use the Bonferonni correction to adjust the significance level in the visualization step of the anlaysis.
+For all modules, we use one environment that includes all necessary packages. 
+
+To create the environment from terminal, run the code line below:
+
+```bash
+# Make sure you are in the same directory as the environment file
+conda env create -f environment.yml
+```
