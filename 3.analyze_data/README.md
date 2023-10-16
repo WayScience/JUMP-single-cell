@@ -1,6 +1,6 @@
 # Analyze predicted probability output
 
-In this module, we perform multiple analyses on the predicted probability data to validate the treatment (e.g., compound, CRISPR, or ORF) with the expected phenotypic class.
+In this module, we perform multiple analyses on the predicted probability data to validate the phenotypic predictions for each treatment (e.g., compound, CRISPR, or ORF).
 To perform comparisons between treatment and the negative control, we perform these post-hoc statistical analyses:
 
 1. Mann-whitney U test

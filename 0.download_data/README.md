@@ -5,7 +5,6 @@ There are 51 plates from the pilot dataset, totalling 1.1 TB of storage from the
 
 Firstly, we generate a manifest file in the [data folder](./data/) called [jump_dataset_location_manifest.csv](./data/jump_dataset_location_manifest.csv).
 Then, we use the [download_from_aws.sh](./download_from_aws.sh) file, which contains the bash script that will download the files from the paths in the manifest.
-We call this file in a notebook to make it fully reproducible.
 
 # Run the notebook to download the data
 

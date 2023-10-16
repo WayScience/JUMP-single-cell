@@ -8,8 +8,8 @@ In this folder, there three file types:
 
 The platemap and metadata files are broken down by treatment (e.g., compound, crispr, or orf).
 
-Metadata files were downloaded from [the metadata folder in AWS](https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0000-jump-pilot/source_4/workspace/metadata/external_metadata/).
-Barcode platemap and platemap files where downloaded from [the platemaps folder in AWS](https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0000-jump-pilot/source_4/workspace/metadata/platemaps/2020_11_04_CPJUMP1/).
+We downloaded metadata files from [the metadata folder in AWS](https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0000-jump-pilot/source_4/workspace/metadata/external_metadata/).
+We downloaded the barcode platemap and platemap files from [the platemaps folder in AWS](https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0000-jump-pilot/source_4/workspace/metadata/platemaps/2020_11_04_CPJUMP1/).
 
 Visualization of the platemaps are as follows:
 

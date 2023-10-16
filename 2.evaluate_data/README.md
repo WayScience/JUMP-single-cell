@@ -1,8 +1,10 @@
 # Apply phenotypic profiling model to JUMP data
 
 In this module, we generate single-cell probabilities for each of the 15 phenotypic classes by applying the [phenotypic profiling model](https://github.com/WayScience/phenotypic_profiling_model).
-There are two model types, final and shuffled baseline, where single-cell features are randomized independently. 
-We output one probability `parquet` file that contains all of the single-cell data per plate and well that contains all relevant metadata.
+There are two model types, final and shuffled baseline.
+The shuffled baseline model trains using randomly shuffled single-cell features. 
+We output one file for all plates that contains phenotypic probabilities and relevant metadata for all of the single-cells.
+The files we output are in `parquet` format.
 
 ## Run the prediction notebook
 
@@ -14,5 +16,3 @@ cd 2.evaluate_data
 # Run the notebook as a python script
 source evaluate_data.sh
 ```
-
-
