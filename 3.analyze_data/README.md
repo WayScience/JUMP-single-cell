@@ -1,7 +1,7 @@
 # Analyze predicted probability output
 
 In this module, we perform multiple analyses on the predicted probability data to validate the phenotypic predictions for each treatment (e.g., compound, CRISPR, or ORF).
-To perform comparisons between treatment and the negative control, we perform these post-hoc statistical analyses:
+To compare treatment and the negative control groups, we perform post-hoc statistical analyses such as:
 
 1. Mann-whitney U test
 2. T-test
