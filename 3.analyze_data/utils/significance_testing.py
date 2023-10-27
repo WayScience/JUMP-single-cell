@@ -134,37 +134,52 @@ def get_treatment_comparison(_comp_functions, _treatment_paths, _probadf, _barco
         negcondf = common_broaddf.loc[common_broaddf["control_type"] == "negcon"]
         no_negcondf = common_broaddf.loc[common_broaddf["control_type"] != "negcon"]
 
-        # Create comparison groups
-        iter_group = set(zip(no_negcondf["Metadata_plate"], no_negcondf["Metadata_model_type"], no_negcondf[treat_data["treatment_column"]]))
+        # Create groups for making comparisons using the model type and the treatment
+        # We only make comparisons within the same phenotype, which is performed below
+        iter_group = set(zip(no_negcondf["Metadata_model_type"], no_negcondf[treat_data["treatment_column"]]))
 
         # Iterate through each group
-        for plate, model_type, utreat in iter_group:
+        for model_type, utreat in iter_group:
+            samp_treat = []
+            samp_neg = []
+            is_empty = True
 
-            # Specify the treatment and negative control dataframes
-            treatdf = no_negcondf.loc[(no_negcondf["Metadata_plate"] == plate) & (no_negcondf["Metadata_model_type"] == model_type) & (no_negcondf[treat_data["treatment_column"]] == utreat)]
-            negdf = negcondf.loc[(negcondf["Metadata_plate"] == plate) & (negcondf["Metadata_model_type"] == model_type)]
+            groupdf = no_negcondf.loc[(no_negcondf["Metadata_model_type"] == model_type) & (no_negcondf[treat_data["treatment_column"]] == utreat)]
 
-            # Remove wells if the cell count is below the corresponding threshold
-            treatdf = filter_wells_by_cell_count(treatdf, _treat_cutoff)
-            negdf = filter_wells_by_cell_count(negdf, _control_cutoff)
+            # Compute the comparisons within each plate seperately
+            for plate in groupdf["Metadata_plate"].unique():
 
-            # Compute the number of cells for each group
-            treat_cell_count = len(treatdf)
-            negcon_cell_count = len(negdf)
-            min_cell_count = min(treat_cell_count, negcon_cell_count)
+                # Specify the treatment and negative control dataframes
+                treatdf = no_negcondf.loc[(no_negcondf["Metadata_plate"] == plate) & (no_negcondf["Metadata_model_type"] == model_type) & (no_negcondf[treat_data["treatment_column"]] == utreat)]
+                negdf = negcondf.loc[(negcondf["Metadata_plate"] == plate) & (negcondf["Metadata_model_type"] == model_type)]
 
-            # If there are no probability values that match the given well for some reason analyze the next treatment
-            if (min_cell_count > 0):
+                # Remove wells if the cell count is below the corresponding threshold
+                treatdf = filter_wells_by_cell_count(treatdf, _treat_cutoff)
+                negdf = filter_wells_by_cell_count(negdf, _control_cutoff)
 
-                # Sample the treatment dataframe if the cell count for the treatments is larger than for the controls
-                if treat_cell_count > negcon_cell_count:
-                    samp_treat = treatdf.sample(n=min_cell_count, random_state=0)
-                    samp_neg = negdf
+                # Compute the number of cells for each group
+                treat_cell_count = len(treatdf)
+                negcon_cell_count = len(negdf)
+                min_cell_count = min(treat_cell_count, negcon_cell_count)
 
-                # Otherwise, sample the negative control
-                else:
-                    samp_neg = negdf.sample(n=min_cell_count, random_state=0)
-                    samp_treat = treatdf
+                # If there are no probability values that match the given well for some reason analyze the next treatment
+                if (min_cell_count > 0):
+                    is_empty = False
+
+                    # Sample the treatment dataframe if the cell count for the treatments is larger than for the controls
+                    if treat_cell_count > negcon_cell_count:
+                        samp_treat.append(treatdf.sample(n=min_cell_count, random_state=0))
+                        samp_neg.append(negdf)
+
+                    # Otherwise, sample the negative control
+                    else:
+                        samp_neg.append(negdf.sample(n=min_cell_count, random_state=0))
+                        samp_treat.append(treatdf)
+
+            # Check if there were enough cells for the treatment, otherwise, don't try to include the data
+            if not is_empty:
+                samp_neg = pd.concat(samp_neg)
+                samp_treat = pd.concat(samp_treat)
 
                 # Iterate through each possible phenotype and update the treatments variable
                 for pheno in phenotype_cols:
