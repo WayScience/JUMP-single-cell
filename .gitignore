@@ -1,10 +1,14 @@
+# Ignore adding specific files from Vim-jukit
 *.py
 !/**/nbconverted/*.py
 **/.jukit/
+!/**/utils/*.py
+
+# Ignore irrelevant files + hidden files
 .ipynb_checkpoints/
 .virtual_documents/
 __pycache__/
 !/**/utils/*.py
 
 # Ignore mac related files
-.DS_Store
+*.DS_Store
