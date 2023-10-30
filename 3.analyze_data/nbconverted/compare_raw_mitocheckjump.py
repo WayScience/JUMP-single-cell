@@ -151,7 +151,7 @@ jump_random_sample_n = mitocheck_df.shape[0]
 # In[8]:
 
 
-# Load full JUMP data\
+# Load full JUMP data
 jump_df = pd.read_parquet(jump_file)
 
 # Obtain important feature information
