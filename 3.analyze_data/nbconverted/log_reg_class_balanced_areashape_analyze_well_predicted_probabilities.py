@@ -51,7 +51,7 @@ if root_dir is None:
 big_drive_path = f"{root_dir}/big_drive"
 sqlite_data_path = f"{big_drive_path}/sc_data"
 ref_path = f"{root_dir}/reference_plate_data"
-proba_path = f"{big_drive_path}/class_balanced_log_reg_probability_sc_data/greg_areashape_log_reg_class_balanced_probabilities.parquet"
+proba_path = f"{big_drive_path}/class_balanced_log_reg_probability_sc_data/class_balanced_well_log_reg_areashape_greg_model_comparisons.parquet"
 
 bar_plate_path = f"{ref_path}/barcode_platemap.csv"
 sig_test_path = "utils/significance_testing"
