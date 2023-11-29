@@ -63,12 +63,22 @@ barcode_platemapdf = pd.read_csv(bar_plate_path)
 probadf = pd.read_parquet(proba_path)
 
 # Metadata and platemap paths and the name of the treatment_columns for each treatment type
-treatment_paths = {"compound":
-                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_metadata_targets.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_platemap.txt", sep="\t"), "treatment_column": "pert_iname", "Plate_Map_Name": "JUMP-Target-1_compound_platemap"},
+treatment_paths = {"compound":  # Name of the treatment type
+                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_metadata_targets.tsv", sep="\t"),  # Metadata
+                    "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_platemap.txt", sep="\t"),  # Platemap data
+                    "treatment_column": "pert_iname",  # Name of the treatment column in the metadata
+                    "Plate_Map_Name": "JUMP-Target-1_compound_platemap"},  # Name of the plate for iterating through treatment types
                "crispr":
-                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_platemap.txt", sep="\t"), "treatment_column": "gene", "Plate_Map_Name": "JUMP-Target-1_crispr_platemap"},
+                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"),
+                    "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_platemap.txt", sep="\t"),
+                    "treatment_column": "gene",
+                    "Plate_Map_Name": "JUMP-Target-1_crispr_platemap"},
                "orf":
-                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"), "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_platemap.txt", sep="\t"), "treatment_column": "gene", "Plate_Map_Name": "JUMP-Target-1_orf_platemap"}}
+                   {"metadata": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"),
+                    "platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_platemap.txt", sep="\t"),
+                    "treatment_column": "gene",
+                    "Plate_Map_Name": "JUMP-Target-1_orf_platemap"}
+                   }
 
 
 # ## Define and create the output paths

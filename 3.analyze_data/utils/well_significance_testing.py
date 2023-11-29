@@ -3,6 +3,9 @@ from collections import defaultdict
 
 def store_comparisons(_comp_functions, _treatments, _dmso_probs, _treatment_probs, **_comp_names):
     """
+    Performs the comparisons between the control probabilities and the treatment probabilities.
+    Stores the comparisons and the desired metadata.
+
     Parameters
     ----------
     _comp_functions: Dictionary of Dictionaries
@@ -45,6 +48,8 @@ def store_comparisons(_comp_functions, _treatments, _dmso_probs, _treatment_prob
 
 def filter_wells_by_cell_count(_df, _cutoff):
     """
+    Removes wells containing less than a desired number of cells
+
     Parameters
     ----------
     _df: pandas.Dataframe
@@ -113,10 +118,10 @@ def get_treatment_comparison(_comp_functions, _treatment_paths, _probadf, _barco
         Maps the plate to the treatment type
 
     _control_cutoff: Integer
-        The minimum number of cells required for a negative control well to be included in the comparison
+        (Optional default=50) The minimum number of cells required for a negative control well to be included in the comparison.
 
     _treat_cutoff: Integer
-        The minimum number of cells required for a treatment well (excluding negative control wells) to be included in the comparison
+        (Optional default=50) The minimum number of cells required for a treatment well (excluding negative control wells) to be included in the comparison. The
 
     Returns
     -------
