@@ -1,13 +1,24 @@
-# Analyze predicted probability output
+# Analyze Predicted Probabilities
 
 In this module, we perform multiple analyses on the predicted probability data to validate the phenotypic predictions for each treatment (e.g., compound, CRISPR, or ORF).
 To compare treatment and the negative control groups, we perform post-hoc statistical analyses such as:
 
 1. Mann-whitney U test
 2. T-test
-3. Dunn test 
+3. Dunn test
+4. KS test
 
-These tests compute the median to determine the directionality of significance among treatments compared to control.
+We compute the median to determine the directionality of significance among treatments compared to control in both the Mann-whitney U test and the Dunn test.
+Alternatively, we compute the test statistic for the parametric T-test.
+
+## Analyze Well Probabilities
+We compare the phenotype probabilities between each treated well and the remaining negative control wells on the corresponding plate.
+Each treatment well and corresponding negative control well phenotype probabilities are only compared if the number of cells in these groups is above a given cell count threshold.
+The group, treatment cells or control cells, are then randomly down-sampled depending on which of these groups has a larger population of cells.
+Random sampling of the control cells is accomplished through stratification of cells by the plate's wells.
+After sampling the cell population, the cells from the treated and control groups are compared using the KS test statistic.
+
+We have found that the predicted probabilities generated from [non-shuffled](https://github.com/WayScience/phenotypic_profiling_model/blob/main/2.train_model/models/multi_class_models/final__CP_areashape_only__balanced.joblib) and [shuffled](https://github.com/WayScience/phenotypic_profiling_model/blob/main/2.train_model/models/multi_class_models/shuffled_baseline__CP__balanced.joblib) weighted logistic regression models seem to perform the best from validation. These models were trained exclusively from [mitocheck](https://github.com/WayScience/mitocheck_data) cellprofiler areashape morphology features.
 
 ## Run the analysis notebooks
 
