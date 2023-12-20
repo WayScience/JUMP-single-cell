@@ -1,0 +1,20 @@
+#!/bin/bash
+
+git_root=$(git rev-parse --show-toplevel)
+norm_data_path="${git_root}/big_drive/normalized_sc_data"
+unnorm_data_path="${git_root}/big_drive/merged_sc_data"
+
+# Check if the folder exists
+if [ -d "$norm_data_path" ]; then
+    # Iterate through all Parquet files in the folder
+    for file in "$norm_data_path"/*.parquet; do
+        if [ -f "$file" ]; then
+
+            plate_name="$(ls $file | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}')"
+            unnorm_plate_path="${unnorm_data_path}/$(ls $unnorm_data_path | grep $plate_name)"
+
+            python3 nbconverted/class_balanced_log_reg_areashape_predict_sc_probabilities.py $file $unnorm_plate_path $plate_name
+
+        fi
+    done
+fi
