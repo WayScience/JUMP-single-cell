@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Get the root directory
+git_root=$(git rev-parse --show-toplevel)
+
+# Get the normalized data path (with multiple plates)
+norm_data_path="${git_root}/big_drive/normalized_sc_data"
+
+# Get the unnormalized data path (with multiple plates)
+unnorm_data_path="${git_root}/big_drive/merged_sc_data"
+
+# Check if the folder exists
+if [ -d "$norm_data_path" ]; then
+
+    # Iterate through all Parquet files in the normalized data path
+    for file in "$norm_data_path"/*.parquet; do
+
+        # Check if each path is a file
+        if [ -f "$file" ]; then
+
+            # Get the plate name from the filename
+            plate_name="$(ls $file | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}')"
+
+            # Get the path of the corresponding unnormalized plate
+            unnorm_plate_path="${unnorm_data_path}/$(ls $unnorm_data_path | grep $plate_name)"
+
+            # Generate the probabilities for the specified plate data
+            python3 nbconverted/class_balanced_log_reg_areashape_predict_sc_probabilities.py $file $unnorm_plate_path $plate_name
+
+        fi
+    done
+fi
