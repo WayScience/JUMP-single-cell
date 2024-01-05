@@ -120,26 +120,27 @@ def perform_ks_test(_dmso_probs, _treatment_probs):
     return zip(["comparison_metric_value", "p_value"], [stat, p_value])
 
 
-# ## Process the data
+# # Process the data
+
+# ## Combine the model probabilty and plate data
 
 # In[6]:
 
 
-# Fill blank broad samples in the broad_sample column with DMSO.
-# These samples are represented as DMSO in the platemap, but as nans when loaded as a DataFrame
-treatment_data["compound"]["platemap"]["broad_sample"].fillna("DMSO", inplace=True)
-treatment_data["compound"]["metadata"]["broad_sample"].fillna("DMSO", inplace=True)
-
-
-# ## Combine the model probabilty and plate data
-
-# In[7]:
-
-
-# Columns names to drop after merging data
-drop_cols = ["Assay_Plate_Barcode", "well_position"]
-
 def combine_meta(probadf):
+    """
+    Parameters
+    ----------
+    probadf: pandas.Dataframe
+        The phenotypic probability data of a given plate
+
+    Returns
+    -------
+    The combined probability and plate metadata
+    """
+    # Columns names to drop after merging data
+    drop_cols = ["Assay_Plate_Barcode", "well_position"]
+
     # Retrieve the data that correspond to the plate names, where the plate names correspond to the treatment type
     filtered_probadf = pd.merge(probadf, barcode_platemapdf, how="inner", left_on="Metadata_Plate", right_on="Assay_Plate_Barcode")
 
@@ -165,10 +166,19 @@ def combine_meta(probadf):
     # Combine the probability and treatment data using the well
     common_broaddf = pd.merge(filtered_probadf, combined_broaddf, how="inner", left_on=["Metadata_Well", "treatment_type"], right_on=["well_position", "treatment_type"])
 
-    # Drop redundant columns for the merge operations
+    # Drop redundant columns from the merge operations
     common_broaddf.drop(columns=drop_cols, inplace=True)
 
     return common_broaddf
+
+
+# In[7]:
+
+
+# Fill blank broad samples in the broad_sample column with DMSO.
+# These samples are represented as DMSO in the platemap, but as nans when loaded as a DataFrame
+treatment_data["compound"]["platemap"]["broad_sample"].fillna("DMSO", inplace=True)
+treatment_data["compound"]["metadata"]["broad_sample"].fillna("DMSO", inplace=True)
 
 
 # ## Defining tests and aggregation metric names
@@ -192,6 +202,7 @@ comp_functions = {"ks_test":  # Name of the test to perform
 # Define columns to group by
 filt_cols = ['Metadata_Plate', 'treatment', 'Metadata_model_type', 'treatment_type', 'Metadata_Well']
 
+# Store phenotype column names
 phenotype_cols = None
 
 # Store comparison data
