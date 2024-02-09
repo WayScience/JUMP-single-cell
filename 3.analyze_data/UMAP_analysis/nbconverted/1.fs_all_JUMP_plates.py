@@ -51,6 +51,9 @@ fs_save_path = pathlib.Path(f"{save_dir}/concat_fs_norm_data_subset.parquet")
 # path to save filtered subset data with Mitocheck features
 filter_save_path = pathlib.Path(f"{save_dir}/concat_mitocheck_data_subset.parquet")
 
+# Number of samples to randomly select to use in feature selected
+n_samples = 1000
+
 print("There are this many plates in this dataset:", len(list(norm_dir.glob("*"))))
 
 
@@ -80,7 +83,7 @@ if not concat_save_path.exists():
         df = parquet_file.read_row_group(random_row_group, columns=parquet_file.schema.names, use_threads=True).to_pandas()
 
         # Randomly sample rows from the selected row group
-        sampled_rows = df.sample(n=1000, random_state=0)
+        sampled_rows = df.sample(n=n_samples, random_state=0)
 
         print(f"Sampled data frame has this many rows: {sampled_rows.shape[0]}")
 
@@ -159,4 +162,22 @@ filtered_df.to_parquet(filter_save_path, index=False)
 
 print(filtered_df.shape)
 filtered_df.head(2)
+
+
+# In[10]:
+
+
+len(feature_cols)
+
+
+# In[9]:
+
+
+diff_columns
+
+
+# In[ ]:
+
+
+
 

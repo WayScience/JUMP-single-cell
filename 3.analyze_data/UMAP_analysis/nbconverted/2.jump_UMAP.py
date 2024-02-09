@@ -15,7 +15,7 @@ import umap
 
 # ## Set paths and variables
 
-# In[2]:
+# In[13]:
 
 
 # Load in barcode_platemap to assign plates based on treatment type
@@ -39,7 +39,7 @@ prob_path = pathlib.Path("./data/all_features_probabilities.parquet")
 prob_df = pd.read_parquet(prob_path)
 
 # Mitocheck labelled dataset to use to find nuclei features and concat
-label_data_path = "https://github.com/WayScience/phenotypic_profiling_model/raw/main/0.download_data/data/labeled_data__ic.csv.gz"
+label_data_path = "https://github.com/WayScience/phenotypic_profiling_model/raw/14130313eddd350182d61374943a897503c74f38/0.download_data/data/labeled_data__ic.csv.gz"
 
 # Model type that will be used for the add predicted probability column
 model_type = "final"
@@ -180,7 +180,7 @@ jump_df.head(2)
 
 # ### Load in Mitocheck labeled data and update CellProfiler columns to match naming for JUMP
 
-# In[8]:
+# In[15]:
 
 
 # Load in labeled mitocheck data
@@ -209,11 +209,8 @@ mito_cp_df.head()
 
 # ### Filter the mitocheck data
 
-# In[9]:
+# In[16]:
 
-
-# Load in labeled mitocheck data
-label_df = pd.read_csv(label_data_path)
 
 # Extract feature columns from the JUMP data filtered by phenotypic profiling model features
 feature_cols = [col for col in label_df.columns if col.startswith("CP__")]
@@ -251,7 +248,14 @@ mito_cp_df.head(2)
 
 # ## Concat mitocheck and jump data (all nuclei features)
 
-# In[10]:
+# In[17]:
+
+
+# Confirm columns in the same order between data frames
+mito_cp_df.columns.tolist() == jump_df.columns.tolist()
+
+
+# In[18]:
 
 
 # Concatenate the two DataFrames vertically
@@ -269,7 +273,7 @@ merged_mito_jump_df.head(2)
 
 # ## Only Zernike features
 
-# In[11]:
+# In[19]:
 
 
 # Extract metadata columns
@@ -294,7 +298,7 @@ mito_jump_zernike_df.head(2)
 
 # ## Only AreaShape features
 
-# In[12]:
+# In[20]:
 
 
 # Extract metadata columns
@@ -324,7 +328,7 @@ mito_jump_areashape_df.head(2)
 # 3. Only Zernike features (AreaShape measurement) from Mitocheck + JUMP
 # 4. Only AreaShape features from Mitocheck + JUMP
 
-# In[13]:
+# In[21]:
 
 
 # Set constants
@@ -380,10 +384,4 @@ for data_name, df in df_dict.items():
 
 print(umap_with_metadata_df.shape)
 umap_with_metadata_df.head()
-
-
-# In[ ]:
-
-
-
 

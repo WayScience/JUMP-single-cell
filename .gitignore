@@ -13,6 +13,6 @@ __pycache__/
 # Ignore mac related files
 *.DS_Store
 
-# Ignore data folder in UMAP analysis
+# Ignore data folder in UMAP analysis (>5GB)
 3.analyze_data/UMAP_analysis/data
 
