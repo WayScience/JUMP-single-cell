@@ -173,6 +173,7 @@ def get_treatment_comparison(_comp_functions, _treatdf, _negcondf, _phenotype_co
 
             # Iterate through each possible phenotype and update the treatments variable
             for pheno in _phenotype_cols:
+                ref_cols["phenotype"] = pheno
                 treatments = store_comparisons(_comp_functions, treatments, samp_neg[pheno], samp_treat[pheno], **ref_cols)
 
     return treatments
