@@ -96,7 +96,7 @@ def strat_samp_wells(_welldf, _total_cell_count):
 
     return _welldf.groupby('Metadata_Well', group_keys=False).apply(samp_well)
 
-def get_treatment_comparison(_comp_functions, _treatdf, _negcondf, _phenotype_cols, _filt_cols, _control_cutoff = 50, _treat_cutoff = 50):
+def get_treatment_comparison(_comp_functions, _treatdf, _negcondf, _phenotype_cols, _filt_cols, _tracked_cols = [], _control_cutoff = 50, _treat_cutoff = 50):
     """
     This function is intended to preprocess the predicted MitoCheck phenotype probability data prior to comparing the phenotype predicted probabilities.
     Please refer to the README for additional information on how the treatment and control groups are compared.
@@ -120,6 +120,9 @@ def get_treatment_comparison(_comp_functions, _treatdf, _negcondf, _phenotype_co
     _filt_cols: List
         The names of the columns to group the treatment cells by before comparing the probabilities.
 
+    _tracked_cols: List
+        (Optional) The names of the columns to be tracked in the final output in addition to _filt_cols and _phenotype_cols.
+
     _control_cutoff: Integer
         (Optional default=50) The minimum number of cells required for a negative control well to be included in the comparison.
 
@@ -140,9 +143,14 @@ def get_treatment_comparison(_comp_functions, _treatdf, _negcondf, _phenotype_co
         # The columns for keeping track of metadata and filtering the negative control cells
         ref_cols = dict(zip(_filt_cols, filt_col_vals))
 
+        # Include other columns of interest not directly used for comparing probabilities if specified
+        if _tracked_cols:
+            ref_cols = {**ref_cols, **dict(zip(_tracked_cols, group_treatdf[_tracked_cols].iloc[0]))}
+
         # The negative control cells
         group_negdf = _negcondf.loc[(_negcondf["Metadata_Plate"] == ref_cols["Metadata_Plate"]) &
-                                   (_negcondf["Metadata_model_type"] == ref_cols["Metadata_model_type"])
+                                   (_negcondf["Metadata_model_type"] == ref_cols["Metadata_model_type"]) &
+                                    (_negcondf["Cell_type"] == ref_cols["Cell_type"])
                                     ]
 
         # Remove wells if the cell count is below the corresponding threshold
