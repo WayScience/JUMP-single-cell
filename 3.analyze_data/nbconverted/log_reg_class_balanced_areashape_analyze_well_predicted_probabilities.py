@@ -58,14 +58,14 @@ ref_path = f"{root_dir}/reference_plate_data"
 # Path to the plate probability data
 proba_path = pathlib.Path(f"{big_drive_path}/class_balanced_log_reg_probability_sc_data")
 
-# Path to the platemap
-bar_plate_path = f"{ref_path}/barcode_platemap.csv"
-
 # Paths of each plate file
 proba_plate_paths = proba_path.glob("*.parquet")
 
 # Define barcode platemap dataframe
-barcode_platemapdf = pd.read_csv(bar_plate_path)
+barcode_platemapdf = pd.read_csv(f"{ref_path}/barcode_platemap.csv")
+
+# Define experiment metadata dataframe
+exmetadf = pd.read_csv(f"{ref_path}/experiment-metadata.tsv", sep="\t")
 
 # Metadata and platemap paths and the name of the treatment_columns for each treatment type
 treatment_data = {
@@ -122,9 +122,17 @@ def perform_ks_test(_dmso_probs, _treatment_probs):
 
 # # Process the data
 
-# ## Combine the model probabilty and plate data
+# ## Combine barcode platemap and experiment metadata
 
 # In[6]:
+
+
+barcode_platemapdf = pd.merge(barcode_platemapdf, exmetadf, how="inner", on=["Assay_Plate_Barcode", "Plate_Map_Name"])
+
+
+# ## Combine the model probabilty and plate data
+
+# In[7]:
 
 
 def combine_meta(probadf):
@@ -172,7 +180,7 @@ def combine_meta(probadf):
     return common_broaddf
 
 
-# In[7]:
+# In[8]:
 
 
 # Fill blank broad samples in the broad_sample column with DMSO.
@@ -183,7 +191,7 @@ treatment_data["compound"]["metadata"]["broad_sample"].fillna("DMSO", inplace=Tr
 
 # ## Defining tests and aggregation metric names
 
-# In[8]:
+# In[9]:
 
 
 # Create a dictionary where the keys represent the name of the comparison or test, and the values are dictionaries
@@ -196,11 +204,14 @@ comp_functions = {"ks_test":  # Name of the test to perform
 
 # ## Compare treatments and negative controls
 
-# In[9]:
+# In[10]:
 
 
 # Define columns to group by
-filt_cols = ['Metadata_Plate', 'treatment', 'Metadata_model_type', 'treatment_type', 'Metadata_Well']
+filt_cols = ['Metadata_Plate', 'treatment', 'Metadata_model_type', 'treatment_type', 'Metadata_Well', 'Cell_type']
+
+# Columns of interest which should also be tracked
+tracked_cols = ["Time"]
 
 # Store phenotype column names
 phenotype_cols = None
@@ -225,7 +236,8 @@ for proba_path in list(proba_plate_paths):
         common_broaddf.loc[common_broaddf["control_type"] != "negcon"],
         common_broaddf.loc[common_broaddf["control_type"] == "negcon"],
         phenotype_cols,
-        filt_cols
+        filt_cols,
+        tracked_cols
     )
 
     # Define the comparisons data structure for the first time
@@ -240,7 +252,7 @@ for proba_path in list(proba_plate_paths):
 
 # ## Save the output of the treatment
 
-# In[10]:
+# In[11]:
 
 
 comparisons = pd.DataFrame(comparisons)
