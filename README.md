@@ -4,13 +4,9 @@
 
 In this repository, we apply the [phenotypic profiling model](https://github.com/WayScience/phenotypic_profiling_model), which predicts phenotypic class of single cells using nuclei features, to the [JUMP-Target pilot data](https://github.com/jump-cellpainting/JUMP-Target) from the [JUMP consortium](https://jump-cellpainting.broadinstitute.org/).
 
-In this dataset, there are 51 plates that are associated with one of three treatment types:
+In this dataset, there are 51 plates with one of three perturbation types (Clustered Regularly Interspaced Short Palindromic Repeats [CRISPR], Open Reading Frame [ORF], and Compound) for two cell lines (A549 and U2OS).
 
-- Compound
-- CRISPR
-- ORF
-
-Each treatment has it's own platemap and metadata file that can be found in the [reference_plate_data](./reference_plate_data/) folder.
+Each perturbation type has it's own platemap and metadata file that can be found in the [reference_plate_data](./reference_plate_data/) folder.
 A barcode platemap is include which associates each plate to the correct platemap file.
 
 We segment a total of **20,959,860 single cells** in all plates.
@@ -37,12 +33,12 @@ Specifically, the benefits of single-cell phenotyping include:
 | [0.download_data](./0.download_data/) | Download JUMP-Target SQLite files | We downloaded the CellProfiler SQLite outputs for 51 plates from AWS |
 | [1.process_data](./1.process_data/) | Process SQLite files | We use pycytominer on the SQLite outputs to merge single-cells and normalize features |
 | [2.evaluate_data](./2.evaluate_data/) | Apply phenotypic profiling model | We generate phenotypic predictions for single-cells using the phenotypic profiling model |
-| [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | We perform multiple analyses to validate the phenotypic predicted class for each treatment compared to control |
-| [reference_plate_data](./reference_plate_data/) | Platemaps per treatment type | This folder holds the platemap files with metadata based on treatment and the barcode platemap file |
+| [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | We perform multiple analyses to validate the phenotypic predicted class for each perturbation compared to control |
+| [reference_plate_data](./reference_plate_data/) | Platemaps per perturbation type | This folder holds the platemap files with metadata based on perturbation type and the barcode platemap file |
 
 ## Main computational environment
 
-For all modules, we use one environment that includes all necessary packages. 
+For all modules, we use one environment that includes all necessary packages.
 
 To create the environment from terminal, run the code line below:
 
