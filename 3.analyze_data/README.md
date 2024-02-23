@@ -1,15 +1,7 @@
 # Analyze Predicted Probabilities
 
 In this module, we perform multiple analyses on the predicted probability data to validate the phenotypic predictions for each treatment (e.g., compound, CRISPR, or ORF).
-To compare treatment and the negative control groups, we perform post-hoc statistical analyses such as:
-
-1. Mann-whitney U test
-2. T-test
-3. Dunn test
-4. KS test
-
-We compute the median to determine the directionality of significance among treatments compared to control in both the Mann-whitney U test and the Dunn test.
-Alternatively, we compute the test statistic for the parametric T-test.
+To compare treatments and the negative control groups, we perform KS tests.
 
 ## Analyze Well Probabilities
 We compare the phenotype probabilities between each treated well and the remaining negative control wells on the corresponding plate.
