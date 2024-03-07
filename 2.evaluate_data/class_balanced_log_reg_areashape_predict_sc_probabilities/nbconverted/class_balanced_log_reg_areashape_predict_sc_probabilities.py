@@ -13,10 +13,11 @@
 import gzip
 import io
 import pathlib
+import sys
+
 import pandas as pd
 import requests
 from joblib import load
-import sys
 
 
 # ## Find the path of the git directory
@@ -81,7 +82,7 @@ def load_joblib_from_url(url):
 model_path = "https://github.com/WayScience/phenotypic_profiling_model/raw/main/2.train_model/models/multi_class_models"
 
 # The path of the data used for the data used for inferencing in the phenotypic_profiling_model repo
-data_path = "https://github.com/WayScience/phenotypic_profiling_model/raw/main/0.download_data/data/labeled_data.csv.gz"
+data_path = "https://github.com/WayScience/phenotypic_profiling_model/raw/main/0.download_data/data/labeled_data__ic.csv.gz"
 
 # Path to the drive
 drive_path = f"{root_dir}/big_drive"
@@ -110,9 +111,9 @@ pathlib.Path(f"{output_proba_path}").mkdir(parents=True, exist_ok=True)
 # Store the models as a dictionary
 models = {
     "final":
-        load_joblib_from_url(f"{model_path}/final__CP_areashape_only__balanced.joblib"),
+        load_joblib_from_url(f"{model_path}/final__CP_areashape_only__balanced__ic.joblib"),
     "shuffled":
-        load_joblib_from_url(f"{model_path}/shuffled_baseline__CP_areashape_only__balanced.joblib")
+        load_joblib_from_url(f"{model_path}/shuffled_baseline__CP_areashape_only__balanced__ic.joblib")
 }
 
 
