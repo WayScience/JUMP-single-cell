@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Compare Well Treatements
-# We compare the treatments in each well using cell treatment probabilities and negative control probabilities for each phenotype.
-# This comparison is accomplished with a KS Test.
+# # Aggregate well phenotype probabilities
+# We aggregate the phenotype probabilities for each well for both the shuffled and final models.
 
 # In[1]:
 
@@ -97,7 +96,7 @@ output_path = pathlib.Path("class_balanced_well_log_reg_aggregate_probabilities"
 output_path.mkdir(parents=True, exist_ok=True)
 
 
-# ## KS test wrapper function
+# ## Well aggregation wrapper function
 
 # In[5]:
 
@@ -114,7 +113,7 @@ def perform_aggregation(_dmso_probs, _treatment_probs):
 
     Returns
     -------
-    A zipped object which represents can be referenced by p_value and a comparison_metric_value, which are later on represented in the resulting dictionary.
+    A zipped object which represents can be referenced by aggregated value, and for compatibility a p-value, which are later on represented in the resulting dictionary.
     """
     stat = np.median(_treatment_probs)
     return zip(["comparison_metric_value", "p_value"], [stat, np.nan])
@@ -211,7 +210,7 @@ comp_functions = {"median_aggregated":  # Name of the test to perform
 filt_cols = ['Metadata_Plate', 'Metadata_Well', 'Metadata_model_type', 'Cell_type']
 
 # Columns of interest which should also be tracked
-tracked_cols = ["treatment", "treatment_type", "Time"]
+tracked_cols = ["treatment", "treatment_type", "Time", "control_type"]
 
 # Store phenotype column names
 phenotype_cols = None
@@ -236,7 +235,8 @@ for proba_path in list(proba_plate_paths):
         common_broaddf,
         common_broaddf,
         phenotype_cols,
-        filt_cols
+        filt_cols,
+        tracked_cols
     )
 
     # Define the comparisons data structure for the first time
