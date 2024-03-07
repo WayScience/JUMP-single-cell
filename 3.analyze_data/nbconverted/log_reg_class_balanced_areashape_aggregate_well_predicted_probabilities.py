@@ -210,7 +210,7 @@ comp_functions = {"median_aggregated":  # Name of the test to perform
 filt_cols = ['Metadata_Plate', 'Metadata_Well', 'Metadata_model_type', 'Cell_type']
 
 # Columns of interest which should also be tracked
-tracked_cols = ["treatment", "treatment_type", "Time"]
+tracked_cols = ["treatment", "treatment_type", "Time", "control_type"]
 
 # Store phenotype column names
 phenotype_cols = None
