@@ -1,6 +1,6 @@
 # Download JUMP-Target SQLite files from AWS
 
-In this module, we download the SQLite files from [AWS](https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0000-jump-pilot/source_4/workspace/backend/2020_11_04_CPJUMP1/).
+In this module, we download the SQLite files from [AWS](https://cellpainting-gallery.s3.amazonaws.com/index.html#cpg0000-jump-pilot/source_4/workspace/backend/2020_11_04_CPJUMP1/) with [aws-cli](https://github.com/aws/aws-cli) on Aug 10, 2023 using instructions provided from [JUMP Cell Painting Datasets](https://github.com/jump-cellpainting/datasets).
 There are 51 plates from the pilot dataset, totalling 1.1 TB of storage from the SQLite files.
 
 Firstly, we generate a manifest file in the [data folder](./data/) called [jump_dataset_location_manifest.csv](./data/jump_dataset_location_manifest.csv).
