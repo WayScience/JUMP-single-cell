@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/625612264.svg)](https://zenodo.org/doi/10.5281/zenodo.10815000)
+
 # JUMP-single-cell
 
 ## Data
