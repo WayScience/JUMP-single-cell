@@ -29,5 +29,5 @@ tail -n +2 "$csv_file" | while IFS=',' read -r -a row; do
     column_value="${row[$column_index]}"
 
     # Download the s3 file to your local machine in a directory defined by command line argument
-    aws s3 cp "$column_value" "$2"
+    aws s3 cp --no-sign-request "$column_value" "$2"
 done
