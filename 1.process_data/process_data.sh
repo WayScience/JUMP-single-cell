@@ -10,4 +10,4 @@ conda activate jump_sc
 jupyter nbconvert --to python --output-dir=nbconverted/ *.ipynb
 
 # run the python script
-python nbconverted/process_and_normalize_jump_data.py
+python nbconverted/process_jump_pilot.py
