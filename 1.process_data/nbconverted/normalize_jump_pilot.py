@@ -172,7 +172,7 @@ for idx, row in barcode_df.iterrows():
     plate_map = row["Plate_Map_Name"]
 
     # Track progress
-    print(f"\nProcessing Plate {plate_name}")
+    print(f"\nNormalizing Plate {plate_name}")
 
     # Get the plate metadata dataframe from the platemap name
     broad_mapdf = barcode_map[plate_map]

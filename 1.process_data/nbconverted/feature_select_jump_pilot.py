@@ -91,7 +91,7 @@ for idx, row in barcode_df.iterrows():
     plate_name = row["Assay_Plate_Barcode"]
 
     # Track progress
-    print(f"\nProcessing Plate {plate_name}")
+    print(f"\nFeature Selecting Plate {plate_name}")
 
     # Path of each normalized output single cell dataset
     normalized_output = f"{normalized_path}/{plate_name}_normalized_sc.parquet"
