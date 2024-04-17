@@ -97,7 +97,7 @@ for idx, row in barcode_df.iterrows():
     normalized_output = f"{normalized_path}/{plate_name}_normalized_sc.parquet"
 
     # Path of each feature selected output single cell dataset
-    feature_selected_output = f"{feature_selected_path}/{plate_name}_normalized_sc.parquet"
+    feature_selected_output = f"{feature_selected_path}/{plate_name}_feature_selected_sc.parquet"
 
     # Feature select normalized data
     feature_select(
