@@ -1,13 +1,12 @@
 #!/bin/bash
 
-# initialize the correct shell for your machine to allow conda to work (see README for note on shell names)
-conda init bash
-
-# activate the main conda environment
-conda activate jump_sc
+py_path="nbconverted"
 
 # convert all notebooks to python files into the nbconverted folder
-jupyter nbconvert --to python --output-dir=nbconverted/ *.ipynb
+jupyter nbconvert --to python --output-dir="${py_path}/" *.ipynb
 
-# run the python script
-python nbconverted/process_jump_pilot.py
+# Run all Python files in the folder
+for pfile in "$py_path"/*.py; do
+    echo "Running $pfile"
+    python3 "$pfile"
+done
