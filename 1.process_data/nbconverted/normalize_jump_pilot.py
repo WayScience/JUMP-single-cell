@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Preprocess using pyctyominer and merge broad samples
+# # Preprocess using pycytominer and merge broad samples
 
 # ## Imports
 
@@ -13,7 +13,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from pycytominer import feature_select, normalize
+from pycytominer import normalize
 from pycytominer.cyto_utils.cells import SingleCells
 
 
@@ -55,7 +55,6 @@ barcode_platemap = f"{ref_path}/barcode_platemap.csv"
 # Output paths
 output_cell_count_path = Path(f"{big_drive_path}/sc_counts")
 normalized_path = Path(f"{big_drive_path}/normalized_sc_data")
-feature_selected_path = Path(f"{big_drive_path}/feature_selected_sc_data")
 
 
 # ## Create directories if non-existent
@@ -65,7 +64,6 @@ feature_selected_path = Path(f"{big_drive_path}/feature_selected_sc_data")
 
 output_cell_count_path.mkdir(parents=True, exist_ok=True)
 normalized_path.mkdir(parents=True, exist_ok=True)
-feature_selected_path.mkdir(parents=True, exist_ok=True)
 
 
 # In[ ]:
@@ -156,19 +154,6 @@ barcode_map = {df_name: add_metadata_prefix_to_column_names(df) for df_name, df 
 platemeta2df = {df_name: fill_dmso(df) for df_name, df in platemeta2df.items()}
 
 
-# ## Feature selection parameters
-
-# In[ ]:
-
-
-feature_select_ops = [
-    "variance_threshold",
-    "correlation_threshold",
-    "blocklist",
-    "drop_na_columns",
-]
-
-
 # ## Merge, Normalize, and Feature Select plate data
 
 # In[ ]:
@@ -186,20 +171,17 @@ for idx, row in barcode_df.iterrows():
     # Get the platemap name
     plate_map = row["Plate_Map_Name"]
 
+    # Track progress
+    print(f"\nProcessing Plate {plate_name}")
+
     # Get the plate metadata dataframe from the platemap name
     broad_mapdf = barcode_map[plate_map]
 
     # Final path of each cell count output file
     output_cell_count_file = f"{output_cell_count_path}/{plate_name}_cellcount.tsv"
 
-    # Path template
-    path_template = f"{normalized_path}/{plate_name}"
-
     # Path of each normalized output single cell dataset
     normalized_output = f"{normalized_path}/{plate_name}_normalized_sc.parquet"
-
-    # Path of each feature selected output single cell dataset
-    feature_selected_output = f"{feature_selected_path}/{plate_name}_normalized_sc.parquet"
 
     # Path of the original sqlite file
     sqlite_file = f"sqlite:///{sqlite_data_path}/{plate_name}.sqlite"
@@ -234,15 +216,6 @@ for idx, row in barcode_df.iterrows():
         samples="Metadata_control_type == 'negcon'",
         method="standardize",
         output_file=normalized_output,
-        output_type="parquet",
-    )
-
-    # Feature select normalized data
-    feature_select(
-        normalized_output,
-        operation=feature_select_ops,
-        na_cutoff=0,
-        output_file=feature_selected_output,
         output_type="parquet",
     )
 
