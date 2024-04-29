@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Preprocess using pyctyominer and merge broad samples
+# # Preprocess using pycytominer and merge broad samples
 
 # ## Imports
 
-# In[1]:
+# In[ ]:
 
 
 import time
@@ -20,7 +20,7 @@ from pycytominer.cyto_utils.cells import SingleCells
 # ## Find the root of the git directory
 # This allows file paths to be referenced in a system agnostic way
 
-# In[2]:
+# In[ ]:
 
 
 # Get the current working directory
@@ -43,7 +43,7 @@ if root_dir is None:
 
 # ## Define Paths
 
-# In[3]:
+# In[ ]:
 
 
 # Input paths
@@ -59,14 +59,14 @@ normalized_path = Path(f"{big_drive_path}/normalized_sc_data")
 
 # ## Create directories if non-existent
 
-# In[4]:
+# In[ ]:
 
 
 output_cell_count_path.mkdir(parents=True, exist_ok=True)
 normalized_path.mkdir(parents=True, exist_ok=True)
 
 
-# In[5]:
+# In[ ]:
 
 
 # Create dataframe from barcode platemap
@@ -77,7 +77,7 @@ barcode_df = pd.read_csv(barcode_platemap)
 
 # ## Define functions
 
-# In[6]:
+# In[ ]:
 
 
 # Add the 'Metadata' prefix to column names
@@ -117,7 +117,7 @@ def fill_dmso(df):
 
 # ## Map reference data
 
-# In[7]:
+# In[ ]:
 
 
 # Merge on the broad_sample column
@@ -129,9 +129,11 @@ compdf = pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_metadata_targets.tsv", 
 compdf.loc[compdf["pert_iname"] == "DMSO", "broad_sample"] = "DMSO"
 
 # Map platemap names found in the barcode file to metadata dataframes
-barcode_map = {"JUMP-Target-1_orf_platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"),
-               "JUMP-Target-1_crispr_platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"),
-                "JUMP-Target-1_compound_platemap": compdf}
+barcode_map = {
+    "JUMP-Target-1_orf_platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"),
+    "JUMP-Target-1_crispr_platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"),
+    "JUMP-Target-1_compound_platemap": compdf
+}
 
 # Map platemap names found in the barcode file to platemap dataframes
 platemeta2df = {platemap_name: pd.read_csv(f"{ref_path}/{platemap_name}.txt", sep="\t") for platemap_name, _ in barcode_map.items()}
@@ -142,7 +144,7 @@ platemeta2cols = {name: df.loc[df["broad_sample"].isnull()]["well_position"].tol
 
 # ## Rename columns and fill control values
 
-# In[8]:
+# In[ ]:
 
 
 # Rename colunns in plate metadata
@@ -152,9 +154,9 @@ barcode_map = {df_name: add_metadata_prefix_to_column_names(df) for df_name, df 
 platemeta2df = {df_name: fill_dmso(df) for df_name, df in platemeta2df.items()}
 
 
-# ## Merge and Normalize plate data
+# ## Merge, Normalize, and Feature Select plate data
 
-# In[9]:
+# In[ ]:
 
 
 # Record the start time
@@ -169,14 +171,17 @@ for idx, row in barcode_df.iterrows():
     # Get the platemap name
     plate_map = row["Plate_Map_Name"]
 
+    # Track progress
+    print(f"\nNormalizing Plate {plate_name}")
+
     # Get the plate metadata dataframe from the platemap name
     broad_mapdf = barcode_map[plate_map]
 
     # Final path of each cell count output file
     output_cell_count_file = f"{output_cell_count_path}/{plate_name}_cellcount.tsv"
 
-    # Path of each normalized out single cell dataset
-    output_file = f"{normalized_path}/{plate_name}_normalized_sc.parquet"
+    # Path of each normalized output single cell dataset
+    normalized_output = f"{normalized_path}/{plate_name}_normalized_sc.parquet"
 
     # Path of the original sqlite file
     sqlite_file = f"sqlite:///{sqlite_data_path}/{plate_name}.sqlite"
@@ -210,7 +215,7 @@ for idx, row in barcode_df.iterrows():
         meta_features="infer",
         samples="Metadata_control_type == 'negcon'",
         method="standardize",
-        output_file=output_file,
+        output_file=normalized_output,
         output_type="parquet",
     )
 
@@ -220,7 +225,7 @@ end_time = time.time()
 
 # ## Specify the time taken
 
-# In[10]:
+# In[ ]:
 
 
 t_minutes = (end_time - start_time) // 60
