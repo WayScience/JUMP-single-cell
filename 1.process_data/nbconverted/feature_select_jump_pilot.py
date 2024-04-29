@@ -8,7 +8,7 @@
 # In[ ]:
 
 
-import time
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -39,29 +39,33 @@ if root_dir is None:
     raise FileNotFoundError("No Git root directory found.")
 
 
-# ## Define Paths
+# ## Paths
+
+# ### Inputs
 
 # In[ ]:
 
 
-# Input paths
 big_drive_path = f"{root_dir}/big_drive"
-sqlite_data_path = f"{big_drive_path}/sc_data"
 ref_path = f"{root_dir}/reference_plate_data"
-barcode_platemap = f"{ref_path}/barcode_platemap.csv"
-normalized_path = Path(f"{big_drive_path}/normalized_sc_data")
+
+# Feature selected sc data
+feature_selected_plate_path = sys.argv[1]
+feature_selected_df = pd.read_parquet(feature_selected_plate_path)
+
+# Name of the plate
+plate_name = sys.argv[2]
+
+
+# ### Outputs
+
+# In[ ]:
+
 
 # Output paths
 feature_selected_path = Path(f"{big_drive_path}/feature_selected_sc_data")
 
 feature_selected_path.mkdir(parents=True, exist_ok=True)
-
-
-# In[ ]:
-
-
-# Create dataframe from barcode platemap
-barcode_df = pd.read_csv(barcode_platemap)
 
 
 # ## Feature selection parameters
@@ -82,43 +86,15 @@ feature_select_ops = [
 # In[ ]:
 
 
-# Record the start time
-start_time = time.time()
+# Path of each feature selected output single cell dataset
+feature_selected_output = f"{feature_selected_path}/{plate_name}_feature_selected_sc.parquet"
 
-# Iterate through each plate in the barcode dataframe
-for idx, row in barcode_df.iterrows():
-
-    plate_name = row["Assay_Plate_Barcode"]
-
-    # Track progress
-    print(f"\nFeature Selecting Plate {plate_name}")
-
-    # Path of each normalized output single cell dataset
-    normalized_output = f"{normalized_path}/{plate_name}_normalized_sc.parquet"
-
-    # Path of each feature selected output single cell dataset
-    feature_selected_output = f"{feature_selected_path}/{plate_name}_feature_selected_sc.parquet"
-
-    # Feature select normalized data
-    feature_select(
-        normalized_output,
-        operation=feature_select_ops,
-        na_cutoff=0,
-        output_file=feature_selected_output,
-        output_type="parquet",
-    )
-
-# Record the end time
-end_time = time.time()
-
-
-# ## Specify the time taken
-
-# In[ ]:
-
-
-t_minutes = (end_time - start_time) // 60
-t_hours = t_minutes / 60
-print(f"Total time taken = {t_minutes} minutes")
-print(f"Total time taken = {t_hours} hours")
+# Feature select normalized data
+feature_select(
+    feature_selected_df,
+    operation=feature_select_ops,
+    na_cutoff=0,
+    output_file=feature_selected_output,
+    output_type="parquet",
+)
 
