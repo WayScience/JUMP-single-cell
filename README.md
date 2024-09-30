@@ -57,5 +57,5 @@ conda env create -f environment.yml
 Alternatively, use the following `just` command
 
 ```bash
-just configure-conda
+just setup-conda-envs
 ```
