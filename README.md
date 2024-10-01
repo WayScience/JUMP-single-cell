@@ -38,13 +38,24 @@ Specifically, the benefits of single-cell phenotyping include:
 | [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | We perform multiple analyses to validate the phenotypic predicted class for each perturbation compared to control |
 | [reference_plate_data](./reference_plate_data/) | Platemaps per perturbation type | This folder holds the platemap files with metadata based on perturbation type and the barcode platemap file |
 
-## Main computational environment
+## Development
 
-For all modules, we use one environment that includes all necessary packages.
+We use a [`justfile`](justfile) to specify [`just`](https://github.com/casey/just) commands for use with this project.
+Please see [`just` installation details](https://just.systems/man/en/packages.html) for configuration on your system.
+
+### Environment
+
+For all modules, we use conda environments that includes all necessary packages.
 
 To create the environment from terminal, run the code line below:
 
 ```bash
 # Make sure you are in the same directory as the environment file
 conda env create -f environment.yml
+```
+
+Alternatively, use the following `just` command
+
+```bash
+just setup-conda-envs
 ```
