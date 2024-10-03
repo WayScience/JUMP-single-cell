@@ -54,9 +54,10 @@ To create the environment from terminal, run the code line below:
 conda env create -f environment.yml
 ```
 
-Alternatively, use the following `just` command
+Alternatively, use the following `just` command.
 
 ```bash
+# setup or update conda envs
 just setup-conda-envs
 ```
 
@@ -75,5 +76,6 @@ just run-step-0
 Run all steps:
 
 ```bash
+# run all steps
 just run-all-steps
 ```
