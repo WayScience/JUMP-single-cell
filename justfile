@@ -37,4 +37,4 @@ default:
 @run-step-0:
     #!{{hashbang}}
     cd 0.download_data
-    source download_data.sh
+    source run.sh
