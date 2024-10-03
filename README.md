@@ -61,7 +61,7 @@ Alternatively, use the following `just` command.
 just setup-conda-envs
 ```
 
-### Processing Steps
+## Running Code from this Project
 
 `just` commands are provided for processing each step.
 There also is a command which can run all processing steps.

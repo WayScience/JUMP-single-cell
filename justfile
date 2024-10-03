@@ -39,9 +39,16 @@ default:
 # run all steps
 @run-all-steps:
     #!{{hashbang}}
+    
+    # setup conda environments
+    just setup-conda-envs
+
+    # run step 0.download_data
     source 0.download_data/run.sh
 
 # run step 0.download_data
 @run-step-0:
     #!{{hashbang}}
+
+    # run step 0.download_data
     source 0.download_data/run.sh
