@@ -32,3 +32,9 @@ default:
         echo "Creating 'R_jump_sc' environment"
         conda env create -n R_jump_sc -f R_environment.yml
     fi
+
+# run step 0.download_data
+@run-step-0:
+    #!{{hashbang}}
+    cd 0.download_data
+    source download_data.sh
