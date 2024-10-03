@@ -15,6 +15,9 @@ default:
 # setup conda envs for this project
 @setup-conda-envs:
     #!{{hashbang}}
+    # initialize the correct shell for your machine to allow conda to work (see README for note on shell names)
+    conda init bash
+
     # Check if the 'jump_sc' environment exists, and update or create accordingly
     if conda env list | grep -q 'jump_sc'; then
         echo "Updating 'jump_sc' environment"
@@ -33,8 +36,12 @@ default:
         conda env create -n R_jump_sc -f R_environment.yml
     fi
 
+# run all steps
+@run-all-steps:
+    #!{{hashbang}}
+    source 0.download_data/run.sh
+
 # run step 0.download_data
 @run-step-0:
     #!{{hashbang}}
-    cd 0.download_data
-    source run.sh
+    source 0.download_data/run.sh
