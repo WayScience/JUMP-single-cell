@@ -32,7 +32,7 @@ Specifically, the benefits of single-cell phenotyping include:
 
 | Module | Purpose | Description |
 | :---- | :----- | :---------- |
-| [0.download_data](./0.download_data/) | Download JUMP-Target SQLite files | We downloaded the CellProfiler SQLite outputs for 51 plates from AWS |
+| [0.download_data](./0.download_data/) | Download JUMP-Target SQLite files and process them with [CytoTable](https://github.com/cytomining/CytoTable) | We download the CellProfiler SQLite outputs for 51 plates from AWS and process them into Parquet files which combine compartment and image metadata as a single table. |
 | [1.process_data](./1.process_data/) | Process SQLite files | We use pycytominer on the SQLite outputs to merge single-cells and normalize features |
 | [2.evaluate_data](./2.evaluate_data/) | Apply phenotypic profiling model | We generate phenotypic predictions for single-cells using the phenotypic profiling model |
 | [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | We perform multiple analyses to validate the phenotypic predicted class for each perturbation compared to control |
@@ -58,4 +58,22 @@ Alternatively, use the following `just` command
 
 ```bash
 just setup-conda-envs
+```
+
+### Processing Steps
+
+`just` commands are provided for processing each step.
+There also is a command which can run all processing steps.
+
+Individual steps:
+
+```bash
+# run step 0.download_data
+just run-step-0
+```
+
+Run all steps:
+
+```bash
+just run-all-steps
 ```
