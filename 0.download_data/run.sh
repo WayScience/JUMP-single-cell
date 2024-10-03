@@ -7,9 +7,11 @@ conda run -n jump_sc jupyter nbconvert --to python \
     ./0.download_data/*.ipynb
 
 # download the jump manifest data
-cd ./0.download_data
+# use a subshell to keep existing code intact
+(
+cd ./0.download_data || exit
 conda run -n jump_sc python ./nbconverted/0.generate_jump_dataset_manifest.py
-cd ..
+)
 
 # process the plate data using cytotable
 conda run -n jump_sc python ./0.download_data/1.process_JUMP_plates_with_CytoTable.py
