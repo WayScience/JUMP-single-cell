@@ -1,5 +1,6 @@
 # Ignore adding specific files from Vim-jukit
 *.py
+!0.download_data/*.py
 !/**/nbconverted/*.py
 **/.jukit/
 !/**/utils/*.py
