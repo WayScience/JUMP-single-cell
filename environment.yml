@@ -19,3 +19,4 @@ dependencies:
   - pip:
     - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
     - lmoments3
+    - cytotable==0.0.10
