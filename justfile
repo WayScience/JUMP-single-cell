@@ -39,7 +39,7 @@ default:
 # run all steps
 @run-all-steps:
     #!{{hashbang}}
-    
+
     # setup conda environments
     just setup-conda-envs
 

@@ -9,4 +9,3 @@ Afterwards, we process each plate using [CytoTable](https://github.com/cytominin
 Optionally, to download only the SQLite plates, please use the [download_from_aws.sh](./download_from_aws.sh) file, which contains the bash script that will download the files from the paths in the manifest.
 
 Please see the notes from the main [`README.md` on processing this step](../README.md#running-code-from-this-project).
-
