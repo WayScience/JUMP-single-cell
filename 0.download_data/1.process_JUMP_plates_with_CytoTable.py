@@ -24,7 +24,9 @@ for _, plate_name, plate_s3_path in pd.read_csv(
     print("Processing plate ", plate_name)
 
     # create a folder for the plate
-    if not (plate_folder := pathlib.Path(f"./0.download_data/data/plates/{plate_name}")).is_dir():
+    if not (
+        plate_folder := pathlib.Path(f"./0.download_data/data/plates/{plate_name}")
+    ).is_dir():
         plate_folder.mkdir()
 
     # if we don't have the cytotable output for a plate, process it
@@ -34,7 +36,7 @@ for _, plate_name, plate_s3_path in pd.read_csv(
         )
     ).is_file():
         # process plate using CytoTable
-        """cytotable_output_path = cytotable.convert(
+        cytotable_output_path = cytotable.convert(
             source_path=plate_s3_path,
             dest_path=cytotable_output_path,
             dest_datatype="parquet",
@@ -49,21 +51,21 @@ for _, plate_name, plate_s3_path in pd.read_csv(
                 executors=[ThreadPoolExecutor(label="tpe_for_jump_processing")]
             ),
             sort_output=False,
-        )"""
+        )
 
     # read only the metadata from parquet file
-    # meta = parquet.ParquetFile(cytotable_output_path).metadata
+    meta = parquet.ParquetFile(cytotable_output_path).metadata
     print(
         "Finished processing plate",
         plate_name,
         "with output",
         cytotable_output_path,
         "which has shape (",
-        # meta.num_rows,
+        meta.num_rows,
         ",",
-        # meta.num_columns,
+        meta.num_columns,
         ").",
     )
 
 # remove the SQLite plates
-# shutil.rmtree("./0.download_data/jump_sqlite_s3_cache/")
+shutil.rmtree("./0.download_data/jump_sqlite_s3_cache/")
