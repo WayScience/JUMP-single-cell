@@ -3,10 +3,14 @@ channels:
   - conda-forge
 dependencies:
   - conda-forge::python=3.9
-  - conda-forge::pandas<2.0 # restrict to less than Pandas 2.0 as there are many conflicts with other dependencies
+  # restrict to less than Pandas 2.0 as there are
+  # many conflicts with other dependencies
+  - conda-forge::pandas<2.0
   - conda-forge::numpy
   - conda-forge::matplotlib
-  - conda-forge::scikit-learn=1.1.1 # Version to allow Roshan's sklearn models to predict probabilities correctly
+  # Version to allow Roshan's sklearn models to
+  # predict probabilities correctly
+  - conda-forge::scikit-learn=1.1.1
   - conda-forge::scipy=1.8.1
   - conda-forge::pathlib2
   - conda-forge::scikit-learn
@@ -17,6 +21,6 @@ dependencies:
   - conda-forge::ipython
   - conda-forge::pip
   - pip:
-    - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
-    - lmoments3
-    - cytotable==0.0.10
+      - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
+      - lmoments3
+      - cytotable==0.0.10

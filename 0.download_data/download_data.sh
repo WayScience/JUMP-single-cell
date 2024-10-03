@@ -6,7 +6,7 @@ conda init bash
 # convert all notebooks to python files into the nbconverted folder
 conda run -n jump_sc jupyter nbconvert --to python \
     --output-dir=nbconverted/ \
-    *.ipynb
+    ./*.ipynb
 
 # download the jump manifest data
 conda run -n jump_sc python nbconverted/0.generate_jump_dataset_manifest.py
