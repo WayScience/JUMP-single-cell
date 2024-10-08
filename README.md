@@ -6,7 +6,7 @@
 
 In this repository, we apply the [phenotypic profiling model](https://github.com/WayScience/phenotypic_profiling_model), which predicts phenotypic class of single cells using nuclei features, to the [JUMP-Target pilot data](https://github.com/jump-cellpainting/JUMP-Target) from the [JUMP consortium](https://jump-cellpainting.broadinstitute.org/).
 
-In this dataset, there are 51 plates with one of three perturbation types (Clustered Regularly Interspaced Short Palindromic Repeats [CRISPR], Open Reading Frame [ORF], and Compound) for two cell lines (A549 and U2OS).
+In this dataset, there are 51 plates with one of three perturbation types (Clustered Regularly Interspaced Short Palindromic Repeats \[CRISPR\], Open Reading Frame \[ORF\], and Compound) for two cell lines (A549 and U2OS).
 
 Each perturbation type has it's own platemap and metadata file that can be found in the [reference_plate_data](./reference_plate_data/) folder.
 A barcode platemap is include which associates each plate to the correct platemap file.
@@ -24,19 +24,19 @@ By predicting single-cell phenotypes with our phenotypic profiling model, we hop
 Specifically, the benefits of single-cell phenotyping include:
 
 - Granular phenotypic mechanisms of perturbations regarding (A) the impact perturbations have on a specific phenotype (e.g., disrupting mitosis) and (B) impact on phenotype prevalence (e.g., a gene knockout that causes apoptosis or stalls cells in a specific cell cycle phase).
--  Filter and/or combine cells of the same phenotypic class to purify and/or improve the traditional image-based profiling pipeline.
+- Filter and/or combine cells of the same phenotypic class to purify and/or improve the traditional image-based profiling pipeline.
 - Adding knowledge to specific combinations of morphology features allows for self-referential interpretation, without the need for database signature lookup or other guilt-by-association methods.
 - When combined with different experimental designs (e.g., targeted fluorescence marker), we can test specific hypotheses regarding single-cell phenotype distributions (and other important hypotheses that would otherwise be impossible without single-cell phenotypes).
 
 ## Repository Structure
 
-| Module | Purpose | Description |
-| :---- | :----- | :---------- |
-| [0.download_data](./0.download_data/) | Download JUMP-Target SQLite files | We downloaded the CellProfiler SQLite outputs for 51 plates from AWS |
-| [1.process_data](./1.process_data/) | Process SQLite files | We use pycytominer on the SQLite outputs to merge single-cells and normalize features |
-| [2.evaluate_data](./2.evaluate_data/) | Apply phenotypic profiling model | We generate phenotypic predictions for single-cells using the phenotypic profiling model |
-| [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | We perform multiple analyses to validate the phenotypic predicted class for each perturbation compared to control |
-| [reference_plate_data](./reference_plate_data/) | Platemaps per perturbation type | This folder holds the platemap files with metadata based on perturbation type and the barcode platemap file |
+| Module                                          | Purpose                                                                                                      | Description                                                                                                                                                            |
+| :---------------------------------------------- | :----------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [0.download_data](./0.download_data/)           | Download JUMP-Target SQLite files and process them with [CytoTable](https://github.com/cytomining/CytoTable) | We download the CellProfiler SQLite outputs for 51 plates from AWS and process them into Parquet files which combine compartment and image metadata as a single table. |
+| [1.process_data](./1.process_data/)             | Process SQLite files                                                                                         | We use pycytominer on the SQLite outputs to merge single-cells and normalize features                                                                                  |
+| [2.evaluate_data](./2.evaluate_data/)           | Apply phenotypic profiling model                                                                             | We generate phenotypic predictions for single-cells using the phenotypic profiling model                                                                               |
+| [3.analyze_data](./3.analyze_data/)             | Analyze phenotypic predictions                                                                               | We perform multiple analyses to validate the phenotypic predicted class for each perturbation compared to control                                                      |
+| [reference_plate_data](./reference_plate_data/) | Platemaps per perturbation type                                                                              | This folder holds the platemap files with metadata based on perturbation type and the barcode platemap file                                                            |
 
 ## Development
 
@@ -54,8 +54,28 @@ To create the environment from terminal, run the code line below:
 conda env create -f environment.yml
 ```
 
-Alternatively, use the following `just` command
+Alternatively, use the following `just` command.
 
 ```bash
+# setup or update conda envs
 just setup-conda-envs
+```
+
+## Running Code from this Project
+
+`just` commands are provided for processing each step.
+There also is a command which can run all processing steps.
+
+Individual steps:
+
+```bash
+# run step 0.download_data
+just run-step-0
+```
+
+Run all steps:
+
+```bash
+# run all steps
+just run-all-steps
 ```
