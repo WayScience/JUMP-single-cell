@@ -1,5 +1,6 @@
 #!/bin/bash
 # Runs processing related to step 0.download_data
+set -e
 
 # convert all notebooks to python files into the nbconverted folder
 conda run -n jump_sc jupyter nbconvert --to python \
