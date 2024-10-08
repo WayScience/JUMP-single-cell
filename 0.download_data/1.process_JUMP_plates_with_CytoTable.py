@@ -27,7 +27,7 @@ for _, plate_name, plate_s3_path in pd.read_csv(
     if not (
         plate_folder := pathlib.Path(f"./0.download_data/data/plates/{plate_name}")
     ).is_dir():
-        plate_folder.mkdir()
+        plate_folder.mkdir(parents=True, exist_ok=True)
 
     # if we don't have the cytotable output for a plate, process it
     if not (
