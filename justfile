@@ -52,3 +52,10 @@ default:
 
     # run step 0.download_data
     source 0.download_data/run.sh
+
+# run step 0.5.quality_control
+@run-step-0-5:
+    #!{{hashbang}}
+
+    # run step 0.download_data
+    source 0.5.quality_control/run.sh
