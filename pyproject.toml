@@ -2,7 +2,6 @@
 target-version = "py39"
 line-length = 88
 fix = true
-
 lint.select = [
   # flake8-builtins
   "A",
@@ -26,3 +25,9 @@ lint.select = [
   "SIM",
   "W",
 ]
+
+[tool.jupytext]
+formats = "ipynb,py:light"
+
+[tool.isort]
+profile = "black"

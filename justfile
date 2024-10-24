@@ -36,6 +36,17 @@ default:
         conda env create -n R_jump_sc -f R_environment.yml
     fi
 
+    # install kernel for use with jupyter envs
+    conda run -n jump_sc python -m ipykernel install --user --name jump_sc --display-name "jump_sc (Python)"
+
+
+# run jupyter lab through project conda env
+@run-jupyter:
+    #!{{hashbang}}
+
+    # open a jupyter lab session through conda env
+    conda run -n jump_sc jupyter lab
+
 # run all steps
 @run-all-steps:
     #!{{hashbang}}
@@ -45,6 +56,8 @@ default:
 
     # run step 0.download_data
     source 0.download_data/run.sh
+    # run step 0.download_data
+    source 0.5.quality_control/run.sh
 
 # run step 0.download_data
 @run-step-0:
