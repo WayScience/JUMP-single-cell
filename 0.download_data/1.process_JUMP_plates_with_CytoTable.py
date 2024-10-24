@@ -51,6 +51,25 @@ for _, plate_name, plate_s3_path in pd.read_csv(
                 executors=[ThreadPoolExecutor(label="tpe_for_jump_processing")]
             ),
             sort_output=False,
+            # add a custom join statement to include all image data
+            # for use during analysis.
+            joins="""
+                SELECT
+                image.*,
+                cytoplasm.* EXCLUDE (Metadata_ImageNumber),
+                cells.* EXCLUDE (Metadata_ImageNumber),
+                nuclei.* EXCLUDE (Metadata_ImageNumber)
+            FROM
+                read_parquet('cytoplasm.parquet') AS cytoplasm
+            LEFT JOIN read_parquet('cells.parquet') AS cells ON
+                cells.Metadata_ImageNumber = cytoplasm.Metadata_ImageNumber
+                AND cells.Metadata_ObjectNumber = cytoplasm.Cytoplasm_Parent_Cells
+            LEFT JOIN read_parquet('nuclei.parquet') AS nuclei ON
+                nuclei.Metadata_ImageNumber = cytoplasm.Metadata_ImageNumber
+                AND nuclei.Metadata_ObjectNumber = cytoplasm.Cytoplasm_Parent_Nuclei
+            LEFT JOIN read_parquet('image.parquet') AS image ON
+                image.Metadata_ImageNumber = cytoplasm.Metadata_ImageNumber
+            """,
         )
 
     # read only the metadata from parquet file
