@@ -14,8 +14,6 @@
 
 # # coSMicQC Demonstration with JUMP Plate BR00117006
 
-import pandas as pd
-import pyarrow as pa
 import pyarrow.parquet as pq
 
 # show the columns where images are included
@@ -24,5 +22,3 @@ import pyarrow.parquet as pq
     for col in pq.ParquetFile("data/plates/BR00117006/BR00117006.parquet").schema.names
     if any(word in col for word in ["Path", "File"])
 ]
-
-

@@ -67,7 +67,7 @@ for _, plate_name, plate_s3_path in pd.read_csv(
                 AND nuclei.Metadata_ObjectNumber = cytoplasm.Cytoplasm_Parent_Nuclei
             LEFT JOIN read_parquet('image.parquet') AS image ON
                 image.Metadata_ImageNumber = cytoplasm.Metadata_ImageNumber
-            """
+            """,
         )
 
         break

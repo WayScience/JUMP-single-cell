@@ -19,3 +19,4 @@ __pycache__/
 # data ignores
 *.sqlite.*
 *.sqlite
+*.parquet

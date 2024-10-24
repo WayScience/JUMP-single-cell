@@ -26,8 +26,8 @@ lint.select = [
   "W",
 ]
 
-[tool.jupytext]
-formats = "ipynb,py:light"
-
 [tool.isort]
 profile = "black"
+
+[tool.jupytext]
+formats = "ipynb,py:light"
