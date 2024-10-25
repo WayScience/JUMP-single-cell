@@ -16,3 +16,10 @@ conda run -n jump_sc python ./nbconverted/0.generate_jump_dataset_manifest.py
 
 # process the plate data using cytotable
 conda run -n jump_sc python ./0.download_data/1.process_JUMP_plates_with_CytoTable.py
+
+# download the images related to JUMP plate BR00117006
+# use a subshell for relative pathing
+(
+cd ./0.download_data || exit
+conda run -n jump_sc python ./2.download_images.py
+)
