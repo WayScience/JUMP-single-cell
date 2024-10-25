@@ -26,6 +26,13 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 from cloudpathlib import S3Client
+# -
+
+df = pd.read_parquet(
+    "../0.download_data/data/plates/BR00117006/BR00117006.parquet",
+    columns=["Image_FileName_OrigAGP"],
+)
+df[["Image_FileName_OrigAGP"]].nunique()
 
 
 # +
@@ -155,6 +162,8 @@ def download_jump_cpg000_images_from_s3(
                     image_cloudpath.download_to(candidate_path)
 
     return "data/images"
+# -
+
 
 
 # +
