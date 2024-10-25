@@ -14,7 +14,8 @@
 
 # # 2.Download JUMP Plate BR00117006 Images and Outlines
 #
-# This notebook works towards demonstrating how to download JUMP Plate BR00117006 images and outlines.
+# This notebook works towards demonstrating how to
+# download JUMP Plate BR00117006 images and outlines.
 
 # +
 import json
