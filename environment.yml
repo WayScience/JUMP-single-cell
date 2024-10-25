@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - conda-forge::python=3.9
+  - conda-forge::pip
   # restrict to less than Pandas 2.0 as there are
   # many conflicts with other dependencies
   - conda-forge::pandas<2.0
@@ -17,10 +18,23 @@ dependencies:
   - conda-forge::requests
   - conda-forge::seaborn
   - conda-forge::scikit-posthocs
+  # used for managing jupyter environments
   - conda-forge::notebook
+  - conda-forge::jupyterlab
+  - conda-forge::ipykernel
   - conda-forge::ipython
-  - conda-forge::pip
+  # quality of life for jupyter environments
+  # ----------------------------------------
+  # automatically converts .ipynb to .py file on save within jupyter lab
+  - conda-forge::jupytext
+  # dependency of jupyterlab_code_formatter
+  - conda-forge::black
+  # dependency of jupyterlab_code_formatter
+  - conda-forge::isort
+  # used for formatting code within .ipynb files
+  - conda-forge::jupyterlab_code_formatter
   - pip:
       - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
       - lmoments3
       - cytotable==0.0.10
+      - cloudpathlib

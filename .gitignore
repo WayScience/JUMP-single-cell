@@ -1,5 +1,4 @@
 # Ignore adding specific files from Vim-jukit
-*.py
 !0.download_data/*.py
 !/**/nbconverted/*.py
 **/.jukit/
@@ -16,3 +15,10 @@ __pycache__/
 
 # Ignore data folder in UMAP analysis (>5GB)
 3.analyze_data/UMAP_analysis/data
+
+# data ignores
+*.sqlite.*
+*.sqlite
+*.parquet
+*.tiff
+*.png
