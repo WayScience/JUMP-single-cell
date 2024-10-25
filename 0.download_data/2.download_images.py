@@ -29,61 +29,6 @@ from cloudpathlib import S3Client
 
 
 # +
-def download_jump_cpg000_images_from_s3(
-    df: pd.DataFrame,
-    s3_columns: List[str],
-    data_path: str,
-) -> str:
-    """
-    Downloads images from S3 paths in specified
-    columns of the DataFrame.
-
-    Creates local directories if they do not exist
-    and downloads files from S3 paths listed
-    in the specified columns, using anonymous
-    (no-sign-request) access.
-
-    Args:
-        df (pd.DataFrame):
-            The DataFrame containing columns
-            with S3 paths.
-        s3_columns (List[str]):
-            List of column names in `df`
-            that contain the S3 paths.
-        data_path (str):
-            A path where images will be downloaded.
-
-    Returns:
-        str:
-            string based path to the images dir
-    """
-
-    # create a custom s3 client to utilize no-sign-request
-    # (for anonymous access to s3 resources)
-    s3_client = S3Client(no_sign_request=True)
-
-    # Create directories for downloading images
-    pathlib.Path(f"{data_path}/outlines").mkdir(parents=True, exist_ok=True)
-    pathlib.Path(f"{data_path}/orig").mkdir(parents=True, exist_ok=True)
-
-    # Iterate over each record in the DataFrame and download the images
-    for record in df[s3_columns].to_dict(orient="records"):
-        for s3_column in s3_columns:
-            image_cloudpath = s3_client.CloudPath(record[s3_column])
-
-            # Download outlines images
-            if "Outlines" in s3_column:
-                image_cloudpath.download_to(
-                    f"data/images/outlines/{image_cloudpath.name}"
-                )
-
-            # Download original images
-            elif "Orig" in s3_column:
-                image_cloudpath.download_to(f"data/images/orig/{image_cloudpath.name}")
-
-    return "data/images"
-
-
 def add_jump_cpg0000_s3_paths(
     df: pd.DataFrame, image_column_groups: List[Tuple[str, str]]
 ) -> pd.DataFrame:
@@ -153,6 +98,63 @@ def add_jump_cpg0000_s3_paths(
         s3_columns.append(s3_column_name)
 
     return df, s3_columns
+
+
+def download_jump_cpg000_images_from_s3(
+    df: pd.DataFrame,
+    s3_columns: List[str],
+    data_path: str,
+) -> str:
+    """
+    Downloads images from S3 paths in specified
+    columns of the DataFrame.
+
+    Creates local directories if they do not exist
+    and downloads files from S3 paths listed
+    in the specified columns, using anonymous
+    (no-sign-request) access.
+
+    Args:
+        df (pd.DataFrame):
+            The DataFrame containing columns
+            with S3 paths.
+        s3_columns (List[str]):
+            List of column names in `df`
+            that contain the S3 paths.
+        data_path (str):
+            A path where images will be downloaded.
+
+    Returns:
+        str:
+            string based path to the images dir
+    """
+
+    # create a custom s3 client to utilize no-sign-request
+    # (for anonymous access to s3 resources)
+    s3_client = S3Client(no_sign_request=True)
+
+    # Create directories for downloading images
+    pathlib.Path(f"{data_path}/outlines").mkdir(parents=True, exist_ok=True)
+    pathlib.Path(f"{data_path}/orig").mkdir(parents=True, exist_ok=True)
+
+    # Iterate over each record in the DataFrame and download the images
+    for record in df[s3_columns].to_dict(orient="records"):
+        for s3_column in s3_columns:
+            image_cloudpath = s3_client.CloudPath(record[s3_column])
+
+            # Download outlines images
+            if "Outlines" in s3_column:
+                candidate_path = f"data/images/outlines/{image_cloudpath.name}"
+                if not pathlib.Path(candidate_path).is_file():
+                    image_cloudpath.download_to(candidate_path)
+
+            # Download original images
+            elif "Orig" in s3_column:
+                candidate_path = f"data/images/orig/{image_cloudpath.name}"
+                if not pathlib.Path(candidate_path).is_file():
+                    image_cloudpath.download_to(candidate_path)
+
+    return "data/images"
 
 
 # +
