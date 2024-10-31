@@ -18,6 +18,16 @@ dependencies:
   - conda-forge::requests
   - conda-forge::seaborn
   - conda-forge::scikit-posthocs
+  # used for cosmicqc quality control visualizations
+  - conda-forge::hvplot
+  - conda-forge::plotly
+  - conda-forge::umap-learn
+  - conda-forge::ipywidgets
+  - conda-forge::fsspec
+  - conda-forge::s3fs
+  - conda-forge::datashader
+  - conda-forge::selenium
+  - conda-forge::dask
   # used for managing jupyter environments
   - conda-forge::notebook
   - conda-forge::jupyterlab
@@ -34,7 +44,8 @@ dependencies:
   # used for formatting code within .ipynb files
   - conda-forge::jupyterlab_code_formatter
   - pip:
-      - git+https://github.com/cytomining/pycytominer.git@8e3c28d3b81efd2c241d4c792edfefaa46698115
+      - pycytominer
       - lmoments3
       - cytotable==0.0.10
       - cloudpathlib
+      - cosmicqc
