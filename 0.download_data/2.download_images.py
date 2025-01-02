@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.16.4
+#       jupytext_version: 1.16.6
 #   kernelspec:
 #     display_name: jump_sc (Python)
 #     language: python
@@ -160,7 +160,7 @@ def download_jump_cpg000_images_from_s3(
 # +
 # reference the file without reading it entirely
 target_file = pq.ParquetFile(
-    "../0.download_data/data/plates/BR00117006/BR00117006.parquet"
+    (parquet_path := "../0.download_data/data/plates/BR00117006/BR00117006.parquet")
 )
 
 # target image names
@@ -242,4 +242,19 @@ print(
         ],
         indent=4,
     ),
+)
+
+# read the full data
+df_full = pd.read_parquet(parquet_path, columns=target_flattened_columns)
+df_full
+
+# find the s3 paths for the full dataset
+df_full, s3_columns = add_jump_cpg0000_s3_paths(
+    df=df_full, image_column_groups=target_image_column_groups
+)
+df_full
+
+# download the images for the dataset
+image_path = download_jump_cpg000_images_from_s3(
+    df=df_full, s3_columns=s3_columns, data_path="data/images"
 )
