@@ -262,7 +262,7 @@ df_merged_single_cells[
 # from being reformatted by black, which is normally preferred.
 # fmt: off
 outline_to_orig_mapping = {
-    rf"{record['Metadata_Well']}_s{record['Image_Metadata_Site']}--cell_outlines\.png": 
+    rf"{record['Metadata_Well']}_s{record['Image_Metadata_Site']}--nuclei_outlines\.png": 
     rf"r{record['Image_Metadata_Row']:02d}c{record['Image_Metadata_Col']:02d}f{record['Image_Metadata_Site']:02d}p(\d{{2}})-.*\.tiff"  
     for record in df_merged_single_cells[
         [
