@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.16.4
+#       jupytext_version: 1.16.6
 #   kernelspec:
 #     display_name: jump_sc (Python)
 #     language: python
@@ -37,6 +37,7 @@ import pandas as pd
 import plotly.express as px
 import pycytominer
 import umap
+from cytodataframe import CytoDataFrame
 from IPython.display import HTML, Image
 from pyarrow import parquet
 
@@ -209,13 +210,16 @@ schema_names[:12]
 # +
 # set a list of metadata columns for use throughout
 metadata_cols = [
+    "Image_TableNumber",
     "Metadata_ImageNumber",
+    "Image_Group_Number",
+    "Image_Group_Index",
+    "Image_Metadata_Col",
     "Image_Metadata_Row",
     "Image_Metadata_Site",
     "Metadata_ObjectNumber",
     "Metadata_Plate",
     "Metadata_Well",
-    "Image_TableNumber",
     "Image_FileName_CellOutlines",
     "Image_FileName_NucleiOutlines",
     "Image_FileName_OrigAGP",
@@ -240,13 +244,39 @@ df_merged_single_cells = pd.read_parquet(
 df_merged_single_cells.head()
 # -
 
-# convert dataframe into a cytodataframe
-df_merged_single_cells = cosmicqc.CytoDataFrame(
-    data=df_merged_single_cells,
-    data_context_dir="../0.download_data/data/images/orig",
-    data_mask_context_dir="../0.download_data/data/images/outlines",
-)
-df_merged_single_cells
+# show the original images and masks alignment with metadata
+df_merged_single_cells[
+    [
+        "Image_FileName_OrigAGP",
+        "Metadata_Well",
+        "Image_Metadata_Row",
+        "Image_Metadata_Col",
+        "Image_Metadata_Site",
+        "Image_FileName_CellOutlines",
+    ]
+]
+
+# +
+# create an outline and orig mapping dictionary to map original images to outlines
+# note: we turn off formatting here to avoid the key-value pairing definintion
+# from being reformatted by black, which is normally preferred.
+# fmt: off
+outline_to_orig_mapping = {
+    rf"{record['Metadata_Well']}_s{record['Image_Metadata_Site']}--cell_outlines\.png": 
+    rf"r{record['Image_Metadata_Row']:02d}c{record['Image_Metadata_Col']:02d}f{record['Image_Metadata_Site']:02d}p(\d{{2}})-.*\.tiff"  
+    for record in df_merged_single_cells[
+        [
+            "Metadata_Well",
+            "Image_Metadata_Row",
+            "Image_Metadata_Col",
+            "Image_Metadata_Site",
+        ]
+    ].to_dict(orient="records")
+}
+# fmt: on
+
+next(iter(outline_to_orig_mapping.items()))
+# -
 
 # label outliers within the dataset
 print("Large nuclei outliers:")
@@ -283,7 +313,12 @@ df_labeled_outliers[
 ].head()
 
 # show small and low formfactor nuclei outliers
-df_labeled_outliers[
+CytoDataFrame(
+    data=pd.DataFrame(df_labeled_outliers).sort_values(by="cqc.small_and_low_formfactor_nuclei.is_outlier", ascending=False),
+    data_context_dir="../0.download_data/data/images/orig",
+    data_outline_context_dir="../0.download_data/data/images/outlines",
+    segmentation_file_regex=outline_to_orig_mapping,
+)[
     [
         "cqc.small_and_low_formfactor_nuclei.is_outlier",
         "Image_FileName_OrigAGP",
@@ -337,7 +372,7 @@ if not pathlib.Path(parquet_sampled_with_outliers).is_file():
             *[
                 col
                 for col in df_labeled_outliers.columns
-                if col not in df_features.columns
+                if col not in schema_names
             ],
         ]
     ]
@@ -410,6 +445,7 @@ df_platemap_and_metadata = pd.read_csv(
     left_on="broad_sample",
     right_on="broad_sample",
 )
+df_platemap_and_metadata
 
 # +
 parquet_pycytominer_annotated = f"./{example_plate}_annotated.parquet"

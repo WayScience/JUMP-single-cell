@@ -28,6 +28,8 @@ dependencies:
   - conda-forge::datashader
   - conda-forge::selenium
   - conda-forge::dask
+  - conda-forge::firefox
+  - conda-forge::geckodriver
   # used for managing jupyter environments
   - conda-forge::notebook
   - conda-forge::jupyterlab
