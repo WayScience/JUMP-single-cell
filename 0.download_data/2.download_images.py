@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.16.4
+#       jupytext_version: 1.16.6
 #   kernelspec:
 #     display_name: jump_sc (Python)
 #     language: python
@@ -155,9 +155,6 @@ def download_jump_cpg000_images_from_s3(
                     image_cloudpath.download_to(candidate_path)
 
     return "data/images"
-
-
-# -
 
 
 # +
