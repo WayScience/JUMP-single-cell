@@ -36,6 +36,7 @@ dependencies:
   - conda-forge::jupyterlab
   - conda-forge::ipykernel
   - conda-forge::ipython
+  - conda-forge::papermill
   # quality of life for jupyter environments
   # ----------------------------------------
   # automatically converts .ipynb to .py file on save within jupyter lab
