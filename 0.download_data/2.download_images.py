@@ -12,12 +12,24 @@
 #     name: jump_sc
 # ---
 
-# # 2.Download JUMP Plate BR00117006 Images and Outlines
+# + [markdown] papermill={"duration": 0.004479, "end_time": "2025-01-06T22:28:25.422676", "exception": false, "start_time": "2025-01-06T22:28:25.418197", "status": "completed"}
+# # 2.Download JUMP Plate Images and Outlines
 #
-# This notebook works towards demonstrating how to
-# download JUMP Plate BR00117006 images and outlines.
+# This notebook works downloads JUMP plate images 
+# and outlines using 
+# [Papermill](https://github.com/nteract/papermill) 
+# paramterization.
 
-# +
+# + editable=true papermill={"duration": 0.008132, "end_time": "2025-01-06T22:28:25.436456", "exception": false, "start_time": "2025-01-06T22:28:25.428324", "status": "completed"} slideshow={"slide_type": ""} tags=["parameters"]
+# Papermill notebook parameters
+# (including notebook cell tag).
+# We set a default here which may be overridden
+# during Papermill execution.
+# See here for more information:
+# https://papermill.readthedocs.io/en/latest/usage-parameterize.html
+plate_id = "BR00117006"
+
+# + editable=true papermill={"duration": 3.150857, "end_time": "2025-01-06T22:28:28.598904", "exception": false, "start_time": "2025-01-06T22:28:25.448047", "status": "completed"} slideshow={"slide_type": ""}
 import json
 import pathlib
 from typing import List, Tuple
@@ -28,7 +40,7 @@ import pyarrow.parquet as pq
 from cloudpathlib import S3Client
 
 
-# +
+# + papermill={"duration": 0.021248, "end_time": "2025-01-06T22:28:28.623359", "exception": false, "start_time": "2025-01-06T22:28:28.602111", "status": "completed"}
 def add_jump_cpg0000_s3_paths(
     df: pd.DataFrame, image_column_groups: List[Tuple[str, str]]
 ) -> pd.DataFrame:
@@ -134,8 +146,12 @@ def download_jump_cpg000_images_from_s3(
     s3_client = S3Client(no_sign_request=True)
 
     # Create directories for downloading images
-    pathlib.Path(f"{data_path}/outlines").mkdir(parents=True, exist_ok=True)
-    pathlib.Path(f"{data_path}/orig").mkdir(parents=True, exist_ok=True)
+    pathlib.Path(base_outline_path := f"{data_path}/outlines").mkdir(
+        parents=True, exist_ok=True
+    )
+    pathlib.Path(base_orig_path := f"{data_path}/orig").mkdir(
+        parents=True, exist_ok=True
+    )
 
     # Iterate over each record in the DataFrame and download the images
     for record in df[s3_columns].to_dict(orient="records"):
@@ -144,23 +160,23 @@ def download_jump_cpg000_images_from_s3(
 
             # Download outlines images
             if "Outlines" in s3_column:
-                candidate_path = f"data/images/outlines/{image_cloudpath.name}"
+                candidate_path = f"{base_outline_path}/{image_cloudpath.name}"
                 if not pathlib.Path(candidate_path).is_file():
                     image_cloudpath.download_to(candidate_path)
 
             # Download original images
             elif "Orig" in s3_column:
-                candidate_path = f"data/images/orig/{image_cloudpath.name}"
+                candidate_path = f"{base_orig_path}/{image_cloudpath.name}"
                 if not pathlib.Path(candidate_path).is_file():
                     image_cloudpath.download_to(candidate_path)
 
     return "data/images"
 
 
-# +
+# + editable=true papermill={"duration": 0.20375, "end_time": "2025-01-06T22:28:28.832306", "exception": false, "start_time": "2025-01-06T22:28:28.628556", "status": "completed"} slideshow={"slide_type": ""}
 # reference the file without reading it entirely
 target_file = pq.ParquetFile(
-    (parquet_path := "../0.download_data/data/plates/BR00117006/BR00117006.parquet")
+    (parquet_path := f"../0.download_data/data/plates/{plate_id}/{plate_id}.parquet")
 )
 
 # target image names
@@ -195,7 +211,7 @@ print(
     )
 )
 
-# +
+# + editable=true papermill={"duration": 0.410698, "end_time": "2025-01-06T22:28:29.244472", "exception": false, "start_time": "2025-01-06T22:28:28.833774", "status": "completed"} slideshow={"slide_type": ""}
 # show first row of output to help determine where files are located
 # note: we do this to avoid reading the full dataset, which is > 20 GB
 df_example = pa.Table.from_batches(
@@ -205,21 +221,22 @@ df_example = pa.Table.from_batches(
 # print the dictionary with indentation from the json module
 print(json.dumps(df_example.to_dict(orient="records"), indent=4))
 
-# +
+# + papermill={"duration": 0.007916, "end_time": "2025-01-06T22:28:29.253908", "exception": false, "start_time": "2025-01-06T22:28:29.245992", "status": "completed"}
 df_example, s3_columns = add_jump_cpg0000_s3_paths(
     df=df_example, image_column_groups=target_image_column_groups
 )
 
 # print the dictionary with indentation from the json module
 print(json.dumps(df_example.to_dict(orient="records"), indent=4))
-# -
 
+# + papermill={"duration": 0.18372, "end_time": "2025-01-06T22:28:29.440437", "exception": false, "start_time": "2025-01-06T22:28:29.256717", "status": "completed"}
 # download the images to a local path
 image_path = download_jump_cpg000_images_from_s3(
-    df=df_example, s3_columns=s3_columns, data_path="data/images"
+    df=df_example, s3_columns=s3_columns, data_path=f"data/images/{plate_id}"
 )
 image_path
 
+# + papermill={"duration": 0.107778, "end_time": "2025-01-06T22:28:29.549758", "exception": false, "start_time": "2025-01-06T22:28:29.441980", "status": "completed"}
 # show the images
 print(
     "Outlines:",
@@ -244,17 +261,20 @@ print(
     ),
 )
 
+# + editable=true papermill={"duration": 0.508443, "end_time": "2025-01-06T22:28:30.066200", "exception": false, "start_time": "2025-01-06T22:28:29.557757", "status": "completed"} slideshow={"slide_type": ""}
 # read the full data
 df_full = pd.read_parquet(parquet_path, columns=target_flattened_columns)
 df_full
 
+# + papermill={"duration": 0.703436, "end_time": "2025-01-06T22:28:30.776504", "exception": false, "start_time": "2025-01-06T22:28:30.073068", "status": "completed"}
 # find the s3 paths for the full dataset
 df_full, s3_columns = add_jump_cpg0000_s3_paths(
     df=df_full, image_column_groups=target_image_column_groups
 )
 df_full
 
+# + editable=true papermill={"duration": 29.614086, "end_time": "2025-01-06T22:29:00.397392", "exception": false, "start_time": "2025-01-06T22:28:30.783306", "status": "completed"} slideshow={"slide_type": ""}
 # download the images for the dataset
 image_path = download_jump_cpg000_images_from_s3(
-    df=df_full, s3_columns=s3_columns, data_path="data/images"
+    df=df_full, s3_columns=s3_columns, data_path=f"data/images/{plate_id}"
 )

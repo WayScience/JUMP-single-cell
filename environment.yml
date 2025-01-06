@@ -52,3 +52,4 @@ dependencies:
       - cytotable==0.0.10
       - cloudpathlib
       - cosmicqc
+      - cytodataframe

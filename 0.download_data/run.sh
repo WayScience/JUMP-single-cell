@@ -21,5 +21,6 @@ conda run -n jump_sc python ./0.download_data/1.process_JUMP_plates_with_CytoTab
 # use a subshell for relative pathing
 (
 cd ./0.download_data || exit
+# run papermill on plate BR00117006 images
 conda run -n jump_sc papermill ./2.download_images.ipynb ./2.download_images.ipynb -p plate_id BR00117006
 )

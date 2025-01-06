@@ -314,9 +314,11 @@ df_labeled_outliers[
 
 # show small and low formfactor nuclei outliers
 CytoDataFrame(
-    data=pd.DataFrame(df_labeled_outliers).sort_values(by="cqc.small_and_low_formfactor_nuclei.is_outlier", ascending=False),
-    data_context_dir="../0.download_data/data/images/orig",
-    data_outline_context_dir="../0.download_data/data/images/outlines",
+    data=pd.DataFrame(df_labeled_outliers).sort_values(
+        by="cqc.small_and_low_formfactor_nuclei.is_outlier", ascending=False
+    ),
+    data_context_dir="../0.download_data/data/images/BR00117006/orig",
+    data_outline_context_dir="../0.download_data/data/images/BR00117006/outlines",
     segmentation_file_regex=outline_to_orig_mapping,
 )[
     [
@@ -369,11 +371,7 @@ if not pathlib.Path(parquet_sampled_with_outliers).is_file():
     df_labeled_outliers_unique_cols = df_labeled_outliers[
         [
             *metadata_cols,
-            *[
-                col
-                for col in df_labeled_outliers.columns
-                if col not in schema_names
-            ],
+            *[col for col in df_labeled_outliers.columns if col not in schema_names],
         ]
     ]
 
