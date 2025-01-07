@@ -546,6 +546,70 @@ plot_hvplot_scatter(
 Image(image_with_outliers)
 
 # +
+# show a UMAP for all outliers within the data
+plot_hvplot_scatter(
+    embeddings=embeddings_with_outliers,
+    title=f"UMAP of JUMP coSMicQC small and low formactor erroneous outliers within {example_plate}",
+    filename=(
+        image_with_outliers := f"./images/umap_erroneous_outliers_{example_plate}_small_and_low_formfactor_nuclei.png"
+    ),
+    color_dataframe=df_features_with_cqc_outlier_data,
+    color_column="cqc.small_and_low_formfactor_nuclei.is_outlier",
+    clabel="density of single cells classified as outliers",
+)
+
+# conserve filespace by displaying export instead of dynamic plot
+Image(image_with_outliers)
+
+# +
+# show a UMAP for all outliers within the data
+plot_hvplot_scatter(
+    embeddings=embeddings_with_outliers,
+    title=f"UMAP of JUMP coSMicQC elongated nuclei erroneous outliers within {example_plate}",
+    filename=(
+        image_with_outliers := f"./images/umap_erroneous_outliers_{example_plate}_elongated_nuclei.png"
+    ),
+    color_dataframe=df_features_with_cqc_outlier_data,
+    color_column="cqc.elongated_nuclei.is_outlier",
+    clabel="density of single cells classified as outliers",
+)
+
+# conserve filespace by displaying export instead of dynamic plot
+Image(image_with_outliers)
+
+# +
+# show a UMAP for all outliers within the data
+plot_hvplot_scatter(
+    embeddings=embeddings_with_outliers,
+    title=f"UMAP of JUMP coSMicQC large nuclei erroneous outliers within {example_plate}",
+    filename=(
+        image_with_outliers := f"./images/umap_erroneous_outliers_{example_plate}_large_nuclei.png"
+    ),
+    color_dataframe=df_features_with_cqc_outlier_data,
+    color_column="cqc.large_nuclei.is_outlier",
+    clabel="density of single cells classified as outliers",
+)
+
+# conserve filespace by displaying export instead of dynamic plot
+Image(image_with_outliers)
+
+# +
+# show a UMAP for all outliers within the data
+plot_hvplot_scatter(
+    embeddings=embeddings_with_outliers,
+    title=f"UMAP of JUMP all coSMicQC erroneous outliers within {example_plate}",
+    filename=(
+        image_with_outliers := f"./images/umap_erroneous_outliers_{example_plate}.png"
+    ),
+    color_dataframe=df_features_with_cqc_outlier_data,
+    color_column="analysis.included_at_least_one_outlier",
+    clabel="density of single cells classified as outliers",
+)
+
+# conserve filespace by displaying export instead of dynamic plot
+Image(image_with_outliers)
+
+# +
 # prepare data for normalization and feature selection
 # by removing cosmicqc and analaysis focused columns.
 df_for_normalize_and_feature_select_without_outliers = df_features_with_cqc_outlier_data[
