@@ -314,9 +314,11 @@ df_labeled_outliers[
 
 # show small and low formfactor nuclei outliers
 CytoDataFrame(
-    data=pd.DataFrame(df_labeled_outliers).sort_values(by="cqc.small_and_low_formfactor_nuclei.is_outlier", ascending=False),
-    data_context_dir="../0.download_data/data/images/orig",
-    data_outline_context_dir="../0.download_data/data/images/outlines",
+    data=pd.DataFrame(df_labeled_outliers).sort_values(
+        by="cqc.small_and_low_formfactor_nuclei.is_outlier", ascending=False
+    ),
+    data_context_dir="../0.download_data/data/images/BR00117006/orig",
+    data_outline_context_dir="../0.download_data/data/images/BR00117006/outlines",
     segmentation_file_regex=outline_to_orig_mapping,
 )[
     [
@@ -369,11 +371,7 @@ if not pathlib.Path(parquet_sampled_with_outliers).is_file():
     df_labeled_outliers_unique_cols = df_labeled_outliers[
         [
             *metadata_cols,
-            *[
-                col
-                for col in df_labeled_outliers.columns
-                if col not in schema_names
-            ],
+            *[col for col in df_labeled_outliers.columns if col not in schema_names],
         ]
     ]
 
@@ -512,7 +510,7 @@ all_metadata_cols
 embeddings_with_outliers = generate_umap_embeddings(
     df_input=pd.read_parquet(parquet_pycytominer_feature_selected),
     cols_metadata_to_exclude=all_metadata_cols,
-    random_state=0,
+    random_state=42,
 )
 # show the shape and top values from the embeddings array
 print(embeddings_with_outliers.shape)
@@ -530,6 +528,70 @@ plot_hvplot_scatter(
 )
 # conserve filespace by displaying export instead of dynamic plot
 Image(image_with_all_outliers)
+
+# +
+# show a UMAP for all outliers within the data
+plot_hvplot_scatter(
+    embeddings=embeddings_with_outliers,
+    title=f"UMAP of JUMP all coSMicQC erroneous outliers within {example_plate}",
+    filename=(
+        image_with_outliers := f"./images/umap_erroneous_outliers_{example_plate}.png"
+    ),
+    color_dataframe=df_features_with_cqc_outlier_data,
+    color_column="analysis.included_at_least_one_outlier",
+    clabel="density of single cells classified as outliers",
+)
+
+# conserve filespace by displaying export instead of dynamic plot
+Image(image_with_outliers)
+
+# +
+# show a UMAP for all outliers within the data
+plot_hvplot_scatter(
+    embeddings=embeddings_with_outliers,
+    title=f"UMAP of JUMP coSMicQC small and low formactor erroneous outliers within {example_plate}",
+    filename=(
+        image_with_outliers := f"./images/umap_erroneous_outliers_{example_plate}_small_and_low_formfactor_nuclei.png"
+    ),
+    color_dataframe=df_features_with_cqc_outlier_data,
+    color_column="cqc.small_and_low_formfactor_nuclei.is_outlier",
+    clabel="density of single cells classified as outliers",
+)
+
+# conserve filespace by displaying export instead of dynamic plot
+Image(image_with_outliers)
+
+# +
+# show a UMAP for all outliers within the data
+plot_hvplot_scatter(
+    embeddings=embeddings_with_outliers,
+    title=f"UMAP of JUMP coSMicQC elongated nuclei erroneous outliers within {example_plate}",
+    filename=(
+        image_with_outliers := f"./images/umap_erroneous_outliers_{example_plate}_elongated_nuclei.png"
+    ),
+    color_dataframe=df_features_with_cqc_outlier_data,
+    color_column="cqc.elongated_nuclei.is_outlier",
+    clabel="density of single cells classified as outliers",
+)
+
+# conserve filespace by displaying export instead of dynamic plot
+Image(image_with_outliers)
+
+# +
+# show a UMAP for all outliers within the data
+plot_hvplot_scatter(
+    embeddings=embeddings_with_outliers,
+    title=f"UMAP of JUMP coSMicQC large nuclei erroneous outliers within {example_plate}",
+    filename=(
+        image_with_outliers := f"./images/umap_erroneous_outliers_{example_plate}_large_nuclei.png"
+    ),
+    color_dataframe=df_features_with_cqc_outlier_data,
+    color_column="cqc.large_nuclei.is_outlier",
+    clabel="density of single cells classified as outliers",
+)
+
+# conserve filespace by displaying export instead of dynamic plot
+Image(image_with_outliers)
 
 # +
 # show a UMAP for all outliers within the data
@@ -632,7 +694,7 @@ if not pathlib.Path(parquet_pycytominer_feature_selected_wo_outliers).is_file():
 embeddings_without_outliers = generate_umap_embeddings(
     df_input=pd.read_parquet(parquet_pycytominer_feature_selected_wo_outliers),
     cols_metadata_to_exclude=all_metadata_cols,
-    random_state=0,
+    random_state=42,
 )
 # show the shape and top values from the embeddings array
 print(embeddings_without_outliers.shape)
