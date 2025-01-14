@@ -510,7 +510,7 @@ all_metadata_cols
 embeddings_with_outliers = generate_umap_embeddings(
     df_input=pd.read_parquet(parquet_pycytominer_feature_selected),
     cols_metadata_to_exclude=all_metadata_cols,
-    random_state=0,
+    random_state=42,
 )
 # show the shape and top values from the embeddings array
 print(embeddings_with_outliers.shape)
@@ -694,7 +694,7 @@ if not pathlib.Path(parquet_pycytominer_feature_selected_wo_outliers).is_file():
 embeddings_without_outliers = generate_umap_embeddings(
     df_input=pd.read_parquet(parquet_pycytominer_feature_selected_wo_outliers),
     cols_metadata_to_exclude=all_metadata_cols,
-    random_state=0,
+    random_state=42,
 )
 # show the shape and top values from the embeddings array
 print(embeddings_without_outliers.shape)
