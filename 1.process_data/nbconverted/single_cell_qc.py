@@ -21,16 +21,9 @@
 plate_id = "BR00117010"
 
 
-# In[2]:
-
-
-# Parameters
-plate_id = "BR00116999"
-
-
 # ## Import libraries
 
-# In[3]:
+# In[2]:
 
 
 from pathlib import Path
@@ -43,7 +36,7 @@ from pyarrow import parquet
 
 # ## Load in the plate data to process with only relevant metadata columns
 
-# In[4]:
+# In[3]:
 
 
 # set path to save qc results
@@ -59,7 +52,7 @@ merged_single_cells = (
 parquet.ParquetFile(merged_single_cells).metadata
 
 
-# In[5]:
+# In[4]:
 
 
 # set a list of metadata columns for use throughout
@@ -97,7 +90,7 @@ df_merged_single_cells.head()
 
 # ## Create mapping for the outlines to the images for CytoDataFrame
 
-# In[6]:
+# In[5]:
 
 
 # create an outline and orig mapping dictionary to map original images to outlines
@@ -138,7 +131,7 @@ next(iter(outline_to_orig_mapping.items()))
 
 # ### Detect outliers and show single-cell image crops with CytoDataFrame (cdf)
 
-# In[7]:
+# In[6]:
 
 
 # find irregular shaped nuclei using thresholds that maximizes
@@ -174,7 +167,7 @@ irregular_nuclei_outliers_cdf.sort_values(by="Nuclei_AreaShape_FormFactor", asce
 
 # ### Randomly sample outlier rows to visually inspect if the threshold looks to be optimized
 
-# In[8]:
+# In[7]:
 
 
 irregular_nuclei_outliers_cdf.sample(n=5, random_state=0)
@@ -182,7 +175,7 @@ irregular_nuclei_outliers_cdf.sample(n=5, random_state=0)
 
 # ### Generate a new dataframe to save the original indices for filtering prior to further preprocessing
 
-# In[9]:
+# In[8]:
 
 
 # Create a new dataframe for failed QC indices
@@ -203,7 +196,7 @@ failed_qc_indices.head()
 
 # ### Detect outliers and show single-cell image crops with CytoDataFrame (cdf)
 
-# In[10]:
+# In[9]:
 
 
 # find mis-segmented nuclei due using thresholds that maximizes
@@ -237,7 +230,7 @@ poor_nuclei_outliers_cdf.sort_values(by="Nuclei_AreaShape_Compactness", ascendin
 
 # ### Randomly sample outlier rows to visually inspect if the threshold looks to be optimized
 
-# In[11]:
+# In[10]:
 
 
 poor_nuclei_outliers_cdf.sample(n=5, random_state=0)
@@ -245,7 +238,7 @@ poor_nuclei_outliers_cdf.sample(n=5, random_state=0)
 
 # ### Save the original indices for failed single cells to compressed CSV files
 
-# In[12]:
+# In[11]:
 
 
 # Create a new dataframe for poor nuclei outliers
