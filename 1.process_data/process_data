@@ -1,5 +1,5 @@
 #!/bin/bash
-# Normalize and Feature Select morphology data per plate
+# Merge, Normalize and Feature Select morphology data per plate
 
 git_root=$(git rev-parse --show-toplevel)
 
