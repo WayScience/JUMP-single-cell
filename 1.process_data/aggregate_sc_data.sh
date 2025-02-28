@@ -1,5 +1,5 @@
 #!/bin/bash
-# Aggregates both the normalized and feature-selected single-cell data
+# Aggregates both the normalized and feature-selected single-cell plate data (using the mean) to the well level.
 
 big_drive="$(git rev-parse --show-toplevel)/big_drive"
 
@@ -11,6 +11,13 @@ normalized_data_path="${big_drive}/normalized_sc_data"
 feature_selected_data_path="${big_drive}/feature_selected_sc_data"
 
 aggregate() {
+#   Parameters
+#   ----------
+#   $1: String
+#       Path of the plate data to be aggregated.
+#   $2: String
+#       Name of the type of data aggregated.
+
     if [ -d "$1" ]; then
         for file in "$1"/*.parquet; do
             if [ -f "$file" ]; then
