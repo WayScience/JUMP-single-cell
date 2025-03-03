@@ -9,6 +9,7 @@
 .virtual_documents/
 __pycache__/
 !/**/utils/*.py
+*.vscode
 
 # Ignore mac related files
 *.DS_Store
