@@ -229,7 +229,7 @@ for idx, row in barcode_df.iterrows():
         for qc_plate_indices_file in qc_indices_manifests_path.iterdir():
             if plate_name in qc_plate_indices_file.name:
                 plate_indicesdf = pd.read_parquet(qc_plate_indices_file)
-                sc_df = sc_df.loc[~plate_indicesdf["original_index"]]
+                sc_df = sc_df.drop(plate_indicesdf["original_index"], axis=0)
                 break
 
     # We only change the columns if the plate does not contain empty wells.
