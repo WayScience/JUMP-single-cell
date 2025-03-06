@@ -47,10 +47,15 @@ if root_dir is None:
 
 
 # Input paths
-big_drive_path = f"{root_dir}/big_drive"
-sqlite_data_path = f"{big_drive_path}/sc_data"
-ref_path = f"{root_dir}/reference_plate_data"
-barcode_platemap = f"{ref_path}/barcode_platemap.csv"
+big_drive_path = Path(f"{root_dir}/big_drive")
+sqlite_data_path = (big_drive_path / "sc_data").resolve(strict=True)
+ref_path = root_dir / "reference_plate_data"
+barcode_platemap = (ref_path / "barcode_platemap.csv").resolve(strict=True)
+
+# Set this to apply QC filtering (Parquet files must contain the "original_index" column)
+qc_indices_manifests_path = (big_drive_path / "JUMP_failed_qc_indices").resolve(
+    strict=True
+)
 
 # Output paths
 output_cell_count_path = Path(f"{big_drive_path}/sc_counts")
@@ -96,6 +101,7 @@ def add_metadata_prefix_to_column_names(df):
     df.rename(columns=lambda x: f"Metadata_{x}", inplace=True)
     return df
 
+
 # Fill in broad_sample "DMSO" for NaN and prefix the column names
 def fill_dmso(df):
     """
@@ -123,23 +129,36 @@ def fill_dmso(df):
 # Merge on the broad_sample column
 merge_col = "Metadata_broad_sample"
 
-compdf = pd.read_csv(f"{ref_path}/JUMP-Target-1_compound_metadata_targets.tsv", sep="\t")
+compdf = pd.read_csv(
+    f"{ref_path}/JUMP-Target-1_compound_metadata_targets.tsv", sep="\t"
+)
 
 # Set empty broad samples to DMSO if the pert iname is DMSO for the compounds dataframe
 compdf.loc[compdf["pert_iname"] == "DMSO", "broad_sample"] = "DMSO"
 
 # Map platemap names found in the barcode file to metadata dataframes
 barcode_map = {
-    "JUMP-Target-1_orf_platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"),
-    "JUMP-Target-1_crispr_platemap": pd.read_csv(f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"),
-    "JUMP-Target-1_compound_platemap": compdf
+    "JUMP-Target-1_orf_platemap": pd.read_csv(
+        f"{ref_path}/JUMP-Target-1_orf_metadata.tsv", sep="\t"
+    ),
+    "JUMP-Target-1_crispr_platemap": pd.read_csv(
+        f"{ref_path}/JUMP-Target-1_crispr_metadata.tsv", sep="\t"
+    ),
+    "JUMP-Target-1_compound_platemap": compdf,
 }
 
 # Map platemap names found in the barcode file to platemap dataframes
-platemeta2df = {platemap_name: pd.read_csv(f"{ref_path}/{platemap_name}.txt", sep="\t") for platemap_name, _ in barcode_map.items()}
+platemeta2df = {
+    platemap_name: pd.read_csv(f"{ref_path}/{platemap_name}.txt", sep="\t")
+    for platemap_name, _ in barcode_map.items()
+}
 
 # Map the wells corresponding to the empty broad samples in the plate metadata files
-platemeta2cols = {name: df.loc[df["broad_sample"].isnull()]["well_position"].tolist() for name, df in platemeta2df.items() if name != "JUMP-Target-1_compound_platemap"}
+platemeta2cols = {
+    name: df.loc[df["broad_sample"].isnull()]["well_position"].tolist()
+    for name, df in platemeta2df.items()
+    if name != "JUMP-Target-1_compound_platemap"
+}
 
 
 # ## Rename columns and fill control values
@@ -147,8 +166,11 @@ platemeta2cols = {name: df.loc[df["broad_sample"].isnull()]["well_position"].tol
 # In[ ]:
 
 
-# Rename colunns in plate metadata
-barcode_map = {df_name: add_metadata_prefix_to_column_names(df) for df_name, df in barcode_map.items()}
+# Rename columns in plate metadata
+barcode_map = {
+    df_name: add_metadata_prefix_to_column_names(df)
+    for df_name, df in barcode_map.items()
+}
 
 # Fill the broad_sample missing values with DMSO for the plate metadata. This does not affect the CRISPR and ORF plates, since the platemaps have no matching DMSO broad samples
 platemeta2df = {df_name: fill_dmso(df) for df_name, df in platemeta2df.items()}
@@ -202,10 +224,20 @@ for idx, row in barcode_df.iterrows():
     # Merge the dataframes based on the broad_sample column, again there will not be matching DMSO broad samples for the CRISPR and ORF plates
     sc_df = pd.merge(sc_df, broad_mapdf, how="left", on=merge_col)
 
+    # Apply QC filtering using data indices
+    if qc_indices_manifests_path.exists():
+        for qc_plate_indices_file in qc_indices_manifests_path.iterdir():
+            if plate_name in qc_plate_indices_file.name:
+                plate_indicesdf = pd.read_parquet(qc_plate_indices_file)
+                sc_df = sc_df.drop(plate_indicesdf["original_index"], axis=0)
+                break
+
     # We only change the columns if the plate does not contain empty wells.
     # The wells that don't have a broad_sample are assigned "no_treatment" for the metadata columns
     if plate_map != "JUMP-Target-1_compound_platemap":
-        sc_df.loc[sc_df["Metadata_Well"].isin(platemeta2cols[plate_map]), broad_mapdf.columns] = "no_treatment"
+        sc_df.loc[
+            sc_df["Metadata_Well"].isin(platemeta2cols[plate_map]), broad_mapdf.columns
+        ] = "no_treatment"
 
     # Normalize the data using the negative control as a reference
     normalize(
