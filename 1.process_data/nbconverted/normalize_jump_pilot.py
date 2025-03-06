@@ -59,7 +59,7 @@ qc_indices_manifests_path = (big_drive_path / "JUMP_failed_qc_indices").resolve(
 
 # Output paths
 output_cell_count_path = Path(f"{big_drive_path}/sc_counts")
-normalized_path = Path(f"{big_drive_path}/normalized_sc_qc_data")
+normalized_path = Path(f"{big_drive_path}/normalized_sc_data")
 
 
 # ## Create directories if non-existent
@@ -203,7 +203,7 @@ for idx, row in barcode_df.iterrows():
     output_cell_count_file = f"{output_cell_count_path}/{plate_name}_cellcount.tsv"
 
     # Path of each normalized output single cell dataset
-    normalized_output = f"{normalized_path}/{plate_name}_normalized_sc_qc.parquet"
+    normalized_output = f"{normalized_path}/{plate_name}_normalized_sc.parquet"
 
     # Path of the original sqlite file
     sqlite_file = f"sqlite:///{sqlite_data_path}/{plate_name}.sqlite"
