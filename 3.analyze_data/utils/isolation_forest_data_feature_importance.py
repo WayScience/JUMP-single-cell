@@ -26,6 +26,13 @@ class IsoforestFeatureImportance:
         self._morphology_data = _morphology_data
         self._isoforest_importances = None
 
+    @property
+    def isoforest_importances(self):
+        if self._isoforest_importances is None:
+            raise ValueError("isoforest_importances have not been computed")
+
+        return self._isoforest_importances
+
     def save_tree_feature_importances(
         self,
         _tree_obj: _tree.Tree,
