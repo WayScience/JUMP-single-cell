@@ -8,6 +8,8 @@ from sklearn.tree import DecisionTreeRegressor, _tree
 
 
 class IsoforestFeatureImportance:
+    # Computes Isolation Forest (Scikit-learn) feature importances from a subset of data.
+
     def __init__(
         self,
         _estimators: Sequence[DecisionTreeRegressor],
