@@ -24,6 +24,7 @@ class IsoforestFeatureImportance:
 
         self._estimators = _estimators
         self._morphology_data = _morphology_data
+        self._isoforest_importances = None
 
     def save_tree_feature_importances(
         self,
@@ -120,6 +121,10 @@ class IsoforestFeatureImportance:
 
         _features = [_features] if isinstance(_features, str) else _features
 
-        filtered_morphology_data = self._morphology_data[_features].copy()
+        if self._isoforest_importances is None:
+            filtered_morphology_data = self.compute_isoforest_feature_importances()
+
+        else:
+            filtered_morphology_data = self._isoforest_importances[_features].copy()
 
         return filtered_morphology_data.apply(lambda x: x.dropna().tolist()).to_dict()
