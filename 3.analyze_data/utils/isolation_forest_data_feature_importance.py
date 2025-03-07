@@ -57,6 +57,10 @@ class IsoforestFeatureImportance:
             feature_idx = _tree_obj.feature[node_id]
 
             if feature_idx >= 0:  # Ignore leaf nodes (-2)
+                """
+                Samples are often easier to seperate with less data.
+                Therefore, earlier features have greater importances.
+                """
                 feature_importances[self._morphology_data.columns[feature_idx]].append(
                     1 / (1 + depth)
                 )
@@ -68,9 +72,16 @@ class IsoforestFeatureImportance:
 
             depth += 1
 
+        """
+        Gives a balanced view of expected feature importance in the tree.
+        As opposed to the total contribution, which increases with the (same) features.
+        Since features are choosen randomly, dividing feature importances
+        by the depth weights each feature by how soon the data could be isolated.
+        """
+
         return {
             _sample_idx: {
-                feature: sum(importances) / len(importances)
+                feature: (sum(importances) / len(importances)) / (depth + 1)
                 for feature, importances in feature_importances.items()
             }
         }
