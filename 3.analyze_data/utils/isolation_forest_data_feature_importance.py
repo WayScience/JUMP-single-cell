@@ -76,7 +76,7 @@ class IsoforestFeatureImportance:
 
         return {
             _sample_idx: {
-                feature: (sum(importances) / len(importances)) / (depth + 1)
+                feature: sum(importances) / (depth + 1)
                 for feature, importances in feature_importances.items()
             }
         }
