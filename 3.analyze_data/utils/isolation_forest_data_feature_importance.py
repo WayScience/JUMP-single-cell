@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Optional, Sequence, Union
+from typing import Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -12,7 +12,7 @@ class IsoforestFeatureImportance:
 
     def __init__(
         self,
-        _estimators: Sequence[DecisionTreeRegressor],
+        _estimators: list[DecisionTreeRegressor],
         _morphology_data: pd.DataFrame,
     ):
         """
@@ -40,7 +40,7 @@ class IsoforestFeatureImportance:
         _sample_idx: int,
     ) -> dict[dict[str, float]]:
         """
-        Aggregates and then returns feature importances per tree.
+        Returns aggregated feature importances across trees for a given sample.
 
         Parameters
         _tree_obj: Object for traversing tree.
@@ -57,13 +57,8 @@ class IsoforestFeatureImportance:
             feature_idx = _tree_obj.feature[node_id]
 
             if feature_idx >= 0:  # Ignore leaf nodes (-2)
-                """
-                Samples are often easier to seperate with less data.
-                Therefore, earlier features have greater importances.
-                """
-                feature_importances[self._morphology_data.columns[feature_idx]].append(
-                    1 / (1 + depth)
-                )
+                # Indicates if a feature is present in a tree (1)
+                feature_importances[self._morphology_data.columns[feature_idx]].append(1)
 
             if morphology_features.iloc[feature_idx] <= _tree_obj.threshold[node_id]:
                 node_id = _tree_obj.children_left[node_id]
@@ -73,10 +68,10 @@ class IsoforestFeatureImportance:
             depth += 1
 
         """
-        Gives a balanced view of expected feature importance in the tree.
-        As opposed to the total contribution, which increases with the (same) features.
-        Since features are choosen randomly, dividing feature importances
-        by the depth weights each feature by how soon the data could be isolated.
+        Weights each feature, responsible for splitting the sample, equally
+        with the inverse depth of the sample's leaf node (terminating node).
+        This allows features to be more important with how soon each sample
+        is isolated across trees.
         """
 
         return {
@@ -86,8 +81,8 @@ class IsoforestFeatureImportance:
             }
         }
 
-    def compute_isoforest_feature_importances(self) -> pd.DataFrame:
-        # Computes and returns the importance for all trees and samples
+    def compute_isoforest_importances(self) -> pd.DataFrame:
+        # Computes and returns the aggregated importance for all features and samples (if they exist) using lazy parallelization.
 
         isotree_importances = Parallel(n_jobs=-1)(
             delayed(self.save_tree_feature_importances)(
@@ -100,7 +95,6 @@ class IsoforestFeatureImportance:
         )
 
         isoforest_importances = {}
-        unique_feats = set()
 
         sample_isoforest_importances = {
             sample: defaultdict(list)
@@ -120,13 +114,12 @@ class IsoforestFeatureImportance:
                 isoforest_importances[sample][feature] = sum(importances) / len(
                     importances
                 )
-                unique_feats.add(feature)
 
         self._isoforest_importances = pd.DataFrame(isoforest_importances).T
 
         return self._isoforest_importances
 
-    def get_isoforest_importances(
+    def get_filtered_isoforest_importances(
         self, _features: Union[str, list[str]]
     ) -> dict[str, float]:
         """
@@ -140,7 +133,7 @@ class IsoforestFeatureImportance:
         _features = [_features] if isinstance(_features, str) else _features
 
         if self._isoforest_importances is None:
-            filtered_morphology_data = self.compute_isoforest_feature_importances()
+            filtered_morphology_data = self.compute_isoforest_importances()
 
         else:
             filtered_morphology_data = self._isoforest_importances[_features].copy()
