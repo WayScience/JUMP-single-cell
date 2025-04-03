@@ -68,7 +68,7 @@ class DeterministicSampling:
             warnings.warn(
                 "The number of samples per group must be at least 1. Changing this to 1."
             )
-            samples_per_plate = 1
+            samples_per_group = 1
 
         sampled_platedf = []
 
