@@ -2,8 +2,7 @@
 # coding: utf-8
 
 # # Identify Single Cell Anomalies
-# In this part of the analysis, the single cell are computed using an isolation forest.
-# The index of this file is used to reference the single cell index in the corresponding parquet files, where the "Metadata_plate" column refers to the plate name corresponding to the reference file.
+# Here we train Anomalyze models on different pre-computed datasets.
 
 # ### Import Libraries
 
@@ -11,50 +10,28 @@
 
 
 import pathlib
-
-import pandas as pd
 import sys
+
+import joblib
+import pandas as pd
+import pyarrow.parquet as pq
 from sklearn.ensemble import IsolationForest
-
-
-# ## Find the path of the git directory
-
-# In[ ]:
-
-
-# Get the current working directory
-cwd = pathlib.Path.cwd()
-
-if (cwd / ".git").is_dir():
-    root_dir = cwd
-
-else:
-    root_dir = None
-    for parent in cwd.parents:
-        if (parent / ".git").is_dir():
-            root_dir = parent
-            break
-
-# Check if a Git root directory was found
-if root_dir is None:
-    raise FileNotFoundError("No Git root directory found.")
 
 
 # ## Define paths
 
 # ### Inputs
 
-# In[ ]:
+# In[1]:
 
 
-big_drive_path = f"{root_dir}/big_drive"
+plate_data_name = pathlib.Path(sys.argv[1]).name
+is_sc = sys.argv[2].lower() == "true"
+sampled_plate_jump_data_path = sys.argv[3]
 
-# Feature selected sc data
-feature_selected_plate_path = sys.argv[1]
-feature_selected_df = pd.read_parquet(feature_selected_plate_path)
-
-# Name of the plate
-plate_name = sys.argv[2]
+sampled_platedf = pd.read_parquet(
+    f"{sampled_plate_jump_data_path}/{plate_data_name}.parquet"
+)
 
 
 # ### Outputs
@@ -62,33 +39,27 @@ plate_name = sys.argv[2]
 # In[ ]:
 
 
-outlier_path = pathlib.Path(f"{big_drive_path}/outlier_sc_fs_plate_data")
-outlier_path.mkdir(parents=True, exist_ok=True)
+isoforest_path = pathlib.Path("isolation_forest_models")
+isoforest_path.mkdir(parents=True, exist_ok=True)
+
+isoforest_path = pathlib.Path(
+    isoforest_path / f"{plate_data_name}_isolation_forest.joblib"
+)
 
 
-# ## Identify Single Cell Outliers
+# ## Train Anomalyze Models
 
 # In[ ]:
 
 
-# Metadata columns
-meta_cols = [col for col in feature_selected_df.columns if "Metadata" in col]
+meta_cols = [col for col in sampled_platedf.columns if "Metadata" in col]
+featdf = sampled_platedf.drop(columns=meta_cols).dropna(axis=1, how="any")
 
-# Cellprofiler feature data
-featdf = feature_selected_df.drop(columns=meta_cols)
+# 1 is used because aggregated data contains fewer samples
+num_estimators = 1_600 if is_sc else 1
 
-# Calculate anomalies
-isofor = IsolationForest(n_estimators=1000, random_state=0, n_jobs=-1)
+isofor = IsolationForest(n_estimators=num_estimators, random_state=0, n_jobs=-1)
+isofor.fit(featdf)
 
-# Store anomaly data
-pd.DataFrame(
-    {
-        "Result_inlier": isofor.fit_predict(featdf),
-        "Result_anomaly_score": isofor.decision_function(featdf),
-        "Metadata_Site": feature_selected_df["Metadata_Site"],
-        "Metadata_Well": feature_selected_df["Metadata_Well"],
-        "Metadata_Plate": feature_selected_df["Metadata_Plate"],
-        "Metadata_ObjectNumber": feature_selected_df["Metadata_ObjectNumber"]
-    }
-).to_parquet(f"{outlier_path}/single_cell_fs_outlier_plate_{plate_name}.parquet", index=True)
+joblib.dump(isofor, isoforest_path)
 
