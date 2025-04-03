@@ -1,3 +1,11 @@
-# Identify single-cell anomalies
-This analysis identifies single-cell anomalies determined with an isolation forest for each plate independently of other plates.
-The isolation forests are constructed from both treatment and control cellprofiler plate features.
+#Identify single-cell anomalies
+This analysis identifies JUMP anomalies after sampling and training processed JUMP data.
+Anomalyze is trained on 6 combinations of processed data:
+- Normalized single-cell QC'd data
+- Normalized single-cell non-QC'd data
+- Normalized and feature-selected single-cell QC'd data
+- Normalized and feature-selected single-cell non-QC'd data
+- QC'd data aggregated to the well level before feature-selection
+- Non-QC'd data aggregated to the well level after feature-selection
+- Non-QC'd data aggregated to the well level before feature-selection
+- QC'd data aggregated to the well level after feature-selection
