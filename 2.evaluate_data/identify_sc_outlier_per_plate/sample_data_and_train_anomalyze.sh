@@ -1,56 +1,51 @@
 #!/bin/bash
 
-# This script calls python code to identify anomalous cells by passing each plate as input.
+# This script calls python code to sample and train anomalyze by passing plates from processed data as input.
 
-# Record the start time of the script
-script_start_time=$(date +%s.%N)
+sampled_plate_jump_data=$(mktemp -d)
 
 # Get the root directory
 git_root=$(git rev-parse --show-toplevel)
 
 py_path="nbconverted"
 
-# convert all notebooks to python files into the nbconverted folder
 jupyter nbconvert --to python --output-dir="${py_path}/" *.ipynb
 
 # Get the normalized data path (with multiple plates)
-feature_selected_data_path="${git_root}/big_drive/feature_selected_sc_data"
+plate_paths=(
+    "${git_root}/big_drive/feature_selected_sc_qc_data"
+    "${git_root}/big_drive/normalized_sc_qc_data"
+    "${git_root}/big_drive/feature_selected_sc_data"
+    "${git_root}/big_drive/normalized_sc_data"
+    "${git_root}/big_drive/post_feature_selection_aggregated_data_pre_qc"
+    "${git_root}/big_drive/pre_feature_selection_aggregated_data_pre_qc"
+    "${git_root}/big_drive/post_feature_selection_aggregated_data_qc"
+    "${git_root}/big_drive/pre_feature_selection_aggregated_data_qc"
+)
 
-# Track the number of plates processed
-number_plates=0
+for plate_dir in "${plate_paths[@]}"; do
 
-# Check if the folder exists
-if [ -d "$feature_selected_data_path" ]; then
+    if [ -d "$plate_dir" ]; then
 
-    # Iterate through all Parquet files in the normalized data path
-    for file in "$feature_selected_data_path"/*.parquet; do
-
-        start_time=$(date +%s.%N)
-
-        # Check if each path is a file
-        if [ -f "$file" ]; then
-
-            # Get the plate name from the filename
-            plate_name="$(ls $file | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}')"
-
-            echo -e "\nProcessing Plate $plate_name"
-
-            # Generate the probabilities for the specified plate data
-            python3 "$py_path/identify_anomalous_single_cells_fs.py" $file $plate_name
-
-            ((number_plates++))
-
+        if [[ "$plate_dir" == *"sc"* ]]; then
+            is_sc="true"
+        else
+            is_sc="false"
         fi
 
-        end_time=$(date +%s.%N)
-        runtime=$(echo "($end_time - $start_time) / 3600" | bc)
-        echo "Plate $plate_name was executed in $runtime hours"
+        echo -e "\nSampling from $plate_dir"
 
-    done
-fi
+        for plate_file in $plate_dir/*; do
+            /usr/bin/time -v python3 "$py_path/sample_anomalous_single_cells_fs.py" "$plate_file" "$is_sc" "$sampled_plate_jump_data"
+        done
 
-script_end_time=$(date +%s.%N)
+        echo -e "\nTraining on sampled data from $plate_dir"
 
-# Show execution summary
-script_runtime=$(echo "($script_end_time - $script_start_time) / 3600" | bc)
-echo -e "\nScript processed $number_plates plates in $script_runtime hours"
+        /usr/bin/time -v python3 "$py_path/identify_anomalous_single_cells_fs.py" "$plate_dir" "$is_sc" "$sampled_plate_jump_data"
+
+    else
+        echo "Error: '$plate_dir' is not a directory."
+        return 1
+    fi
+
+done
