@@ -26,8 +26,7 @@ from sklearn.ensemble import IsolationForest
 
 
 plate_data_name = pathlib.Path(sys.argv[1]).name
-is_sc = sys.argv[2].lower() == "true"
-sampled_plate_jump_data_path = sys.argv[3]
+sampled_plate_jump_data_path = sys.argv[2]
 
 sampled_platedf = pd.read_parquet(
     f"{sampled_plate_jump_data_path}/{plate_data_name}.parquet"
@@ -55,10 +54,12 @@ isoforest_path = pathlib.Path(
 meta_cols = [col for col in sampled_platedf.columns if "Metadata" in col]
 featdf = sampled_platedf.drop(columns=meta_cols).dropna(axis=1, how="any")
 
-# 1 is used because aggregated data contains fewer samples
-num_estimators = 1_600 if is_sc else 1
-
-isofor = IsolationForest(n_estimators=num_estimators, random_state=0, n_jobs=-1)
+# If 1_600 trees are trained with 256 samples per tree, then
+# 1_600 * 256 gives approximately the expected number of samples per tree.
+# For some of the plate data, this number of samples can barely fit in memory.
+# We also want to maximize the number of trees to learn many patterns for identifying anomalies.
+# 256 is empirically the largest number of samples per tree that allowed outliers to be isolated better.
+isofor = IsolationForest(n_estimators=1_600, random_state=0, n_jobs=-1)
 isofor.fit(featdf)
 
 joblib.dump(isofor, isoforest_path)

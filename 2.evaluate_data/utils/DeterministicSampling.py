@@ -22,7 +22,7 @@ class DeterministicSampling:
         self._divisor = 10_000
 
     """
-    _plate_column, _well_column and _cell_id_columns must be present in _platedf.
+    _plate_column, _well_column and _cell_id_columns store column names, and must be present in _platedf.
     _cell_id_columns will be used with _plate_column and _well_column to uniquely identify each cell.
     For example, _cell_id_columns in some projects could be ["Metadata_Site", "Metadata_ObjectNumber"]
     """

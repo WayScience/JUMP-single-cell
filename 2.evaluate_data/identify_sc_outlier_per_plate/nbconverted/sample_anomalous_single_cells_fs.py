@@ -29,10 +29,7 @@ from DeterministicSampling import DeterministicSampling
 plate_path = pathlib.Path(sys.argv[1]).resolve(strict=True)
 platedf = pd.read_parquet(plate_path)
 
-# Boolean flag for if the data is single-cell
-is_sc = sys.argv[2].lower() == "true"
-
-sampled_plate_jump_path = pathlib.Path(sys.argv[3])
+sampled_plate_jump_path = pathlib.Path(sys.argv[2])
 
 
 # ### Outputs
@@ -48,21 +45,19 @@ plate_data_path = sampled_plate_jump_path / f"{plate_path.parent.name}.parquet"
 # In[3]:
 
 
-if is_sc:
-    ds = DeterministicSampling(
-        _platedf=platedf,
-        _samples_per_plate=8_100,
-        _plate_column="Metadata_Plate",
-        _well_column="Metadata_Well",
-        _cell_id_columns=["Metadata_Site", "Metadata_ObjectNumber"],
-    )
+ds = DeterministicSampling(
+    _platedf=platedf,
+    # Number of samples per plate needed to train the JUMP isolation forests
+    # See identify_anomalous_single_cells_fs.py for more details
+    # Only 8_000 are needed, however each sampling will likely not be exactly 8_000 samples.
+    # To ensure a sufficient sample size I increased the threshold.
+    _samples_per_plate=8_100,
+    _plate_column="Metadata_Plate",
+    _well_column="Metadata_Well",
+    _cell_id_columns=["Metadata_Site", "Metadata_ObjectNumber"],
+)
 
-    sampled_platedf = ds.sample_plate_deterministically(
-        _sample_strategy="well_sampling"
-    )
-
-else:
-    sampled_platedf = platedf
+sampled_platedf = ds.sample_plate_deterministically(_sample_strategy="well_sampling")
 
 
 # ## Concatenate and Save Sampled Plate data
@@ -76,6 +71,4 @@ if plate_data_path.exists():
     )
 
 sampled_platedf.to_parquet(plate_data_path)
-
-print(sampled_platedf.shape)
 
