@@ -18,6 +18,7 @@ dependencies:
   - conda-forge::requests
   - conda-forge::seaborn
   - conda-forge::scikit-posthocs
+  - conda-forge::python-cityhash
   # used for cosmicqc quality control visualizations
   - conda-forge::pycytominer
   - conda-forge::hvplot

@@ -1,3 +1,0 @@
-# Identify single-cell anomalies
-This analysis identifies single-cell anomalies determined with an isolation forest for each plate independently of other plates.
-The isolation forests are constructed from both treatment and control cellprofiler plate features.
