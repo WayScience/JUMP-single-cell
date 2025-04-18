@@ -21,7 +21,7 @@ from sklearn.ensemble import IsolationForest
 # In[ ]:
 
 
-def compute_sc_outlier_data(
+def compute_sc_anomalies(
     _scdf: pd.DataFrame,
 ) -> pd.DataFrame:
     """
@@ -35,9 +35,9 @@ def compute_sc_outlier_data(
     # Isolation forest reference:
     # https://ieeexplore.ieee.org/document/4781136
     isofor = IsolationForest(n_estimators=1_000, random_state=0, n_jobs=-1)
-    _scdf = _scdf.assign(Result_inlier=isofor.fit_predict(_scdf[feat_cols].copy()))
+    _scdf = _scdf.assign(Result_inlier=isofor.fit_predict(_scdf[feat_cols]))
     _scdf = _scdf[meta_cols].assign(
-        Result_anomaly_score=isofor.decision_function(_scdf[feat_cols].copy())
+        Result_anomaly_score=isofor.decision_function(_scdf[feat_cols])
     )
 
     _scdf.sort_values(by="Result_anomaly_score", ascending=True, inplace=True)
@@ -75,7 +75,8 @@ meta_dict = {col: scddf[col].dtype for col in meta_cols}
 meta_dict["Result_inlier"] = "i1"  # int8
 meta_dict["Result_anomaly_score"] = "f8"  # float64
 
-outlier_ddf = scddf.map_partitions(compute_sc_outlier_data, meta=meta_dict)
+# The "meta" parameter expects a dictionary describing the output dataframe column types.
+outlier_ddf = scddf.map_partitions(compute_sc_anomalies, meta=meta_dict)
 outlier_ddf.to_parquet(
     anomaly_data_path / sc_data_path.name / "_anomaly_data.parquet", write_index=False
 )

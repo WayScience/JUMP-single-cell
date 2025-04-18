@@ -10,7 +10,7 @@ git_root=$(git rev-parse --show-toplevel)
 
 py_path="nbconverted"
 
-jupyter nbconvert --to python --output-dir="${py_path}/" *.ipynb
+jupyter nbconvert --to python --output-dir="${py_path}/" ./*.ipynb
 
 iso_forest_paths=f"${git_root}/2.evaluate_data/train_sc_anomalyze_models/isolation_forest_models"
 
@@ -26,7 +26,7 @@ for plate_dir in "${plate_paths[@]}"; do
 
     if [ -d "$plate_dir" ]; then
 
-        iso_forest_path="$iso_forest_path/$(basename "$plate_dir")_isolation_forest.joblib"
+        iso_forest_path="$iso_forest_paths/$(basename "$plate_dir")_isolation_forest.joblib"
 
         echo -e "\nSampling from $plate_dir"
 
