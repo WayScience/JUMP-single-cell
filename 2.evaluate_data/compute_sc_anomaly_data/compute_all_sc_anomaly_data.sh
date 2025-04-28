@@ -34,7 +34,7 @@ for plate_dir in "${plate_paths[@]}"; do
 
                 echo -e "\nSampling from $plate_dir"
 
-                /usr/bin/time -v python3 "$py_path/compute_sc_outlier_data.py" "$file" "$iso_forest_path" "sc_anomaly_data"
+                /usr/bin/time -v python3 "$py_path/compute_sc_anomaly_data.py" "$file" "$iso_forest_path" "sc_anomaly_data"
 
             fi
 
