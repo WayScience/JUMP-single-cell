@@ -48,7 +48,7 @@ meta_cols = [col for col in scdf.columns if "Metadata" in col]
 # Isolation forest reference:
 # https://ieeexplore.ieee.org/document/4781136
 scdf = scdf.assign(Result_inlier=iso_forest.fit_predict(scdf[feat_cols]))
-scdf = scdf[meta_cols].assign(
+scdf = scdf.assign(
     Result_anomaly_score=iso_forest.decision_function(scdf[feat_cols])
 )
 
