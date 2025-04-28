@@ -22,13 +22,13 @@ from sklearn.ensemble import IsolationForest
 # In[ ]:
 
 
-data_path = sys.argv[1].resolve(strict=True)
-data_dir_name = data_path.parent.name
-scdf = pd.read_parquet(data_path)
+sc_data_path = sys.argv[1].resolve(strict=True)
+sc_data_dir_name = sc_data_path.parent.name
+scdf = pd.read_parquet(sc_data_path)
 
 iso_forest = joblib.load(pathlib.Path(sys.argv[2]).resolve(strict=True))
 
-anomaly_data_path = pathlib.Path(sys.argv[3]) / data_dir_name
+anomaly_data_path = pathlib.Path(sys.argv[3]) / sc_data_dir_name
 anomaly_data_path.mkdir(parents=True, exist_ok=True)
 
 
