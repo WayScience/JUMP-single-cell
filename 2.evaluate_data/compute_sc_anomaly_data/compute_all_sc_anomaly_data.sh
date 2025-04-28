@@ -14,7 +14,7 @@ jupyter nbconvert --to python --output-dir="${py_path}/" ./*.ipynb
 
 iso_forest_paths="${git_root}/2.evaluate_data/train_sc_anomalyze_models/isolation_forest_models"
 
-# Get the normalized data path (with multiple plates)
+# Get the single-cell data path (with multiple plates)
 plate_paths=(
     "${git_root}/big_drive/feature_selected_sc_qc_data"
     "${git_root}/big_drive/normalized_sc_qc_data"
@@ -32,7 +32,7 @@ for plate_dir in "${plate_paths[@]}"; do
 
                 iso_forest_path="$iso_forest_paths/$(basename "$plate_dir")_isolation_forest.joblib"
 
-                echo -e "\nSampling from $plate_dir"
+                echo -e "\nComputing anomaly data from $plate_dir"
 
                 /usr/bin/time -v python3 "$py_path/compute_sc_anomaly_data.py" "$file" "$iso_forest_path" "sc_anomaly_data"
 
