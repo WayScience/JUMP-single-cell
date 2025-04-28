@@ -12,7 +12,7 @@ py_path="nbconverted"
 
 jupyter nbconvert --to python --output-dir="${py_path}/" ./*.ipynb
 
-iso_forest_paths=f"${git_root}/2.evaluate_data/train_sc_anomalyze_models/isolation_forest_models"
+iso_forest_paths="${git_root}/2.evaluate_data/train_sc_anomalyze_models/isolation_forest_models"
 
 # Get the normalized data path (with multiple plates)
 plate_paths=(
