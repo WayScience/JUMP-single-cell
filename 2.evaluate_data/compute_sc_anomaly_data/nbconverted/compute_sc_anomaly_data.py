@@ -27,6 +27,7 @@ sc_data_dir_name = sc_data_path.parent.name
 scdf = pd.read_parquet(sc_data_path)
 
 iso_forest = joblib.load(pathlib.Path(sys.argv[2]).resolve(strict=True))
+iso_forest.n_jobs = -1
 
 anomaly_data_path = pathlib.Path(sys.argv[3]) / sc_data_dir_name
 anomaly_data_path.mkdir(parents=True, exist_ok=True)
