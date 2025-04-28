@@ -10,45 +10,11 @@
 import pathlib
 import sys
 
-import dask.dataframe as dd
 import joblib
 import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 from sklearn.ensemble import IsolationForest
-
-
-# ## Identify Anomaly Data
-
-# In[ ]:
-
-
-def compute_sc_anomalies(
-    _scdf: pd.DataFrame,
-) -> pd.DataFrame:
-    """
-    Compute single-cell outlier data.
-
-    Parameters
-    ----------
-    _scdf: Single cell profile data containing morphology features and metadata.
-    """
-
-    # Isolation forest reference:
-    # https://ieeexplore.ieee.org/document/4781136
-    isofor = IsolationForest(n_estimators=1_000, random_state=0, n_jobs=-1)
-    _scdf = _scdf.assign(Result_inlier=isofor.fit_predict(_scdf[feat_cols]))
-    _scdf = _scdf[meta_cols].assign(
-        Result_anomaly_score=isofor.decision_function(_scdf[feat_cols])
-    )
-
-    _scdf.sort_values(by="Result_anomaly_score", ascending=True, inplace=True)
-
-    return _scdf[
-        meta_cols
-        + [
-            "Result_inlier",
-            "Result_anomaly_score",
-        ]
-    ]
 
 
 # ## Define inputs and outputs
@@ -56,12 +22,13 @@ def compute_sc_anomalies(
 # In[ ]:
 
 
-sc_data_path = pathlib.Path(sys.argv[1].resolve(strict=True))
-scddf = dd.read_parquet(sc_data_path / "*.parquet")
+data_path = sys.argv[1].resolve(strict=True)
+data_dir_name = data_path.parent.name
+scdf = pd.read_parquet(data_path)
 
 iso_forest = joblib.load(pathlib.Path(sys.argv[2]).resolve(strict=True))
 
-anomaly_data_path = pathlib.Path("sc_anomaly_data")
+anomaly_data_path = pathlib.Path(sys.argv[3]) / data_dir_name
 anomaly_data_path.mkdir(parents=True, exist_ok=True)
 
 
@@ -69,15 +36,33 @@ anomaly_data_path.mkdir(parents=True, exist_ok=True)
 
 
 feat_cols = iso_forest.feature_names_in_
-meta_cols = [col for col in scddf.columns if "Metadata" in col]
+meta_cols = [col for col in scdf.columns if "Metadata" in col]
 
-meta_dict = {col: scddf[col].dtype for col in meta_cols}
-meta_dict["Result_inlier"] = "i1"  # int8
-meta_dict["Result_anomaly_score"] = "f8"  # float64
 
-# The "meta" parameter expects a dictionary describing the output dataframe column types.
-outlier_ddf = scddf.map_partitions(compute_sc_anomalies, meta=meta_dict)
-outlier_ddf.to_parquet(
-    anomaly_data_path / sc_data_path.name / "_anomaly_data.parquet", write_index=False
+# ## Compute Anomaly Data
+
+# In[ ]:
+
+
+# Isolation forest reference:
+# https://ieeexplore.ieee.org/document/4781136
+scdf = scdf.assign(Result_inlier=iso_forest.fit_predict(scdf[feat_cols]))
+scdf = scdf[meta_cols].assign(
+    Result_anomaly_score=iso_forest.decision_function(scdf[feat_cols])
+)
+
+scdf.sort_values(by="Result_anomaly_score", ascending=True, inplace=True)
+
+pq.write_to_dataset(
+    pa.Table.from_pandas(
+        scdf[
+            meta_cols
+            + [
+                "Result_inlier",
+                "Result_anomaly_score",
+            ]
+        ]
+    ),
+    root_path=anomaly_data_path,
 )
 
