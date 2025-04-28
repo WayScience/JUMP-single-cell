@@ -22,7 +22,7 @@ from sklearn.ensemble import IsolationForest
 # In[ ]:
 
 
-sc_data_path = sys.argv[1].resolve(strict=True)
+sc_data_path = pathlib.Path(sys.argv[1]).resolve(strict=True)
 sc_data_dir_name = sc_data_path.parent.name
 scdf = pd.read_parquet(sc_data_path)
 
