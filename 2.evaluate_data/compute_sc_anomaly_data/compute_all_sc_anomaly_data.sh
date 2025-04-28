@@ -26,11 +26,19 @@ for plate_dir in "${plate_paths[@]}"; do
 
     if [ -d "$plate_dir" ]; then
 
-        iso_forest_path="$iso_forest_paths/$(basename "$plate_dir")_isolation_forest.joblib"
+        for file in "$plate_dir"/*.parquet; do
 
-        echo -e "\nSampling from $plate_dir"
+            if [ -f "$file" ]; then
 
-        /usr/bin/time -v python3 "$py_path/compute_sc_outlier_data.py" "$plate_dir" "$iso_forest_path"
+                iso_forest_path="$iso_forest_paths/$(basename "$plate_dir")_isolation_forest.joblib"
+
+                echo -e "\nSampling from $plate_dir"
+
+                /usr/bin/time -v python3 "$py_path/compute_sc_outlier_data.py" "$file" "$iso_forest_path" "sc_anomaly_data"
+
+            fi
+
+        done
 
     else
         echo "Error: '$plate_dir' is not a directory."
