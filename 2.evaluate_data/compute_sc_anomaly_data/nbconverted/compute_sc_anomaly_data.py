@@ -52,5 +52,5 @@ scdf = scdf.assign(Result_anomaly_score=iso_forest.decision_function(scdf[feat_c
 
 scdf.sort_values(by="Result_anomaly_score", ascending=True, inplace=True)
 
-pd.to_parquet(sc_data_dir_name / f"{sc_data_dir_name}_sc_anomalies_{sc_data_path.name}")
+scdf.to_parquet(sc_data_dir_name / f"{sc_data_dir_name}_sc_anomalies_{sc_data_path.name}")
 
