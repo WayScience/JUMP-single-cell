@@ -48,22 +48,9 @@ meta_cols = [col for col in scdf.columns if "Metadata" in col]
 # Isolation forest reference:
 # https://ieeexplore.ieee.org/document/4781136
 scdf = scdf.assign(Result_inlier=iso_forest.fit_predict(scdf[feat_cols]))
-scdf = scdf.assign(
-    Result_anomaly_score=iso_forest.decision_function(scdf[feat_cols])
-)
+scdf = scdf.assign(Result_anomaly_score=iso_forest.decision_function(scdf[feat_cols]))
 
 scdf.sort_values(by="Result_anomaly_score", ascending=True, inplace=True)
 
-pq.write_to_dataset(
-    pa.Table.from_pandas(
-        scdf[
-            meta_cols
-            + [
-                "Result_inlier",
-                "Result_anomaly_score",
-            ]
-        ]
-    ),
-    root_path=anomaly_data_path,
-)
+pd.to_parquet(sc_data_dir_name / f"{sc_data_dir_name}_sc_anomalies_{sc_data_path.name}")
 
