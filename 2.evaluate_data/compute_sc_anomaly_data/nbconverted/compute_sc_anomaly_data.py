@@ -24,12 +24,12 @@ from sklearn.ensemble import IsolationForest
 
 sc_data_path = pathlib.Path(sys.argv[1]).resolve(strict=True)
 sc_data_dir_name = sc_data_path.parent.name
-scdf = pd.read_parquet(sc_data_path)
+pq_file = pq.ParquetFile(sc_data_path)
 
 iso_forest = joblib.load(pathlib.Path(sys.argv[2]).resolve(strict=True))
 iso_forest.n_jobs = -1
 
-anomaly_data_path = pathlib.Path(sys.argv[3]) / sc_data_dir_name
+anomaly_data_path = pathlib.Path(sys.argv[3]) / sc_data_dir_name / sc_data_path.stem
 anomaly_data_path.mkdir(parents=True, exist_ok=True)
 
 
@@ -37,7 +37,6 @@ anomaly_data_path.mkdir(parents=True, exist_ok=True)
 
 
 feat_cols = iso_forest.feature_names_in_
-meta_cols = [col for col in scdf.columns if "Metadata" in col]
 
 
 # ## Compute Anomaly Data
@@ -47,10 +46,14 @@ meta_cols = [col for col in scdf.columns if "Metadata" in col]
 
 # Isolation forest reference:
 # https://ieeexplore.ieee.org/document/4781136
-scdf = scdf.assign(Result_inlier=iso_forest.fit_predict(scdf[feat_cols]))
-scdf = scdf.assign(Result_anomaly_score=iso_forest.decision_function(scdf[feat_cols]))
+for i, batch in enumerate(pq_file.iter_batches(batch_size=10000)):
+    pdf = batch.to_pandas()
+    meta_cols = [col for col in pdf.columns if "Metadata" in col]
+    pdf = pdf.assign(Result_inlier=iso_forest.predict(pdf[feat_cols]))
+    pdf = pdf.assign(Result_anomaly_score=iso_forest.decision_function(pdf[feat_cols]))
 
-scdf.sort_values(by="Result_anomaly_score", ascending=True, inplace=True)
+    pdf.sort_values(by="Result_anomaly_score", ascending=True, inplace=True)
 
-scdf.to_parquet(anomaly_data_path / f"{sc_data_dir_name}_anomaly_{sc_data_path.name}")
+    output_path = anomaly_data_path / f"{sys.argv[3]}_batch_{i}.parquet"
+    pdf.to_parquet(output_path)
 
