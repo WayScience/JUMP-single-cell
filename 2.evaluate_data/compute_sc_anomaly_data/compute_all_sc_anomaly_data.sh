@@ -18,9 +18,9 @@ anomaly_data_path="${git_root}/big_drive/sc_anomaly_data"
 
 # Get the single-cell data path (with multiple plates)
 plate_paths=(
-    #"${git_root}/big_drive/feature_selected_sc_qc_data"
+    "${git_root}/big_drive/feature_selected_sc_qc_data"
     "${git_root}/big_drive/normalized_sc_qc_data"
-    #"${git_root}/big_drive/feature_selected_sc_data"
+    "${git_root}/big_drive/feature_selected_sc_data"
     "${git_root}/big_drive/normalized_sc_data"
 )
 
