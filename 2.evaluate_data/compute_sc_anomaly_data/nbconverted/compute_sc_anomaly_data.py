@@ -46,7 +46,7 @@ feat_cols = iso_forest.feature_names_in_
 
 # Isolation forest reference:
 # https://ieeexplore.ieee.org/document/4781136
-for i, batch in enumerate(pq_file.iter_batches(batch_size=10000)):
+for i, batch in enumerate(pq_file.iter_batches(batch_size=220_000)):
     pdf = batch.to_pandas()
     meta_cols = [col for col in pdf.columns if "Metadata" in col]
     pdf = pdf.assign(Result_inlier=iso_forest.predict(pdf[feat_cols]))
