@@ -18,9 +18,9 @@ anomaly_data_path="${git_root}/big_drive/sc_anomaly_data"
 
 # Get the single-cell data path (with multiple plates)
 plate_paths=(
-    "${git_root}/big_drive/feature_selected_sc_qc_data"
+    #"${git_root}/big_drive/feature_selected_sc_qc_data"
     "${git_root}/big_drive/normalized_sc_qc_data"
-    "${git_root}/big_drive/feature_selected_sc_data"
+    #"${git_root}/big_drive/feature_selected_sc_data"
     "${git_root}/big_drive/normalized_sc_data"
 )
 
@@ -34,7 +34,6 @@ for plate_dir in "${plate_paths[@]}"; do
             if [ -f "$file" ]; then
 
                 iso_forest_path="$iso_forest_paths/$(basename "$plate_dir")_isolation_forest.joblib"
-
 
                 /usr/bin/time -v python3 "$py_path/compute_sc_anomaly_data.py" "$file" "$iso_forest_path" "$anomaly_data_path"
 

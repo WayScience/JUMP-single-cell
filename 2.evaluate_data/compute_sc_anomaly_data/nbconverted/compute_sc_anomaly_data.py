@@ -54,6 +54,6 @@ for i, batch in enumerate(pq_file.iter_batches(batch_size=10000)):
 
     pdf.sort_values(by="Result_anomaly_score", ascending=True, inplace=True)
 
-    output_path = anomaly_data_path / f"{sys.argv[3]}_batch_{i}.parquet"
+    output_path = anomaly_data_path / f"{sc_data_path.stem}_anomaly_batch_{i}.parquet"
     pdf.to_parquet(output_path)
 
