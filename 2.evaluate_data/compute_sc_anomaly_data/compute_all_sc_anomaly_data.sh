@@ -27,7 +27,7 @@ plate_paths=(
 for plate_dir in "${plate_paths[@]}"; do
 
     if [ -d "$plate_dir" ]; then
-        anomaly_data_path
+
         echo -e "\nComputing anomaly data from $plate_dir"
         for file in "$plate_dir"/*.parquet; do
 
