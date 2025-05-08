@@ -44,7 +44,7 @@ for plate_dir in "${plate_paths[@]}"; do
 
         echo -e "\nTraining on sampled data from $plate_dir"
 
-        /usr/bin/time -v python3 "$py_path/identify_anomalous_single_cells_fs.py" "$plate_dir" "$sampled_plate_jump_data"
+        /usr/bin/time -v python3 "$py_path/identify_anomalous_single_cells_fs.py" "$plate_dir" "$sampled_plate_jump_data" "$feature_column_path"
 
     else
         echo "Error: '$plate_dir' is not a directory."

@@ -9,6 +9,7 @@
 # In[ ]:
 
 
+import json
 import pathlib
 import sys
 
@@ -25,12 +26,21 @@ from sklearn.ensemble import IsolationForest
 # In[1]:
 
 
-plate_data_name = pathlib.Path(sys.argv[1]).name
+plate_data_path = pathlib.Path(sys.argv[1])
+plate_data_name = plate_data_path.name
+plate_data_dir_name = plate_data_path.parent.name
 sampled_plate_jump_data_path = sys.argv[2]
 
 sampled_platedf = pd.read_parquet(
     f"{sampled_plate_jump_data_path}/{plate_data_name}.parquet"
 )
+
+feature_columns_path = (
+    pathlib.Path(sys.argv[3]) / plate_data_dir_name / "feature_columns.json"
+).resolve(strict=True)
+
+with feature_columns_path.open("r") as feat_cols_obj:
+    feat_cols = json.load(feat_cols_obj)
 
 
 # ### Outputs
@@ -52,7 +62,7 @@ isoforest_path = pathlib.Path(
 
 
 meta_cols = [col for col in sampled_platedf.columns if "Metadata" in col]
-featdf = sampled_platedf.drop(columns=meta_cols).dropna(axis=1, how="any")
+featdf = sampled_platedf[feat_cols]
 
 # If 1_600 trees are trained with 256 samples per tree, then
 # 1_600 * 256 gives approximately the expected number of samples per tree.
