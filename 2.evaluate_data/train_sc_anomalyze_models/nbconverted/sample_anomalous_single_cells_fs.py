@@ -53,13 +53,15 @@ plate_data_path = sampled_plate_jump_path / f"{plate_path.parent.name}.parquet"
 
 
 feat_cols = []
+non_na_cols = platedf.columns[platedf.notna().all()].tolist()
 
 if feat_col_path.exists():
     with feat_col_path.open("r") as feat_col_obj:
         feat_cols = json.load(feat_col_obj)
+        feat_cols = list(set(non_na_cols) & set(feat_cols))
 
-non_na_cols = platedf.columns[platedf.notna().all()].tolist()
-feat_cols = list(set(non_na_cols) & set(feat_cols))
+else:
+    feat_cols = non_na_cols
 
 with feat_col_path.open("w") as feat_col_obj:
     json.dump(feat_cols, feat_col_obj)
