@@ -2,13 +2,14 @@
 # coding: utf-8
 
 # # Sample data from each well
-# Deterministically sample data from each plate dataset
+# Deterministically sample data from each plate dataset and get the intersection of all features not containing nans.
 
 # ### Import Libraries
 
 # In[ ]:
 
 
+import json
 import pathlib
 import sys
 
@@ -26,10 +27,16 @@ from DeterministicSampling import DeterministicSampling
 
 
 # Plate morphology data
-plate_path = pathlib.Path(sys.argv[1]).resolve(strict=True)
+sc_data_path = pathlib.Path(sys.argv[1]).resolve(strict=True)
+sc_data_dir_name = sc_data_path.parent.name
+plate_path = pathlib.Path(sc_data_path).resolve(strict=True)
 platedf = pd.read_parquet(plate_path)
 
 sampled_plate_jump_path = pathlib.Path(sys.argv[2])
+
+anomaly_data_path = pathlib.Path(sys.argv[3]) / sc_data_dir_name
+anomaly_data_path.mkdir(parents=True, exist_ok=True)
+feat_col_path = anomaly_data_path / "feature_columns.json"
 
 
 # ### Outputs
@@ -38,6 +45,27 @@ sampled_plate_jump_path = pathlib.Path(sys.argv[2])
 
 
 plate_data_path = sampled_plate_jump_path / f"{plate_path.parent.name}.parquet"
+
+
+# ## Save feature columns that don't contain NaNs
+
+# In[ ]:
+
+
+feat_cols = []
+non_na_cols = platedf.columns[platedf.notna().all()].tolist()
+non_na_cols = [col for col in non_na_cols if not "Metadata" in col]
+
+if feat_col_path.exists():
+    with feat_col_path.open("r") as feat_col_obj:
+        feat_cols = json.load(feat_col_obj)
+        feat_cols = list(set(non_na_cols) & set(feat_cols))
+
+else:
+    feat_cols = non_na_cols
+
+with feat_col_path.open("w") as feat_col_obj:
+    json.dump(feat_cols, feat_col_obj)
 
 
 # ## Sample single-cell data by Hash
