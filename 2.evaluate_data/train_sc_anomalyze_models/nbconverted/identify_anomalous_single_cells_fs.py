@@ -28,7 +28,6 @@ from sklearn.ensemble import IsolationForest
 
 plate_data_path = pathlib.Path(sys.argv[1])
 plate_data_name = plate_data_path.name
-plate_data_dir_name = plate_data_path.parent.name
 sampled_plate_jump_data_path = sys.argv[2]
 
 sampled_platedf = pd.read_parquet(
@@ -36,7 +35,7 @@ sampled_platedf = pd.read_parquet(
 )
 
 feature_columns_path = (
-    pathlib.Path(sys.argv[3]) / plate_data_dir_name / "feature_columns.json"
+    pathlib.Path(sys.argv[3]) / plate_data_name / "feature_columns.json"
 ).resolve(strict=True)
 
 with feature_columns_path.open("r") as feat_cols_obj:
@@ -48,7 +47,7 @@ with feature_columns_path.open("r") as feat_cols_obj:
 # In[ ]:
 
 
-isoforest_path = pathlib.Path("isolation_forest_models")
+isoforest_path = pathlib.Path(sys.argv[4])
 isoforest_path.mkdir(parents=True, exist_ok=True)
 
 isoforest_path = pathlib.Path(

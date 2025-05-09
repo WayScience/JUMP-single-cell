@@ -54,6 +54,7 @@ plate_data_path = sampled_plate_jump_path / f"{plate_path.parent.name}.parquet"
 
 feat_cols = []
 non_na_cols = platedf.columns[platedf.notna().all()].tolist()
+non_na_cols = [col for col in non_na_cols if not "Metadata" in col]
 
 if feat_col_path.exists():
     with feat_col_path.open("r") as feat_col_obj:

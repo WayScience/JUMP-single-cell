@@ -31,6 +31,7 @@ plate_paths=(
 )
 
 feature_column_path="${git_root}/big_drive/sc_anomaly_data"
+isoforest_path="${git_root}/big_drive/isolation_forest_models"
 
 for plate_dir in "${plate_paths[@]}"; do
 
@@ -44,7 +45,7 @@ for plate_dir in "${plate_paths[@]}"; do
 
         echo -e "\nTraining on sampled data from $plate_dir"
 
-        /usr/bin/time -v python3 "$py_path/identify_anomalous_single_cells_fs.py" "$plate_dir" "$sampled_plate_jump_data" "$feature_column_path"
+        /usr/bin/time -v python3 "$py_path/identify_anomalous_single_cells_fs.py" "$plate_dir" "$sampled_plate_jump_data" "$feature_column_path" "$isoforest_path"
 
     else
         echo "Error: '$plate_dir' is not a directory."
