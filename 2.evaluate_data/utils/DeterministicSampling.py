@@ -21,15 +21,22 @@ class DeterministicSampling:
         self._cell_id_columns = _cell_id_columns
         self._divisor = 10_000
 
+    """
+    _plate_column, _well_column and _cell_id_columns store column names, and must be present in _platedf.
+    _cell_id_columns will be used with _plate_column and _well_column to uniquely identify each cell.
+    For example, _cell_id_columns in some projects could be ["Metadata_Site", "Metadata_ObjectNumber"]
+    """
+
     @property
     def platedf(self):
         return self._platedf.copy()
 
     def __hash_data(self):
+        # Create a hash for each data entry
+
         hash_cols = [self._plate_column, self._well_column] + self._cell_id_columns
         self._group_cols = hash_cols[0:2]
 
-        # Vectorized string join for hashing
         combined_strs = self._platedf[hash_cols].astype(str).agg("".join, axis=1)
 
         # Vectorized hash mapping
@@ -51,6 +58,7 @@ class DeterministicSampling:
         num_groups = len(grouped)
         samples_per_group = max(1, self._samples_per_plate // num_groups)
 
+        # Fixed sampling per group using hash
         return pd.concat(
             (
                 group_df.loc[
