@@ -63,12 +63,12 @@ isoforest_path = pathlib.Path(
 meta_cols = [col for col in sampled_platedf.columns if "Metadata" in col]
 featdf = sampled_platedf[feat_cols]
 
-# If 1_600 trees are trained with 256 samples per tree, then
-# 1_600 * 256 gives approximately the expected number of samples per tree.
+# If 800 trees are trained with 256 samples per tree, then
+# 800 * 256 gives approximately the expected number of samples per isolation forest.
 # For some of the plate data, this number of samples can barely fit in memory.
 # We also want to maximize the number of trees to learn many patterns for identifying anomalies.
 # 256 is empirically the largest number of samples per tree that allowed outliers to be isolated better.
-isofor = IsolationForest(n_estimators=1_600, random_state=0, n_jobs=-1)
+isofor = IsolationForest(n_estimators=800, random_state=0, n_jobs=-1)
 isofor.fit(featdf)
 
 joblib.dump(isofor, isoforest_path)

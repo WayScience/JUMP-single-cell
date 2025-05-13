@@ -24,10 +24,10 @@ jupyter nbconvert --to python --output-dir="${py_path}/" *.ipynb
 
 # Get the normalized data path (with multiple plates)
 plate_paths=(
+    "${git_root}/big_drive/normalized_sc_data"
     "${git_root}/big_drive/feature_selected_sc_qc_data"
     "${git_root}/big_drive/normalized_sc_qc_data"
     "${git_root}/big_drive/feature_selected_sc_data"
-    "${git_root}/big_drive/normalized_sc_data"
 )
 
 feature_column_path="${git_root}/big_drive/sc_anomaly_data"
