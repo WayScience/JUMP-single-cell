@@ -77,7 +77,8 @@ ds = DeterministicSampling(
     _platedf=platedf,
     # Number of samples per plate needed to train the JUMP isolation forests
     # See identify_anomalous_single_cells_fs.py for more details
-    # Only 4_000 are needed, however each sampling will likely not be exactly 4_000 samples.
+    # Only 4_000 are needed, however each sampling will likely not be exactly 4_000 samples
+    # due to the probabilistic nature of hash-based sampling.
     # To ensure a sufficient sample size I increased the threshold.
     _samples_per_plate=4_100,
     _plate_column="Metadata_Plate",
