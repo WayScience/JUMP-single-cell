@@ -49,10 +49,10 @@ feat_cols = iso_forest.feature_names_in_
 # The data is batched here to reduce the memory burden
 for i, batch in enumerate(pq_file.iter_batches(batch_size=220_000)):
     pdf = batch.to_pandas()
-    meta_cols = [col for col in pdf.columns if "Metadata" in col]
     pdf = pdf.assign(Result_inlier=iso_forest.predict(pdf[feat_cols]))
     pdf = pdf.assign(Result_anomaly_score=iso_forest.decision_function(pdf[feat_cols]))
-    pdf.drop(feat_cols, axis=1, inplace=True)
+    keep_cols = [col for col in pdf.columns if "Metadata" in col or "Result" in col]
+    pdf = pdf[keep_cols]
 
     pdf.sort_values(by="Result_anomaly_score", ascending=True, inplace=True)
 
