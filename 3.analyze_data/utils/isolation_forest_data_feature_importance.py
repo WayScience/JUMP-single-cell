@@ -4,6 +4,7 @@ from typing import Optional, Union
 import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
+from scipy.constants import euler_gamma
 from sklearn.tree import DecisionTreeRegressor, _tree
 
 
@@ -14,6 +15,7 @@ class IsoforestFeatureImportance:
         self,
         _estimators: list[DecisionTreeRegressor],
         _morphology_data: pd.DataFrame,
+        _num_samples_per_tree: int,
     ):
         """
         Parameters
@@ -26,12 +28,29 @@ class IsoforestFeatureImportance:
         self._morphology_data = _morphology_data
         self._isoforest_importances = None
 
+        self._anomaly_power_denom = len(_estimators) * self._compute_norm_factor(
+            _num_samples_per_tree
+        )
+
     @property
     def isoforest_importances(self):
         if self._isoforest_importances is None:
             raise ValueError("isoforest_importances have not been computed")
 
         return self._isoforest_importances
+
+    def _compute_norm_factor(self, _num_samples_per_tree: int):
+        """
+        Used to compute the anomaly score in an isolation forest.
+        See https://doi.org/10.1109/ICDM.2008.17 for more details.
+        """
+
+        harmonic_approx = np.log(_num_samples_per_tree) + np.euler_gamma
+
+        return (
+            2 * harmonic_approx
+            - 2 * (_num_samples_per_tree - 1) / _num_samples_per_tree
+        )
 
     def save_tree_feature_importances(
         self,
@@ -50,7 +69,7 @@ class IsoforestFeatureImportance:
 
         node_id = 0  # Start at the root node
         depth = 0
-        feature_importances = defaultdict(list)
+        num_feature_importances = defaultdict(int)
         morphology_features = self._morphology_data.iloc[_sample_idx].copy()
 
         while node_id != _leaf_id:
@@ -58,7 +77,7 @@ class IsoforestFeatureImportance:
 
             if feature_idx >= 0:  # Ignore leaf nodes (-2)
                 # Indicates if a feature is present in a tree (1)
-                feature_importances[self._morphology_data.columns[feature_idx]].append(1)
+                num_feature_importances[self._morphology_data.columns[feature_idx]] += 1
 
             if morphology_features.iloc[feature_idx] <= _tree_obj.threshold[node_id]:
                 node_id = _tree_obj.children_left[node_id]
@@ -76,8 +95,8 @@ class IsoforestFeatureImportance:
 
         return {
             _sample_idx: {
-                feature: sum(importances) / (depth + 1)
-                for feature, importances in feature_importances.items()
+                feature: (2 ** -((depth + 1) / self._anomaly_power_denom)) ** count
+                for feature, count in num_feature_importances.items()
             }
         }
 
