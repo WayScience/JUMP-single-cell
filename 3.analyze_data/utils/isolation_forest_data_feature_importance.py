@@ -13,6 +13,8 @@ class IsoforestFeatureImportance:
     Computes Isolation Forest (Scikit-learn) feature importances from a subset of data.
     Feature importances were derived from the Isolation Forest paper.
     See https://doi.org/10.1109/ICDM.2008.17 for more details.
+    This approach assumes each feature between a sample's leaf node and root node
+    is equally important in isolating that sample for a given isolation tree estimator.
     """
 
     def __init__(
