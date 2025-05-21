@@ -8,12 +8,19 @@ from sklearn.tree import DecisionTreeRegressor, _tree
 
 
 class IsoforestFeatureImportance:
-    # Computes Isolation Forest (Scikit-learn) feature importances from a subset of data.
+    """
+    Computes Isolation Forest (Scikit-learn) feature importances from a subset of data.
+    Feature importances were derived from the Isolation Forest paper.
+    See https://doi.org/10.1109/ICDM.2008.17 for more details.
+    This approach assumes each feature between a sample's leaf node and root node
+    is equally important in isolating that sample for a given isolation tree estimator.
+    """
 
     def __init__(
         self,
         _estimators: list[DecisionTreeRegressor],
         _morphology_data: pd.DataFrame,
+        _num_train_samples_per_tree: int,
     ):
         """
         Parameters
@@ -25,6 +32,9 @@ class IsoforestFeatureImportance:
         self._estimators = _estimators
         self._morphology_data = _morphology_data
         self._isoforest_importances = None
+        self._norm_factor = self._compute_norm_factor(
+            _num_features_per_forest=_num_train_samples_per_tree
+        )
 
     @property
     def isoforest_importances(self):
@@ -32,6 +42,18 @@ class IsoforestFeatureImportance:
             raise ValueError("isoforest_importances have not been computed")
 
         return self._isoforest_importances
+
+    def _compute_norm_factor(self, _num_features_per_forest: int):
+        """
+        Used to compute the anomaly score in an isolation forest.
+        """
+
+        harmonic_approx = np.log(_num_features_per_forest) + np.euler_gamma
+
+        return (
+            2 * harmonic_approx
+            - 2 * (_num_features_per_forest - 1) / _num_features_per_forest
+        )
 
     def save_tree_feature_importances(
         self,
@@ -50,7 +72,7 @@ class IsoforestFeatureImportance:
 
         node_id = 0  # Start at the root node
         depth = 0
-        feature_importances = defaultdict(list)
+        num_features = defaultdict(int)
         morphology_features = self._morphology_data.iloc[_sample_idx].copy()
 
         while node_id != _leaf_id:
@@ -58,7 +80,7 @@ class IsoforestFeatureImportance:
 
             if feature_idx >= 0:  # Ignore leaf nodes (-2)
                 # Indicates if a feature is present in a tree (1)
-                feature_importances[self._morphology_data.columns[feature_idx]].append(1)
+                num_features[self._morphology_data.columns[feature_idx]] += 1
 
             if morphology_features.iloc[feature_idx] <= _tree_obj.threshold[node_id]:
                 node_id = _tree_obj.children_left[node_id]
@@ -67,24 +89,16 @@ class IsoforestFeatureImportance:
 
             depth += 1
 
-        """
-        Weights each feature, responsible for splitting the sample, equally
-        with the inverse depth of the sample's leaf node (terminating node).
-        This allows features to be more important with how soon each sample
-        is isolated across trees.
-        """
-
-        return {
-            _sample_idx: {
-                feature: sum(importances) / (depth + 1)
-                for feature, importances in feature_importances.items()
+        if node_id != _leaf_id:
+            return {
+                _sample_idx: {feature: [depth] * count}
+                for feature, count in num_features.items()
             }
-        }
 
     def compute_isoforest_importances(self) -> pd.DataFrame:
-        # Computes and returns the aggregated importance for all features and samples (if they exist) using lazy parallelization.
+        # Computes feature importances for all features and samples (if they exist) using lazy parallelization.
 
-        isotree_importances = Parallel(n_jobs=-1)(
+        isotree_sample_importances = Parallel(n_jobs=-1)(
             delayed(self.save_tree_feature_importances)(
                 _tree_obj=estimator.tree_, _leaf_id=leaf_id, _sample_idx=sample_idx
             )
@@ -94,25 +108,38 @@ class IsoforestFeatureImportance:
             )
         )
 
-        isoforest_importances = {}
+        isotree_sample_importances = [
+            tree_sample
+            for tree_sample in isotree_sample_importances
+            if tree_sample is not None
+        ]
 
-        sample_isoforest_importances = {
-            sample: defaultdict(list)
-            for sample in range(self._morphology_data.shape[0])
-        }
+        sample_isoforest_importances = defaultdict(lambda: defaultdict(list))
 
         # Converting data from list of tree dictionaries to dictionary of samples
-        for isotree in isotree_importances:
-            for sample, feature_importances in isotree.items():
-                for feature, importance in feature_importances.items():
-                    sample_isoforest_importances[sample][feature].append(importance)
+        for isotree_sample in isotree_sample_importances:
+            for sample, sample_isotree_feature_counts in isotree_sample.items():
+                for feature, depths in sample_isotree_feature_counts.items():
+                    sample_isoforest_importances[sample][feature].extend(depths)
 
-        # Averaging feature importances per sample and feature across trees
-        for sample, feature_importances in sample_isoforest_importances.items():
-            isoforest_importances[sample] = defaultdict(list)
-            for feature, importances in feature_importances.items():
-                isoforest_importances[sample][feature] = sum(importances) / len(
-                    importances
+        isoforest_importances = defaultdict(lambda: dict)
+
+        # Computes the feature importance across all trees that
+        # split using the corresponding feature.
+        # This is similar to the anomaly score for samples, but for
+        # each (sample,feature) pair.
+        for (
+            sample,
+            sample_isotree_feature_counts,
+        ) in sample_isoforest_importances.items():
+            for feature, depths in sample_isotree_feature_counts.items():
+                num_features = len(depths)
+
+                isoforest_importances[sample][feature] = np.prod(
+                    [
+                        2 ** -(depth / (num_features * self._norm_factor))
+                        for depth in depths
+                    ]
                 )
 
         self._isoforest_importances = pd.DataFrame(isoforest_importances).T
@@ -139,3 +166,7 @@ class IsoforestFeatureImportance:
             filtered_morphology_data = self._isoforest_importances[_features].copy()
 
         return filtered_morphology_data.apply(lambda x: x.dropna().tolist()).to_dict()
+
+    def __call__(self):
+        # Return the final dataframe (likely with NaNs)
+        return self.compute_isoforest_importances()
