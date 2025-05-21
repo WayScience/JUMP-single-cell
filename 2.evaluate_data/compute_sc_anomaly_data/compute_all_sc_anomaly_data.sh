@@ -28,7 +28,7 @@ for plate_dir in "${plate_paths[@]}"; do
 
     if [ -d "$plate_dir" ]; then
 
-        echo -e "\nComputing anomaly data from $plate_dir"
+        echo -e "\nComputing anomaly data and feature importance data from $plate_dir"
         for file in "$plate_dir"/*.parquet; do
 
             if [ -f "$file" ]; then
@@ -36,6 +36,8 @@ for plate_dir in "${plate_paths[@]}"; do
                 iso_forest_path="$iso_forest_paths/$(basename "$plate_dir")_isolation_forest.joblib"
 
                 /usr/bin/time -v python3 "$py_path/compute_sc_anomaly_data.py" "$file" "$iso_forest_path" "$anomaly_data_path"
+
+                /usr/bin/time -v python3 "$py_path/compute_sc_feature_importance_data.py" "$file" "$iso_forest_path"
 
             fi
 
