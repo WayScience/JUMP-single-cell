@@ -4,7 +4,6 @@ from typing import Optional, Union
 import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
-from scipy.constants import euler_gamma
 from sklearn.tree import DecisionTreeRegressor, _tree
 
 
