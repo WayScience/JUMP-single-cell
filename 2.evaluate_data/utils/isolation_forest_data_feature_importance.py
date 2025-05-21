@@ -168,3 +168,7 @@ class IsoforestFeatureImportance:
             filtered_morphology_data = self._isoforest_importances[_features].copy()
 
         return filtered_morphology_data.apply(lambda x: x.dropna().tolist()).to_dict()
+
+    def __call__(self):
+        # Return the final dataframe (likely with NaNs)
+        return self.compute_isoforest_importances
