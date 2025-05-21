@@ -169,4 +169,4 @@ class IsoforestFeatureImportance:
 
     def __call__(self):
         # Return the final dataframe (likely with NaNs)
-        return self.compute_isoforest_importances
+        return self.compute_isoforest_importances()
