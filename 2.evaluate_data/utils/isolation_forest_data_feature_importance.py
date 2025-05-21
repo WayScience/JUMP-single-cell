@@ -21,7 +21,7 @@ class IsoforestFeatureImportance:
         self,
         _estimators: list[DecisionTreeRegressor],
         _morphology_data: pd.DataFrame,
-        _num_features_per_forest: int,
+        _num_train_samples_per_tree: int,
     ):
         """
         Parameters
@@ -34,7 +34,7 @@ class IsoforestFeatureImportance:
         self._morphology_data = _morphology_data
         self._isoforest_importances = None
         self._norm_factor = self._compute_norm_factor(
-            _num_features_per_forest=_num_features_per_forest
+            _num_features_per_forest=_num_train_samples_per_tree
         )
 
     @property
