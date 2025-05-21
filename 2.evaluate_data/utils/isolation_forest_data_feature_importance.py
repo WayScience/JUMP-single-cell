@@ -72,7 +72,7 @@ class IsoforestFeatureImportance:
 
         node_id = 0  # Start at the root node
         depth = 0
-        num_feature_importances = defaultdict(list)
+        num_features = defaultdict(int)
         morphology_features = self._morphology_data.iloc[_sample_idx].copy()
 
         while node_id != _leaf_id:
@@ -80,9 +80,7 @@ class IsoforestFeatureImportance:
 
             if feature_idx >= 0:  # Ignore leaf nodes (-2)
                 # Indicates if a feature is present in a tree (1)
-                num_feature_importances[
-                    self._morphology_data.columns[feature_idx]
-                ].append(1)
+                num_features[self._morphology_data.columns[feature_idx]] += 1
 
             if morphology_features.iloc[feature_idx] <= _tree_obj.threshold[node_id]:
                 node_id = _tree_obj.children_left[node_id]
@@ -93,8 +91,8 @@ class IsoforestFeatureImportance:
 
         if node_id != _leaf_id:
             return {
-                _sample_idx: {feature: importances * depth}
-                for feature, importances in num_feature_importances.items()
+                _sample_idx: {feature: [depth] * count}
+                for feature, count in num_features.items()
             }
 
     def compute_isoforest_importances(self) -> pd.DataFrame:
