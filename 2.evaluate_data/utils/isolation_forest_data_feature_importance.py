@@ -48,7 +48,7 @@ class IsoforestFeatureImportance:
         Used to compute the anomaly score in an isolation forest.
         """
 
-        harmonic_approx = np.log(_num_features_per_forest) + np.euler_gamma
+        harmonic_approx = np.log(_num_features_per_forest - 1) + np.euler_gamma
 
         return (
             2 * harmonic_approx
