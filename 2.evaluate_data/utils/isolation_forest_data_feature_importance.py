@@ -18,9 +18,9 @@ class IsoforestFeatureImportance:
 
     def __init__(
         self: Self,
-        _estimators: list[DecisionTreeRegressor],
-        _morphology_data: pd.DataFrame,
-        _num_train_samples_per_tree: int,
+        estimators: list[DecisionTreeRegressor],
+        morphology_data: pd.DataFrame,
+        num_train_samples_per_tree: int,
     ):
         """
         Parameters
@@ -29,11 +29,11 @@ class IsoforestFeatureImportance:
         _morphology_data: Data with only numerical morphology data (without metadata).
         """
 
-        self._estimators = _estimators
-        self._morphology_data = _morphology_data
+        self._estimators = estimators
+        self._morphology_data = morphology_data
         self._isoforest_importances = None
         self._norm_factor = self._compute_norm_factor(
-            _num_features_per_forest=_num_train_samples_per_tree
+            _num_features_per_forest=num_train_samples_per_tree
         )
 
     @property
@@ -147,7 +147,7 @@ class IsoforestFeatureImportance:
         return self._isoforest_importances
 
     def get_filtered_isoforest_importances(
-        self: Self, _features: Union[str, list[str]]
+        self: Self, features: Union[str, list[str]]
     ) -> dict[str, float]:
         """
         Return feature importances without NaNs.
@@ -157,13 +157,13 @@ class IsoforestFeatureImportance:
         _features: Morphology feature names.
         """
 
-        _features = [_features] if isinstance(_features, str) else _features
+        features = [features] if isinstance(features, str) else features
 
         if self._isoforest_importances is None:
             filtered_morphology_data = self.compute_isoforest_importances()
 
         else:
-            filtered_morphology_data = self._isoforest_importances[_features].copy()
+            filtered_morphology_data = self._isoforest_importances[features].copy()
 
         return filtered_morphology_data.apply(lambda x: x.dropna().tolist()).to_dict()
 
