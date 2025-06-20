@@ -8,7 +8,7 @@ from farmhash import Fingerprint64
 class DeterministicSampling:
 
     def __init__(
-        self: Self,
+        self,
         _platedf: pd.DataFrame,
         _samples_per_plate: int,
         _plate_column: str,
@@ -29,10 +29,10 @@ class DeterministicSampling:
     """
 
     @property
-    def platedf(self: Self) -> pd.DataFrame:
+    def platedf(self) -> pd.DataFrame:
         return self._platedf.copy()
 
-    def __hash_data(self: Self) -> None:
+    def __hash_data(self) -> None:
         # Create a hash for each data entry
 
         hash_cols = [self._plate_column, self._well_column] + self._cell_id_columns
@@ -46,7 +46,7 @@ class DeterministicSampling:
         )
 
     def sample_plate_deterministically(
-        self: Self, _sample_strategy: str = "well_sampling"
+        self, _sample_strategy: str = "well_sampling"
     ) -> pd.DataFrame:
         self.__hash_data()
 
