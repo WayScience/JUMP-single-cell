@@ -1,5 +1,4 @@
 import warnings
-from typing import Self
 
 import pandas as pd
 from farmhash import Fingerprint64
