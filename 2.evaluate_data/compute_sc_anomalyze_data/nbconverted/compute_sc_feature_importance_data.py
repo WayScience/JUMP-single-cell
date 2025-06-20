@@ -154,9 +154,9 @@ for anomaly_dataset in anomaly_datasets_path.iterdir():
                 # https://ieeexplore.ieee.org/document/4781136
                 feature_importancesdf.append(
                     IsoforestFeatureImportance(
-                        _estimators=anomalyze_model.estimators_,
-                        _morphology_data=morphologydf,
-                        _num_train_samples_per_tree=anomalyze_model.max_samples_,
+                        estimators=anomalyze_model.estimators_,
+                        morphology_data=morphologydf,
+                        num_train_samples_per_tree=anomalyze_model.max_samples_,
                     )()
                 )
 
