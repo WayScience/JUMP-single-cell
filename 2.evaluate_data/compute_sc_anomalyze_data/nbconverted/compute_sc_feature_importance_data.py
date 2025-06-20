@@ -4,7 +4,7 @@
 # # Compute Sample Feature Importances
 # This notebook computes feature importances by dataset, treatment type, and by anomaly score.
 
-# In[ ]:
+# In[1]:
 
 
 import pathlib
@@ -74,7 +74,7 @@ feature_importances_path.mkdir(parents=True, exist_ok=True)
 # # Sample and Compute Feature feature_importances
 # Sample and then compute feature importances between the most anomalous and the least anomalous cells.
 
-# In[ ]:
+# In[2]:
 
 
 model_suffix_name = "_isolation_forest.joblib"
@@ -144,18 +144,18 @@ for anomaly_dataset in anomaly_datasets_path.iterdir():
                     merge_cols + anomalyze_model.feature_names_in_.tolist()
                 ]
 
-                morphologydf = pd.merge(
+                morphologyonlydf = pd.merge(
                     left=platedf, right=morphologydf, on=merge_cols, how="inner"
                 )
 
-                morphologydf = morphologydf[anomalyze_model.feature_names_in_.tolist()]
+                morphologyonlydf = morphologyonlydf[anomalyze_model.feature_names_in_.tolist()]
 
                 # Isolation forest reference:
                 # https://ieeexplore.ieee.org/document/4781136
                 feature_importancesdf.append(
                     IsoforestFeatureImportance(
                         estimators=anomalyze_model.estimators_,
-                        morphology_data=morphologydf,
+                        morphology_data=morphologyonlydf,
                         num_train_samples_per_tree=anomalyze_model.max_samples_,
                     )()
                 )
