@@ -29,10 +29,10 @@ class DeterministicSampling:
     """
 
     @property
-    def platedf(self: Self):
+    def platedf(self: Self) -> pd.DataFrame:
         return self._platedf.copy()
 
-    def __hash_data(self: Self):
+    def __hash_data(self: Self) -> None:
         # Create a hash for each data entry
 
         hash_cols = [self._plate_column, self._well_column] + self._cell_id_columns
@@ -47,7 +47,7 @@ class DeterministicSampling:
 
     def sample_plate_deterministically(
         self: Self, _sample_strategy: str = "well_sampling"
-    ):
+    ) -> pd.DataFrame:
         self.__hash_data()
 
         if _sample_strategy != "well_sampling":
