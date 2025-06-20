@@ -7,7 +7,7 @@ from farmhash import Fingerprint64
 class DeterministicSampling:
 
     def __init__(
-        self: Self,
+        self,
         _platedf: pd.DataFrame,
         _samples_per_plate: int,
         _plate_column: str,

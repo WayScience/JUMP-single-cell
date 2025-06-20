@@ -95,7 +95,7 @@ class IsoforestFeatureImportance:
                 for feature, count in num_features.items()
             }
 
-    def compute_isoforest_importances(self: Self) -> pd.DataFrame:
+    def compute_isoforest_importances(self) -> pd.DataFrame:
         # Computes feature importances for all features and samples (if they exist) using lazy parallelization.
 
         isotree_sample_importances = Parallel(n_jobs=-1)(
