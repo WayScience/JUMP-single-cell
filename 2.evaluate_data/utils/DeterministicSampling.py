@@ -1,4 +1,5 @@
 import warnings
+from typing import Self
 
 import pandas as pd
 from farmhash import Fingerprint64
@@ -7,7 +8,7 @@ from farmhash import Fingerprint64
 class DeterministicSampling:
 
     def __init__(
-        self,
+        self: Self,
         _platedf: pd.DataFrame,
         _samples_per_plate: int,
         _plate_column: str,
@@ -28,10 +29,10 @@ class DeterministicSampling:
     """
 
     @property
-    def platedf(self):
+    def platedf(self: Self):
         return self._platedf.copy()
 
-    def __hash_data(self):
+    def __hash_data(self: Self):
         # Create a hash for each data entry
 
         hash_cols = [self._plate_column, self._well_column] + self._cell_id_columns
@@ -44,7 +45,9 @@ class DeterministicSampling:
             lambda x: Fingerprint64(x) % self._divisor
         )
 
-    def sample_plate_deterministically(self, _sample_strategy: str = "well_sampling"):
+    def sample_plate_deterministically(
+        self: Self, _sample_strategy: str = "well_sampling"
+    ):
         self.__hash_data()
 
         if _sample_strategy != "well_sampling":
