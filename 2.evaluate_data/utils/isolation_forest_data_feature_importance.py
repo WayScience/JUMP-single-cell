@@ -55,14 +55,14 @@ class IsoforestFeatureImportance:
             - 2 * (_num_features_per_forest - 1) / _num_features_per_forest
         )
 
-    def save_tree_feature_importances(
+    def save_tree_feature_depths(
         self: Self,
         _tree_obj: _tree.Tree,
         _leaf_id: int,
         _sample_idx: int,
     ) -> dict[dict[str, float]]:
         """
-        Returns aggregated feature importances across trees for a given sample.
+        Returns sample depths per feature.
 
         Parameters
         _tree_obj: Object for traversing tree.
@@ -99,7 +99,7 @@ class IsoforestFeatureImportance:
         # Computes feature importances for all features and samples (if they exist) using lazy parallelization.
 
         isotree_sample_importances = Parallel(n_jobs=-1)(
-            delayed(self.save_tree_feature_importances)(
+            delayed(self.save_tree_feature_depths)(
                 _tree_obj=estimator.tree_, _leaf_id=leaf_id, _sample_idx=sample_idx
             )
             for estimator in self._estimators
