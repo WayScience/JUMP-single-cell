@@ -37,13 +37,13 @@ class IsoforestFeatureImportance:
         )
 
     @property
-    def isoforest_importances(self: Self):
+    def isoforest_importances(self: Self) -> pd.DataFrame:
         if self._isoforest_importances is None:
             raise ValueError("isoforest_importances have not been computed")
 
         return self._isoforest_importances
 
-    def _compute_norm_factor(self: Self, _num_features_per_forest: int):
+    def _compute_norm_factor(self: Self, _num_features_per_forest: int) -> float:
         """
         Used to compute the anomaly score in an isolation forest.
         """
@@ -167,6 +167,6 @@ class IsoforestFeatureImportance:
 
         return filtered_morphology_data.apply(lambda x: x.dropna().tolist()).to_dict()
 
-    def __call__(self: Self):
+    def __call__(self: Self) -> pd.DataFrame:
         # Return the final dataframe (likely with NaNs)
         return self.compute_isoforest_importances()
