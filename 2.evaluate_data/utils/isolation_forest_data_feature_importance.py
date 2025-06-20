@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Optional, Union
+from typing import Optional, Self, Union
 
 import numpy as np
 import pandas as pd
@@ -95,7 +95,7 @@ class IsoforestFeatureImportance:
                 for feature, count in num_features.items()
             }
 
-    def compute_isoforest_importances(self) -> pd.DataFrame:
+    def compute_isoforest_importances(self: Self) -> pd.DataFrame:
         # Computes feature importances for all features and samples (if they exist) using lazy parallelization.
 
         isotree_sample_importances = Parallel(n_jobs=-1)(
@@ -166,7 +166,7 @@ class IsoforestFeatureImportance:
             filtered_morphology_data = self._isoforest_importances[features].copy()
 
         return filtered_morphology_data.apply(lambda x: x.dropna().tolist()).to_dict()
-
+      
     def __call__(self) -> pd.DataFrame:
         # Return the final dataframe (likely with NaNs)
         return self.compute_isoforest_importances()

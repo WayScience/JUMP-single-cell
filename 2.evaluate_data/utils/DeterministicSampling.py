@@ -8,7 +8,7 @@ from farmhash import Fingerprint64
 class DeterministicSampling:
 
     def __init__(
-        self,
+        self: Self,
         _platedf: pd.DataFrame,
         _samples_per_plate: int,
         _plate_column: str,
@@ -47,6 +47,7 @@ class DeterministicSampling:
 
     def sample_plate_deterministically(
         self, _sample_strategy: str = "well_sampling"
+
     ) -> pd.DataFrame:
         self.__hash_data()
 
