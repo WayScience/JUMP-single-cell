@@ -47,8 +47,8 @@ anomalyze_model = joblib.load(model_path)
 
 
 # Number of samples to compute feature importances for in each category (anomalous or inlier)
-num_control_samples = 10
-num_anomalous_samples = 10
+num_control_samples = 100
+num_anomalous_samples = 100
 
 merge_cols = [
     "Metadata_Plate",
