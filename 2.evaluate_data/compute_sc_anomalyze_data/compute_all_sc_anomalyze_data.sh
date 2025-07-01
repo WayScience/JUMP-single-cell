@@ -46,3 +46,5 @@ for plate_dir in "${plate_paths[@]}"; do
     fi
 
 done
+
+python3 nbconverted/compute_sc_feature_importance_data.py

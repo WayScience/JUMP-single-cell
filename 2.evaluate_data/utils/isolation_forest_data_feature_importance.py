@@ -98,15 +98,18 @@ class IsoforestFeatureImportance:
     def compute_isoforest_importances(self) -> pd.DataFrame:
         # Computes feature importances for all features and samples (if they exist) using lazy parallelization.
 
-        isotree_sample_importances = Parallel(n_jobs=-1)(
-            delayed(self.save_tree_feature_depths)(
-                _tree_obj=estimator.tree_, _leaf_id=leaf_id, _sample_idx=sample_idx
+        with Parallel(n_jobs=-1) as parallel:
+            isotree_sample_importances = parallel(
+                delayed(self.save_tree_feature_depths)(
+                    _tree_obj=estimator.tree_, _leaf_id=leaf_id, _sample_idx=sample_idx
+                )
+                for estimator in self._estimators
+                for sample_idx, leaf_id in enumerate(
+                    estimator.tree_.apply(
+                        self._morphology_data.values.astype(np.float32)
+                    )
+                )
             )
-            for estimator in self._estimators
-            for sample_idx, leaf_id in enumerate(
-                estimator.tree_.apply(self._morphology_data.values.astype(np.float32))
-            )
-        )
 
         isotree_sample_importances = [
             tree_sample
