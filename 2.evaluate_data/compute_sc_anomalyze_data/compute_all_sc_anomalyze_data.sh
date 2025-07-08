@@ -13,8 +13,8 @@ py_path="nbconverted"
 jupyter nbconvert --to python --output-dir="${py_path}/" ./*.ipynb
 
 iso_forest_paths="${git_root}/2.evaluate_data/train_sc_anomalyze_models/isolation_forest_models"
-
 anomaly_data_path="${git_root}/big_drive/sc_anomaly_data"
+
 
 # Get the single-cell data path (with multiple plates)
 plate_paths=(
@@ -28,7 +28,7 @@ for plate_dir in "${plate_paths[@]}"; do
 
     if [ -d "$plate_dir" ]; then
 
-        echo -e "\nComputing anomaly data from $plate_dir"
+        echo -e "\nComputing anomaly data and feature importance data from $plate_dir"
         for file in "$plate_dir"/*.parquet; do
 
             if [ -f "$file" ]; then
@@ -47,3 +47,5 @@ for plate_dir in "${plate_paths[@]}"; do
     fi
 
 done
+
+/usr/bin/time -v python3 "$pypath/compute_sc_feature_importance_data.py"

@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Optional, Self, Union
+from typing import Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -17,7 +17,7 @@ class IsoforestFeatureImportance:
     """
 
     def __init__(
-        self: Self,
+        self,
         estimators: list[DecisionTreeRegressor],
         morphology_data: pd.DataFrame,
         num_train_samples_per_tree: int,
@@ -37,13 +37,13 @@ class IsoforestFeatureImportance:
         )
 
     @property
-    def isoforest_importances(self: Self) -> pd.DataFrame:
+    def isoforest_importances(self) -> pd.DataFrame:
         if self._isoforest_importances is None:
             raise ValueError("isoforest_importances have not been computed")
 
         return self._isoforest_importances
 
-    def _compute_norm_factor(self: Self, _num_features_per_forest: int) -> float:
+    def _compute_norm_factor(self, _num_features_per_forest: int) -> float:
         """
         Used to compute the anomaly score in an isolation forest.
         """
@@ -56,7 +56,7 @@ class IsoforestFeatureImportance:
         )
 
     def save_tree_feature_depths(
-        self: Self,
+        self,
         _tree_obj: _tree.Tree,
         _leaf_id: int,
         _sample_idx: int,
@@ -95,18 +95,21 @@ class IsoforestFeatureImportance:
                 for feature, count in num_features.items()
             }
 
-    def compute_isoforest_importances(self: Self) -> pd.DataFrame:
+    def compute_isoforest_importances(self) -> pd.DataFrame:
         # Computes feature importances for all features and samples (if they exist) using lazy parallelization.
 
-        isotree_sample_importances = Parallel(n_jobs=-1)(
-            delayed(self.save_tree_feature_depths)(
-                _tree_obj=estimator.tree_, _leaf_id=leaf_id, _sample_idx=sample_idx
+        with Parallel(n_jobs=-1) as parallel:
+            isotree_sample_importances = parallel(
+                delayed(self.save_tree_feature_depths)(
+                    _tree_obj=estimator.tree_, _leaf_id=leaf_id, _sample_idx=sample_idx
+                )
+                for estimator in self._estimators
+                for sample_idx, leaf_id in enumerate(
+                    estimator.tree_.apply(
+                        self._morphology_data.values.astype(np.float32)
+                    )
+                )
             )
-            for estimator in self._estimators
-            for sample_idx, leaf_id in enumerate(
-                estimator.tree_.apply(self._morphology_data.values.astype(np.float32))
-            )
-        )
 
         isotree_sample_importances = [
             tree_sample
@@ -147,7 +150,7 @@ class IsoforestFeatureImportance:
         return self._isoforest_importances
 
     def get_filtered_isoforest_importances(
-        self: Self, features: Union[str, list[str]]
+        self, features: Union[str, list[str]]
     ) -> dict[str, float]:
         """
         Return feature importances without NaNs.
@@ -167,6 +170,6 @@ class IsoforestFeatureImportance:
 
         return filtered_morphology_data.apply(lambda x: x.dropna().tolist()).to_dict()
 
-    def __call__(self: Self) -> pd.DataFrame:
+    def __call__(self) -> pd.DataFrame:
         # Return the final dataframe (likely with NaNs)
         return self.compute_isoforest_importances()
