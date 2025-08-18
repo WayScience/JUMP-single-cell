@@ -89,11 +89,10 @@ class IsoforestFeatureImportance:
 
             depth += 1
 
-        if node_id != _leaf_id:
-            return {
-                _sample_idx: {feature: [depth] * count}
-                for feature, count in num_features.items()
-            }
+        return {
+            _sample_idx: {feature: [depth] * count}
+            for feature, count in num_features.items()
+        }
 
     def compute_isoforest_importances(self) -> pd.DataFrame:
         # Computes feature importances for all features and samples (if they exist) using lazy parallelization.
@@ -125,7 +124,7 @@ class IsoforestFeatureImportance:
                 for feature, depths in sample_isotree_feature_counts.items():
                     sample_isoforest_importances[sample][feature].extend(depths)
 
-        isoforest_importances = defaultdict(lambda: dict)
+        isoforest_importances = defaultdict(dict)
 
         # Computes the feature importance across all trees that
         # split using the corresponding feature.
