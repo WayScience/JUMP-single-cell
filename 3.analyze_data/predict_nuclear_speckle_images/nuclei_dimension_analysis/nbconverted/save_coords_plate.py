@@ -41,7 +41,10 @@ if root_dir is None:
 
 
 metadata_path = pathlib.Path(sys.argv[1])
-platedf = pd.read_parquet(metadata_path).dropna()
+
+# Did not remove nans from parquet files
+# so downstream code can decide how to handle this data.
+platedf = pd.read_parquet(metadata_path)
 
 
 # # Outputs
