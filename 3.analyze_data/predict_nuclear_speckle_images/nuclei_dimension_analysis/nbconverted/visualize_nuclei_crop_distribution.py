@@ -60,9 +60,34 @@ nuclei_crop_figure_path = pathlib.Path("nuclei_crop_distribution_figure")
 nuclei_crop_figure_path.mkdir(parents=True, exist_ok=True)
 
 
-# # Plot Sample Distribution of Nuclei Crops
+# # Percentage above Threshold
+# To understand how many crops are above the threshold spatial dimensions.
 
 # In[5]:
+
+
+thresh_cropdimdf = cropdimdf.loc[
+    (cropdimdf["Nuclei_AreaShape_BoundingBoxDelta_X"] > 66)
+    & (cropdimdf["Nuclei_AreaShape_BoundingBoxDelta_Y"] > 66)
+]
+number_crops = cropdimdf.shape[0]
+
+print(
+    f"Percentage of crops with both spatial dimension above 66 pixels: {(thresh_cropdimdf.shape[0] / number_crops) * 100:.2f}"
+)
+
+print(
+    f"Percentage of crops with the width spatial dimension above 66 pixels: {(thresh_cropdimdf.loc[thresh_cropdimdf['Nuclei_AreaShape_BoundingBoxDelta_X'] > 66].shape[0] / number_crops) * 100:.2f}"
+)
+
+print(
+    f"Percentage of crops with the height spatial dimension above 66 pixels: {(thresh_cropdimdf.loc[thresh_cropdimdf['Nuclei_AreaShape_BoundingBoxDelta_Y'] > 66].shape[0] / number_crops) * 100:.2f}"
+)
+
+
+# # Plot Sample Distribution of Nuclei Crops
+
+# In[6]:
 
 
 g = sns.jointplot(
