@@ -73,7 +73,7 @@ g = sns.jointplot(
 )
 g.fig.set_size_inches(18, 10)
 g.set_axis_labels(
-    "Bounding Box Height (Pixels)", "Bounding Box Length (Pixels)", fontsize=13
+    "Bounding Box Width (Pixels)", "Bounding Box Height (Pixels)", fontsize=13
 )
 g.fig.suptitle("Sample Distribution of Bounding Box Sizes", fontsize=16)
 
