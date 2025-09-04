@@ -106,7 +106,6 @@ g.fig.suptitle("Sample Distribution of Bounding Box Sizes", fontsize=16)
 
 g.ax_joint.tick_params(axis="x", labelsize=12)
 g.ax_joint.tick_params(axis="y", labelsize=12)
-g.ax_joint.legend(fontsize=12)
 
 plt.savefig(nuclei_crop_figure_path / "nuclei_crop_distributions.png")
 plt.show()
