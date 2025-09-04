@@ -62,6 +62,8 @@ nuclei_crop_figure_path.mkdir(parents=True, exist_ok=True)
 
 # # Percentage above Threshold
 # To understand how many crops are above the threshold spatial dimensions.
+# 66 was calculated as the max bounding size for developing nuclear speckle models.
+# Therefore, we are interested in how many nuclei are above this threshold in both spatial dimensions.
 
 # In[5]:
 
