@@ -73,7 +73,7 @@ class IsoforestFeatureImportance:
         node_id = 0  # Start at the root node
         depth = 0
         num_features = defaultdict(int)
-        morphology_features = self._morphology_data.loc[_sample_idx].copy()
+        morphology_features = self._morphology_data.loc[_sample_idx]
 
         while node_id != _leaf_id:
             feature_idx = _tree_obj.feature[node_id]
