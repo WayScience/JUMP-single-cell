@@ -73,7 +73,7 @@ class IsoforestFeatureImportance:
         node_id = 0  # Start at the root node
         depth = 0
         num_features = defaultdict(int)
-        morphology_features = self._morphology_data.iloc[_sample_idx].copy()
+        morphology_features = self._morphology_data.loc[_sample_idx].copy()
 
         while node_id != _leaf_id:
             feature_idx = _tree_obj.feature[node_id]
@@ -100,14 +100,14 @@ class IsoforestFeatureImportance:
         with Parallel(n_jobs=-1) as parallel:
             isotree_sample_importances = parallel(
                 delayed(self.save_tree_feature_depths)(
-                    _tree_obj=estimator.tree_, _leaf_id=leaf_id, _sample_idx=sample_idx
+                    _tree_obj=estimator.tree_,
+                    _leaf_id=estimator.tree_.apply(
+                        row.values.astype(np.float32).reshape(1, -1)
+                    )[0],
+                    _sample_idx=sample_id,
                 )
                 for estimator in self._estimators
-                for sample_idx, leaf_id in enumerate(
-                    estimator.tree_.apply(
-                        self._morphology_data.values.astype(np.float32)
-                    )
-                )
+                for sample_id, row in self._morphology_data.iterrows()
             )
 
         isotree_sample_importances = [
@@ -144,7 +144,9 @@ class IsoforestFeatureImportance:
                     ]
                 )
 
-        self._isoforest_importances = pd.DataFrame(isoforest_importances).T
+        self._isoforest_importances = pd.DataFrame.from_dict(
+            isoforest_importances, orient="index"
+        )
 
         return self._isoforest_importances
 
