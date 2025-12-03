@@ -45,10 +45,11 @@ if root_dir is None:
 # In[ ]:
 
 
-# Replace with your root folder path
-anomaly_datasets_path = (root_dir / "big_drive/sc_anomaly_data").resolve(strict=True)
+# Replace with your data storage path here
+big_drive_path = root_dir / "big_drive"
+anomaly_datasets_path = (big_drive_path / "sc_anomaly_data").resolve(strict=True)
 
-anomalyze_models_path = (root_dir / "big_drive/isolation_forest_models").resolve(
+anomalyze_models_path = (big_drive_path / "isolation_forest_models").resolve(
     strict=True
 )
 
@@ -66,13 +67,13 @@ plate_mappingdf = pd.read_csv(plate_mapping_path, sep="\t")[
 # In[ ]:
 
 
-feature_importances_path = root_dir / "big_drive/sc_feature_importances"
+feature_importances_path = big_drive_path / "sc_anomaly_feature_importances"
 
 
 # # Sample and Compute Feature feature_importances
 # Sample and then compute feature importances between the most anomalous and the least anomalous cells.
 
-# In[1]:
+# In[ ]:
 
 
 model_suffix_name = "_isolation_forest.joblib"
@@ -92,9 +93,11 @@ plate_mappingdf.rename(
 )
 
 for anomaly_dataset in anomaly_datasets_path.iterdir():
+    if "normal" in anomaly_dataset.stem or "qc" in anomaly_dataset.stem:
+        continue
 
     anomaly_model_name = anomaly_dataset.stem + model_suffix_name
-    morphology_dataset = root_dir / f"big_drive/{anomaly_dataset.stem}"
+    morphology_dataset = big_drive_path / f"{anomaly_dataset.stem}"
     anomalyze_model = joblib.load(anomalyze_models_path / anomaly_model_name)
 
     anomaly_paths = list(anomaly_dataset.rglob("*.parquet"))
@@ -121,14 +124,14 @@ for anomaly_dataset in anomaly_datasets_path.iterdir():
         for plate in treatment_typedf["Metadata_Plate"].unique():
             subprocess.run(
                 [
-                    str("run_feature_importance.sh"),
+                    "run_feature_importance.sh",
                     str(anomaly_dataset),
                     plate,
                     str(morphology_dataset),
                     str(anomalyze_models_path / anomaly_model_name),
                     str(treatment_feature_importances_path),
                     str(plate_mapping_path),
-                    str("compute_feature_importance_by_plate.py"),
+                    "nbconverted/compute_feature_importance_by_plate.py",
                 ]
             )
 

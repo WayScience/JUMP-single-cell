@@ -98,6 +98,7 @@ for control_type in ["negcon", "anomalous"]:
     platedf = platedf[merge_cols + anomalyze_model.feature_names_in_.tolist()]
 
     morphologyonlydf = pd.merge(platedf, morphologydf, on=merge_cols, how="inner")
+    metadf = morphologyonlydf.copy().filter(like="Metadata")
     morphologyonlydf = morphologyonlydf[anomalyze_model.feature_names_in_.tolist()]
 
     result = IsoforestFeatureImportance(
@@ -106,16 +107,13 @@ for control_type in ["negcon", "anomalous"]:
         num_train_samples_per_tree=anomalyze_model.max_samples_,
     )()
 
-    result = result.assign(
-        Metadata_control_type=control_type,
-        Metadata_treatment_type=feature_importances_output_path.stem,
-        Metadata_Plate=args.plate,
-    )
+    metadf = metadf[metadf.columns.difference(result.columns)]
+    result = result.join(metadf, how="inner")
 
     feature_importancesdf.append(result)
 
 if feature_importancesdf:
-    pd.concat(feature_importancesdf, axis=0).to_parquet(
+    pd.concat(feature_importancesdf, axis=0, ignore_index=True).to_parquet(
         feature_importances_output_path / f"{args.plate}.parquet"
     )
 
