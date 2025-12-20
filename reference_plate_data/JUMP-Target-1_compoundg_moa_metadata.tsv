@@ -1,0 +1,304 @@
+Metadata_pert_iname	Metadata_clinical_phase	Metadata_moa	Metadata_target	Metadata_disease_area	Metadata_indication
+A-987306	Preclinical	histamine receptor antagonist	ADORA1|AVPR1A|CCR1|CHRM1|CHRM2|CHRM3|CHRM4|DRD3|HTR1A|HTR1B|HTR2A|HTR2B|HTR3A|TACR2		
+AC-710	Preclinical	PDGFR tyrosine kinase receptor inhibitor	CSF1R|FLT3|KIT|PDGFRA|PDGFRB		
+acalabrutinib	Phase 3	Bruton's tyrosine kinase (BTK) inhibitor	BTK		
+acetohexamide	Launched	ATP channel blocker	ABCC8|KCNJ1|KCNJ10|KCNJ11	endocrinology	diabetes mellitus
+acetylcysteine	Launched	mucolytic agent	ACY1|CHUK|GRIN1|GRIN2A|GRIN2B|GRIN2D|GRIN3A|GSS|IKBKB|RELA|SLC7A11	gastroenterology	acetaminophen overdose|hepatic injury
+afimoxifene	Phase 2	estrogen receptor antagonist	ESR1|ESR2|ESRRG|PLD1|PRKCD|PRKCE|PRKCQ|PRKCZ		
+AK-7	Preclinical	SIRT inhibitor	SIRT2		
+alda-1	Preclinical	aldehyde dehydrogenase activator	ALDH2		
+aloxistatin	Phase 3	protease inhibitor	CTSG		
+alrestatin	Preclinical	aldose reductase inhibitor	AKR1B1		
+AMG900	Phase 1	Aurora kinase inhibitor	AURKA|AURKB|AURKC		
+amiloride	Launched	sodium channel blocker	AOC1|ASIC1|ASIC2|ASIC3|PKD2|PKD2L1|PLAU|SCNN1A|SCNN1B|SCNN1D|SCNN1G|SLC9A1|TRPC7|TRPV2	cardiology	hypertension|congestive heart failure
+aminopurvalanol-a	Preclinical	CDK inhibitor|tyrosine kinase inhibitor	CDK1|CDK2|CDK5|CDK6		
+amlexanox	Launched	histamine receptor modulator	FGF1|IL3|PDE4A|PDE4B|PDE4C|PDE4D|S100A12|S100A13	dental|pulmonary|ophthalmology|allergy	aphthous ulcers|asthma|conjunctivitis|allergic rhinitis
+amlodipine	Launched	calcium channel blocker	CA1|CACNA1B|CACNA1C|CACNA1D|CACNA1F|CACNA1S|CACNA2D1|CACNA2D3|CACNB1|CACNB2|SMPD1	cardiology	hypertension|chronic stable angina|vasospastic angina|coronary artery disease (CAD)
+anandamide	Phase 2	cannabinoid receptor agonist	CACNA1G|CACNA1H|CACNA1I|CNR1|CNR2|GLRA1|GPR18|GPR55|KCNA2|KCNK3|KCNK9|TRPM8|TRPV1		
+anisomycin	Preclinical	DNA synthesis inhibitor	NHP2L1|RPL10L|RPL11|RPL13A|RPL15|RPL19|RPL23|RPL23A|RPL26L1|RPL3|RPL37|RPL8|RSL24D1		
+ANR-94	Preclinical	A1 adenosine receptor antagonist	ADORA2A		
+apatinib	Phase 3	RET tyrosine kinase inhibitor	CSK|KDR|KIT|RET		
+AR-12	Phase 1	phosphoinositide dependent kinase inhibitor	PDPK1		
+arcyriaflavin-a	Preclinical	CDK inhibitor	CCND1|CDK4		
+aripiprazole	Launched	serotonin receptor agonist|serotonin receptor antagonist	ADRA1A|ADRA1B|ADRA2A|ADRA2B|ADRA2C|CHRM1|CHRM2|CHRM3|CHRM4|CHRM5|DRD1|DRD2|DRD3|DRD4|DRD5|HRH1|HTR1A|HTR1B|HTR1D|HTR1E|HTR2A|HTR2C|HTR3A|HTR6|HTR7	neurology/psychiatry	depression|schizophrenia|bipolar disorder
+arundic-acid	Phase 2/Phase 3	astrocyte modulating agent	PTGS2|S100B		
+ascorbic-acid	Launched	antioxidant	ALKBH2|ALKBH3|BBOX1|DBH|EGLN1|EGLN2|EGLN3|KDM5D|LCT|OGFOD1|OGFOD2|P3H1|P3H2|P3H3|P4HA1|P4HTM|PAM|PHYH|PLOD1|PLOD2|PLOD3|SLC23A1|SLC23A2|TMLHE	endocrinology	scurvy
+AVL-292	Phase 2	Bruton's tyrosine kinase (BTK) inhibitor	BTK|YES1		
+azacitidine	Launched	DNA methyltransferase inhibitor	DNMT1|DNMT3A	hematologic malignancy|hematology	myelodysplastic diseases (MDS)|anemia|chronic myelomonocytic leukemia (CMMoL)
+azathioprine	Launched	dehydrogenase inhibitor	HPRT1|IMPDH1|PPAT	transplant|rheumatology	renal homotransplantation|rheumatoid arthritis
+AZD1283	Preclinical	purinergic receptor antagonist	P2RY12		
+AZD7762	Phase 1	CHK inhibitor	CHEK1|CHEK2		
+AZD9668	Phase 2	elastase inhibitor	ELANE		
+azeliragon	Phase 3	RAGE receptor antagonist	AGER		
+AZ191	Preclinical	DYRK inhibitor	DYRK1B		
+A205804	Preclinical	ICAM1 expression inhibitor	ICAM1|SELE		
+baclofen	Launched	benzodiazepine receptor agonist	GABBR1|GABBR2|KCTD12|KCTD16|KCTD8	neurology/psychiatry	multiple sclerosis|spasms
+BAM7	Preclinical	BAX activator	BAX		
+BAN-ORL-24	Preclinical	nociceptin/orphanin FQ receptor antagonist	OPRL1		
+batimastat	Phase 3	matrix metalloprotease inhibitor	ADAM28|ADAMTS5|MMP12|MMP16|MMP2|MMP8		
+BAX-channel-blocker	Preclinical	cytochrome C release inhibitor	BAX		
+BAY-87-2243	Phase 1	hypoxia inducible factor inhibitor	HIF1A		
+benzamil	Phase 2	sodium channel blocker	ASIC1|PKD2L1|SCNN1A|SCNN1B|SCNN1D|SCNN1G|SLC8A1		
+bepridil	Launched	calcium channel blocker	ATP1A1|CACNA1A|CACNA1H|CACNA2D2|CALM1|KCNQ1|KCNQ4|PDE1A|PDE1B|TNNC1	cardiology	angina pectoris
+BI-2536	Phase 2	PLK inhibitor	BRD4|PLK1|PLK2|PLK3		
+BMS-536924	Preclinical	IGF-1 inhibitor	AKT1|CCNE1|CDK2|CYP3A4|ERBB2|IGF1R|KDR|LCK|MAPK1|MET|PDGFRA|PDGFRB		
+BMS-587101	Phase 2	integrin antagonist	ITGAL|ITGB2		
+BQ-788	Phase 1	endothelin receptor antagonist	EDNRB		
+briciclib	Phase 1	cyclin D inhibitor	CCND1		
+brinzolamide	Launched	carbonic anhydrase inhibitor	CA1|CA12|CA14|CA2|CA4|CA5A|CA7	ophthalmology	intraocular pressure|glaucoma|ocular hypertension
+BRL-50481	Preclinical	phosphodiesterase inhibitor	PDE7A|PDE7B		
+bufexamac	Withdrawn	cyclooxygenase inhibitor	HDAC10|HDAC6		
+buparlisib	Phase 3	PI3K inhibitor	PIK3CA|PIK3CG		
+BVT-948	Preclinical	tyrosine phosphatase inhibitor	PTPN1|PTPN11|PTPN2		
+carzenide	Preclinical		CA1|CA12|CA14|CA2|CA6|CA9		
+castanospermine	Phase 2	glucosidase inhibitor	GAA|GBA		
+CC-401	Phase 1	JNK inhibitor	MAPK8		
+CCG-50014	Preclinical	G protein signaling inhibitor	RGS4|RGS8		
+CCG-63802	Preclinical	G protein signaling inhibitor	RGS4		
+cediranib	Phase 3	KIT inhibitor|VEGFR inhibitor	CSF1R|FLT1|FLT3|FLT4|KDR|KIT|PDGFRA|PDGFRB		
+ceritinib	Launched	ALK tyrosine kinase receptor inhibitor	ALK|FLT3|IGF1R|INSR|TSSK1B	oncology	non-small cell lung cancer (NSCLC)
+cetilistat	Phase 3	triacylglycerol lipase inhibitor	PNLIP		
+CGP-53353	Preclinical	EGFR inhibitor|PKC inhibitor	EGFR|PRKCB		
+cilostazol	Launched	phosphodiesterase inhibitor	PDE3A|PDE3B	cardiology	claudication
+citric-acid	Preclinical	coagulation factor inhibitor	AKR1B1|ANG|APRT|BHMT|C8G|CA4|CPB1|CS|CTDSP1|GNMT|HGS|HS3ST3A1|IL4I1|ITPA|LSM6|MDH2|MIF|PDE5A|PKD2L1|PLEKHA1|RNASE1|RNASE3|SRC|TNFSF13B|UCK2		
+colchicine	Launched	microtubule inhibitor	GLRA1|GLRA2|TUBA1A|TUBA1B|TUBA1C|TUBA3C|TUBA3D|TUBA3E|TUBA4A|TUBB|TUBB1|TUBB2A|TUBB2B|TUBB3|TUBB4A|TUBB4B|TUBB6|TUBB8	rheumatology|endocrinology	gout|fever
+conivaptan	Launched	vasopressin receptor antagonist	AVPR1A|AVPR2	endocrinology	hyponatremia
+coumarin	Launched	vitamin K antagonist	CA1|CA12|CA14|CA2|CA4|CA6|CA9|CYP2A6	gastroenterology|pulmonary	ulcerative colitis|asthma|celiac disease
+CP-724714	Phase 2	EGFR inhibitor|protein tyrosine kinase inhibitor	ERBB2		
+CVT-10216	Phase 1	aldehyde dehydrogenase inhibitor	ALDH2		
+cycloheximide	Preclinical	protein synthesis inhibitor	RPL3		
+cyclophosphamide	Launched	DNA alkylating agent	CYP2A6|CYP2B6|CYP2C18|CYP2C19|CYP2C8|CYP2C9|CYP2D6|CYP3A4|CYP3A5|CYP3A7	hematologic malignancy|oncology	Hodgkin's lymphoma|small lymphocytic lymphoma (SLL)|breast cancer|neuroblastoma|Burkitt's lymphoma|multiple myeloma|chronic lymphocytic leukemia (CLL)|acute myeloid leukemia (AML)|acute lymphoblastic leukemia (ALL)|chronic myeloid leukemia (CML)|true histiocytic lymphoma (THL)|retinoblastoma|ovarian cancer
+cyclosporine	Launched	calcineurin inhibitor	ABCB11|CAMLG|FPR1|PPIA|PPIF|PPP3R2|SLC10A1|SLCO1B1|SLCO1B3	transplant|rheumatology|dermatology	organ rejection|rheumatoid arthritis|psoriasis
+CYM-50260	Preclinical	sphingosine 1 phosphate receptor agonist	S1PR4		
+CYM-50358	Preclinical	sphingosine 1-phosphate receptor antagonist	S1PR4		
+CYM-5442	Preclinical	sphingosine 1 phosphate receptor agonist	S1PR1		
+CYM-5520	Preclinical	sphingosine 1 phosphate receptor agonist	S1PR2		
+CYT-997	Phase 2	tubulin polymerization inhibitor	TUBB		
+dalbavancin	Launched	bacterial cell wall synthesis inhibitor	PNLIP	infectious disease	skin infections
+dalfampridine	Launched	potassium channel blocker	KCNA1|KCNA10|KCNA2|KCNA3|KCNA4|KCNA5|KCNA6|KCNA7|KCNB1|KCNB2|KCNC1|KCNC2|KCNC3|KCNC4|KCND1|KCND2|KCND3|KCNF1|KCNG1|KCNG2|KCNG3|KCNG4|KCNH1|KCNH2|KCNH3|KCNH4|KCNH5|KCNH6|KCNH7|KCNH8|KCNJ13|KCNJ5|KCNQ1|KCNQ2|KCNQ3|KCNQ4|KCNQ5|KCNS1|KCNS2|KCNS3|KCNV1|KCNV2	neurology/psychiatry	multiple sclerosis
+danusertib	Phase 2	Aurora kinase inhibitor|growth factor receptor inhibitor	AURKA|AURKB|AURKC|FGFR1|NTRK1|RET|SLK		
+DDR1-IN-1	Preclinical	discoidin domain receptor inhibitor	DDR1|DDR2		
+deferasirox	Launched	chelating agent	CYP3A4	hematology	transfusional hemosiderosis|thalassemia|iron overload
+delanzomib	Phase 1/Phase 2	proteasome inhibitor	CMA1|CTSG|CYP3A4|ELANE		
+desonide	Launched	glucocorticoid receptor agonist	NR3C1|PLA2G1B	gastroenterology	Crohn's disease
+dexamethasone	Launched	glucocorticoid receptor agonist	ANXA1|NOS2|NR0B1|NR3C1|NR3C2	endocrinology|rheumatology|allergy|gastroenterology|hematology|neurology/psychiatry|dermatology	hypercalcemia|rheumatoid arthritis|psoriatic arthritis|osteoarthritis|allergic rhinitis|ulcerative colitis|anemia|multiple sclerosis|enteritis|lupus|dermatitis herpetiformis (DH)|nephrotic syndrome|psoriasis
+DG-172	Preclinical	PPAR receptor inverse agonist	PPARD		
+diacerein	Launched	interleukin inhibitor	IL1B	rheumatology	osteoarthritis
+dilazep	Launched	adenosine reuptake inhibitor	SLC29A1		
+diltiazem	Launched	calcium channel blocker	CACNA1C|CACNA1S|CACNA2D1|CACNG1|HTR3A|KCNA5	cardiology	hypertension|angina pectoris
+dinoprostone	Withdrawn	prostanoid receptor agonist	CATSPER1|CATSPER2|CATSPER3|CATSPER4|PTGDR|PTGDR2|PTGER1|PTGER2|PTGER3|PTGER4|PTGFR|TBXA2R		
+DMSO	Preclinical	control vehicle			
+droxinostat	Preclinical	HDAC inhibitor	HDAC6|HDAC8		
+dyphylline	Launched	adenosine receptor antagonist|phosphodiesterase inhibitor	ADORA1|ADORA2A|PDE3A|PDE4A|PDE4B|PDE4C|PDE4D|PDE7A|PDE7B	pulmonary	asthma|bronchitis|emphysema
+edoxaban	Launched	coagulation factor inhibitor	F10	neurology/psychiatry|hematology|cardiology	stroke|pulmonary embolism (PE)|systemic embolism|deep vein thrombosis (DVT)|atrial fibrillation (AF)
+efaproxiral	Phase 3	haemoglobin oxygen release stimulant	HBA1|HBB		
+efaroxan	Phase 2	adrenergic receptor antagonist	ADORA2A		
+EI1	Preclinical	histone lysine methyltransferase inhibitor	EZH2		
+enflurane	Launched	membrane permeability inhibitor	ATP2C1|ATP5D|GABRA1|GABRA2|GABRA3|GABRA4|GABRA5|GABRA6|GABRB1|GABRB2|GABRB3|GABRD|GABRE|GABRG1|GABRG2|GABRG3|GABRP|GABRQ|GLRA1|GLRB|GRIA1|KCNA1|KCNK10|KCNK18|KCNK2|KCNK3|KCNK9|KCNN4		
+enilconazole	Launched	sterol demethylase inhibitor	CYP19A1|CYP1A2|CYP2B6|CYP2C9|CYP2J2|CYP3A4|CYP3A5|NR1I2|PPARA|PTGER2	infectious disease	skin infections
+epoprostenol	Launched	prostacyclin analog	P2RY12|PTGER1|PTGER4|PTGIR|PTGIS	cardiology	hypertension
+epothilone-b	Phase 3	microtubule stabilizing agent|tubulin polymerization inhibitor	TUBA1A|TUBA1B|TUBA1C|TUBA3C|TUBA4A|TUBA8|TUBB|TUBB1|TUBB3|TUBB4A|TUBB4B		
+ethoxzolamide	Launched	carbonic anhydrase inhibitor	CA1|CA12|CA13|CA14|CA2|CA3|CA4|CA5A|CA5B|CA6|CA7|CA9	ophthalmology|gastroenterology	glaucoma|duodenal ulcer disease
+ethyl-pyruvate	Phase 2	tumor necrosis factor production inhibitor	HMGB1|TNF		
+felodipine	Launched	calcium channel blocker	CACNA1C|CACNA1D|CACNA1F|CACNA1H|CACNA1S|CACNA2D1|CACNA2D2|CACNB2|CALM1|CFTR|NR3C2|PDE1A|PDE1B|TNNC1|TNNC2	cardiology	hypertension
+FERb-033	Preclinical	EGFR inhibitor	ERBB2		
+filgotinib	Phase 2	JAK inhibitor	JAK1|JAK2|JAK3|TYK2		
+FK-866	Phase 2	niacinamide phosphoribosyltransferase inhibitor	NAMPT		
+flindokalner	Phase 3	potassium channel agonist	KCNMA1|KCNN4|KCNQ2|KCNQ4|KCNQ5		
+fludarabine	Launched	ribonucleotide reductase inhibitor	ADA|RRM1|RRM2	hematologic malignancy	chronic lymphocytic leukemia (CLL)
+fludarabine-phosphate	Launched	ribonucleotide reductase inhibitor	DCK|POLA1|POLD1|POLE|RRM1|RRM2|RRM2B	hematologic malignancy	chronic lymphocytic leukemia (CLL)
+flufenamic-acid	Preclinical	chloride channel blocker	AKR1C3|ANO1|AR|GJA1|GJA10|GJA3|GJA4|GJA5|GJA8|GJA9|GJB1|GJB2|GJB3|GJB4|GJB5|GJB6|GJB7|GJC1|GJC2|GJC3|GJD2|GJD3|GJD4|GJE1|PANX1|PANX2|PANX3|PKD2L1|PTGS1|PTGS2|TRPC5|TRPM2|TRPM5		
+flupirtine	Launched	glutamate receptor antagonist	ADRA2A|KCNQ1|KCNQ2	neurology/psychiatry	pain relief
+fomepizole	Launched	alcohol dehydrogenase inhibitor	ADH1A|ADH1B|ADH1C|AKR1A1|CAT	critical care	poison antidote
+formononetin	Preclinical	alcohol dehydrogenase inhibitor	ADH1C|SLC5A2		
+FPS-ZM1	Preclinical	RAGE receptor antagonist	AGER		
+gabapentin-enacarbil	Launched	adrenergic receptor agonist	CACNA1A|CACNA1B|CACNA1C|CACNA1D|CACNA1E|CACNA1F|CACNA1G|CACNA1H|CACNA1I|CACNA1S|CACNA2D1|CACNA2D2|CACNA2D3|CACNA2D4|CACNB1|CACNB2|CACNB3|CACNB4|CACNG1|CACNG2|CACNG3|CACNG4|CACNG5|CACNG6|CACNG7|CACNG8	neurology/psychiatry	restless leg syndrome|postherpetic neuralgia
+ganetespib	Phase 3	HSP inhibitor	HSP90AA1		
+geldanamycin	Preclinical	HSP inhibitor	HSP90AA1|HSP90AB1		
+GK921	Preclinical	transglutaminase inhibitor	TGM2		
+glutamine-(l)	Launched		CTPS1|GLUL|GPRC6A|PPAT	gastroenterology|dental|neurology/psychiatry|rheumatology	diarrhea|mucositis|muscle pain|joint pain|peptic ulcer disease (PUD)|ulcerative colitis|Crohn's disease|anxiety|insomnia
+glyburide	Launched	ATP channel blocker|insulin secretagogue|sulfonylurea	ABCA1|ABCB11|ABCC8|ABCC9|CFTR|CPT1A|KCNJ1|KCNJ11|KCNJ5|KCNJ8|SLCO2B1	endocrinology	diabetes mellitus|hyperglycemia
+GNF-5	Preclinical	Bcr-Abl kinase inhibitor	ABL1|BCR		
+GNF-5837	Preclinical	growth factor receptor inhibitor	NTRK1|NTRK2|NTRK3		
+GSK-37647	Preclinical	free fatty acid receptor agonist	FFAR4		
+GSK1070916	Phase 1	Aurora kinase inhibitor	AURKA|AURKB|AURKC|CYP2D6|CYP3A4		
+GSK2110183	Phase 2	AKT inhibitor	AKT1|AKT2|AKT3		
+GSK3787	Preclinical	PPAR receptor antagonist	PPARD		
+guanidine	Launched	HSP inhibitor	ALDH2|DLG4|GAMT|RNASE1	neurology/psychiatry	Lambert-Eaton myasthenic syndrome (LEMS)
+GW-311616	Phase 1	leukocyte elastase inhibitor|elastase inhibitor	ELANE		
+halopemide	Phase 2	phospholipase inhibitor	PLD1|PLD2		
+hexestrol	Launched	synthetic estrogen	AKR1C1|ESR1|ESR2		
+homoharringtonine	Launched	protein synthesis inhibitor	RPL3	hematologic malignancy	chronic myeloid leukemia (CML)
+H2L-5765834	Preclinical	lysophosphatidic acid receptor antagonist	LPAR1|LPAR3		
+ibudilast	Launched	leukotriene receptor antagonist|phosphodiesterase inhibitor	IL1B|IL6|PDE3A|PDE4A|PDE4B|PDE4C|PDE4D|PDE5A	pulmonary|neurology/psychiatry	asthma|stroke
+ibutamoren	Phase 2	growth hormone secretagogue receptor agonist	GHR|GHSR		
+ibutilide	Launched	potassium channel blocker	CACNA1C|CACNA2D1|CACNB1|CACNG1|KCNH2|KCNH6|KCNH7|KCNJ11|KCNK1|KCNK6	cardiology	atrial fibrillation (AF)
+ilomastat	Phase 3	matrix metalloprotease inhibitor	ACAN|ADAM28|MMP1|MMP12|MMP13|MMP14|MMP2|MMP3|MMP8|MMP9		
+ingenol-mebutate	Launched	PKC activator	PRKCA|PRKCB|PRKCD|PRKCE|PRKCG	dermatology	actinic keratosis (AK)
+IRL-2500	Preclinical	endothelin receptor antagonist	EDNRB		
+isoflurane	Launched	inhaled anaesthetic	ATP2C1|ATP5D|CALM1|GABRA1|GABRA2|GABRA3|GABRA4|GABRA5|GABRA6|GABRB1|GABRB2|GABRB3|GABRD|GABRE|GABRG1|GABRG2|GABRG3|GABRP|GABRQ|GLRA1|GLRB|GRIA1|KCNA1|KCNK10|KCNK18|KCNK2|KCNK3|KCNK9	neurology/psychiatry	general anaesthetic
+IWP-L6	Preclinical	porcupine inhibitor	PORCN		
+ixabepilone	Launched	microtubule stabilizing agent	TUBA1A|TUBA1B|TUBA1C|TUBA3C|TUBA3D|TUBA3E|TUBA4A|TUBB|TUBB1|TUBB2A|TUBB2B|TUBB3|TUBB4A|TUBB4B|TUBB6|TUBB8	oncology	breast cancer
+JTE-013	Preclinical	lysophospholipid receptor antagonist	P2RY10|S1PR2		
+JTE-607	Phase 2	cytokine production inhibitor	IL10|IL1B|IL6|TNF		
+KG-5	Preclinical	RAF inhibitor	BRAF|FLT3|KIT|PDGFRB		
+KH-CB19	Preclinical	CDC inhibitor	CLK1|CLK3|DYRK1A		
+KI-16425	Preclinical	lysophosphatidic acid receptor antagonist	LPAR1|LPAR3		
+KU-55933	Preclinical	ATM kinase inhibitor	ATM|PRKDC		
+KU-60019	Preclinical	ATM kinase inhibitor	ATM		
+L-Cystine	Launched		CTNS|SLC3A1|SLC7A11|SLC7A9		
+L-proline	Launched	glutamate receptor agonist	EPRS|L3HYPDH|P3H1|P3H2|P3H3|P4HA1|P4HA2|PARS2|PPIA|PPIB|PPIC|PPIF|PPIG|PPIH|PRODH|PROSC|PYCR1|PYCR2|PYCRL|SLC6A14|SLC6A7		
+LDN-212854	Preclinical	bone morphogenic protein inhibitor	ABL1|ACVR1|RIPK2		
+LDN-27219	Preclinical	tissue transglutaminase inhibitor	TGM2		
+leflunomide	Launched	dihydroorotate dehydrogenase inhibitor|PDGFR tyrosine kinase receptor inhibitor	AHR|DHODH|PTK2B	rheumatology	rheumatoid arthritis
+lercanidipine	Launched	calcium channel blocker	CACNA2D1|CACNG1	cardiology	hypertension
+LGK-974	Phase 2	porcupine inhibitor	PORCN		
+lonafarnib	Phase 3	farnesyltransferase inhibitor	FNTA|HRAS|KRAS|NRAS		
+loperamide	Launched	opioid receptor agonist	CACNA1A|CALM1|OPRD1|OPRK1|OPRM1|POMC	gastroenterology	diarrhea
+LOXO-101	Phase 2	tropomyosin receptor kinase inhibitor	NTRK1|NTRK2|NTRK3		
+LY2109761	Preclinical	TGF beta receptor inhibitor	TGFBR1|TGFBR2		
+M-25	Preclinical	smoothened receptor antagonist	DHH|IHH|SMO		
+MCOPPB	Preclinical	nociceptin/orphanin FQ (NOP) receptor agonist	OPRL1		
+ME-0328	Preclinical	PPAR receptor antagonist	PARP3		
+meclofenamic-acid	Launched	cyclooxygenase inhibitor|prostanoid receptor antagonist	ALOX5|CNR1|KCNQ2|KCNQ3|PTGS1|PTGS2	rheumatology|neurology/psychiatry|endocrinology	joint pain|muscle pain|rheumatoid arthritis|primary dysmenorrhea (PD)
+menadione	Launched	mitochondrial DNA polymerase inhibitor|phosphatase inhibitor	AOX1|BGLAP|F10|F2|F7|F9|GGCX|NQO1|NQO2|PROC|PROS1|PROZ|VKORC1|VKORC1L1	gastroenterology|neurology/psychiatry|dermatology|rheumatology	ulcerative colitis|diarrhea|headache|varicose veins|rheumatoid arthritis
+methoxsalen	Launched	DNA synthesis inhibitor	CYP1A1|CYP1A2|CYP2A13|CYP2A6|CYP3A4	dermatology	psoriasis
+miconazole	Launched	bacterial cell wall synthesis inhibitor	KCNH2|KCNH6|KCNH7|KCNMA1|KCNMB1|KCNMB2|KCNMB3|KCNMB4|KCNN1|KCNN2|KCNN3|KCNN4|NOS2|NOS3|TRPM2|TRPV5	infectious disease|neurology/psychiatry	yeast infection|itching
+miglitol	Launched	glucosidase inhibitor	GAA|GANAB|GANC|MGAM	endocrinology	diabetes mellitus
+minocycline	Launched	bacterial 30S ribosomal subunit inhibitor	ALOX5|CASP1|CASP3|CYCS|IL1B|MMP9|VEGFA	endocrinology|infectious disease|ophthalmology|urology	fever|respiratory tract infections|psittacosis|trachoma|conjunctivitis|urethritis|chancroid|tularemia|cholera|brucellosis
+misoprostol	Launched	prostanoid receptor agonist	PTGER2|PTGER3|PTGER4|PTGIR	gastroenterology	duodenal ulcer disease
+ML-193	Preclinical	G protein-coupled receptor antagonist	GPR55		
+ML-228	Preclinical	hypoxia inducible factor activator	HIF1A		
+ML-323	Preclinical	ubiquitin specific protease inhibitor	USP1		
+motesanib	Phase 3	KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor|VEGFR inhibitor	FLT1|FLT4|KDR|KIT		
+N-alpha-Methylhistamine-dihydrochloride	Phase 3	histamine receptor agonist	HRH4		
+nafamostat	Launched	serine protease inhibitor	ASIC1|ASIC2|ASIC3|C1R|PRSS1|TPSAB1|TRPM7		
+nalmefene	Launched	opioid receptor antagonist	OPRD1|OPRK1|OPRM1	pulmonary	respiratory depression
+NBQX	Preclinical	glutamate receptor antagonist	GRIA1|GRIA2|GRIA3|GRIA4|GRIK1|GRIN1|GRIN2A|GRIN2B		
+nevirapine	Launched	non-nucleoside reverse transcriptase inhibitor	CYP1A2|CYP2A6|CYP2B6|CYP2C9|CYP2D6|CYP3A4|CYP3A5	infectious disease	human immunodeficiency virus (HIV-1)
+nialamide	Withdrawn	monoamine oxidase inhibitor	COMT|MAOA|MAOB		
+nicotine	Launched	acetylcholine receptor agonist	CHAT|CHRNA10|CHRNA2|CHRNA3|CHRNA4|CHRNA5|CHRNA6|CHRNA7|CHRNA9|CHRNB2|CHRNB3|CHRNB4|CYP19A1|TBXAS1|TRPA1	neurology/psychiatry	smoking cessation
+niflumic-acid	Launched	cyclooxygenase inhibitor	ANO1|CLCN1|CLCNKA|CLCNKB|KCNQ1|PLA2G1B|PLA2G4A|PTGS1|PTGS2|UGT1A9	rheumatology|neurology/psychiatry	joint pain|muscle pain
+nilvadipine	Launched	calcium channel blocker	CACNA1C|CACNA1D|CACNA1S|CACNA2D1|CACNA2D3|CACNB2	cardiology	hypertension|cerebral artery occlusion
+nimodipine	Launched	calcium channel blocker	AHR|CACNA1C|CACNA1D|CACNA1F|CACNA1S|CACNB1|CACNB2|CACNB3|CACNB4|CFTR|NR3C2	hematology	hemorrhage
+NNC-55-0396	Preclinical	T-type calcium channel blocker	CATSPER1|CATSPER2|CATSPER3|CATSPER4		
+NQDI-1	Preclinical	caspase inhibitor	CASP3		
+NS-11021	Preclinical	calcium-activated potassium channel activator	KCNMA1		
+NS-309	Preclinical	calcium-activated potassium channel activator	KCNN1|KCNN2|KCNN3|KCNN4		
+NSC-625987	Preclinical	CDK inhibitor	CDK2|CDK4		
+NSC-632839	Preclinical	ubiquitin specific protease inhibitor	SENP2|USP1|USP2|USP7		
+NSC-663284	Preclinical	CDC inhibitor	CDC25A|CDC25B|CDC25C		
+NSC-95397	Preclinical	CDC inhibitor	CDC25A|CDC25B		
+NVP-ADW742	Preclinical	insulin growth factor receptor inhibitor	IGF1R		
+NVP-AEW541	Preclinical	IGF-1 inhibitor	IGF1R|INSR		
+NVP-HSP990	Phase 1	HSP inhibitor	HSP90AA1|HSP90AB1		
+NVS-PAK1-1	Preclinical	p21 activated kinase inhibitor	PAK1		
+N6-cyclopentyladenosine	Preclinical	adenosine receptor agonist	ADORA1|ADORA2A|ADORA2B|ADORA3|SLC29A1		
+octreotide	Launched	somatostatin receptor agonist	SSTR1|SSTR2|SSTR3|SSTR5	gastroenterology|endocrinology|oncology	diarrhea|acromegaly|carcinoid tumors
+olanzapine	Launched	dopamine receptor antagonist|serotonin receptor antagonist	ADRA1A|ADRA1B|ADRA2A|ADRA2B|ADRA2C|ADRB1|ADRB2|ADRB3|CHRM1|CHRM2|CHRM3|CHRM4|CHRM5|DRD1|DRD2|DRD3|DRD4|DRD5|GABRA1|GABRA2|GABRA3|GABRA4|GABRA5|GABRA6|GABRB1|GABRB2|GABRB3|GABRD|GABRE|GABRG1|GABRG2|GABRG3|GABRP|GABRQ|HRH1|HRH2|HRH4|HTR1A|HTR1B|HTR1D|HTR1E|HTR1F|HTR2A|HTR2B|HTR2C|HTR3A|HTR5A|HTR6|HTR7	neurology/psychiatry	schizophrenia|bipolar disorder
+olopatadine	Launched	histamine receptor antagonist	HRH1|S100A1|S100A12|S100A13|S100A2|S100B	ophthalmology	conjunctivitis
+OMDM-2	Preclinical	FAAH inhibitor	GPR119		
+orantinib	Phase 3	FGFR inhibitor|PDGFR tyrosine kinase receptor inhibitor|VEGFR inhibitor	AURKA|AURKB|EGFR|FGFR1|FGFR2|KDR|PDGFRA|PDGFRB		
+oxibendazole	Launched	tubulin polymerization inhibitor	TUBB|TUBB4B	infectious disease	strongyles
+oxytocin	Launched	oxytocin receptor agonist	AVPR1A|AVPR1B|AVPR2|OXTR	obstetrics/gynecology	labor induction
+ozagrel	Launched	thromboxane synthase inhibitor	TBXAS1	neurology/psychiatry	stroke
+ozanimod	Phase 3	sphingosine 1 phosphate receptor agonist	S1PR1		
+paliperidone	Launched	dopamine receptor antagonist|serotonin receptor antagonist	ADRA1A|ADRA1B|ADRA2A|ADRA2B|ADRA2C|CYP2D6|CYP3A4|CYP3A5|DRD1|DRD2|DRD3|DRD4|HRH1|HTR1A|HTR1D|HTR2A|HTR2C	neurology/psychiatry	schizophrenia
+pazopanib	Launched	KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor|VEGFR inhibitor	CSF1R|FGF1|FGFR1|FGFR3|FLT1|FLT4|ITK|KDR|KIT|PDGFRA|PDGFRB|SH2B3	oncology	renal cell carcinoma (RCC)|soft tissue sarcoma (STS)
+PD-98059	Preclinical	MEK inhibitor	AKT1|CHEK1|GSK3B|LCK|MAP2K1|MAPK1|MAPK11|MAPK12|MAPK14|MAPK8|PRKCA|RAF1|ROCK1|RPS6KB1|SGK1		
+pentostatin	Launched	adenosine deaminase inhibitor|ribonucleotide reductase inhibitor	ADA	hematologic malignancy	hairy cell leukemia
+PETCM	Preclinical	caspase activator	CASP3		
+PF-03758309	Phase 1	p21 activated kinase inhibitor	PAK4		
+PF-04217903	Phase 1	c-Met inhibitor	MET		
+PF-05190457	Phase 2	growth hormone secretagogue receptor inverse agonist	GHSR		
+PF-06463922	Phase 2	ALK tyrosine kinase receptor inhibitor	ALK|FES|ROS1		
+PF-431396	Preclinical	focal adhesion kinase inhibitor	PTK2|PTK2B		
+PF-915275	Phase 1	11-beta hydroxysteroid dehydrogenase inhibitor	HSD11B1		
+PFI-1	Preclinical	bromodomain inhibitor	BRD4		
+PHA-793887	Phase 1	CDK inhibitor	CDK1|CDK2|CDK4|CDK5|CDK7|CDK9		
+phenolphthalein	Withdrawn	indicator dye	UGT1A9		
+phenylbutazone	Withdrawn	cyclooxygenase inhibitor|prostanoid receptor antagonist	PTGIS|PTGS1|PTGS2		
+picrotin	Phase 2	GABA receptor antagonist	GABRA1|GABRR1|GLRA1|GLRA2|GLRA3|GLRB		
+picrotoxinin	Preclinical	GABA receptor antagonist	GLRA1|GLRA2|GLRA3|GLRB|HTR3A|HTR3B		
+pidolic-acid	Launched		ADAM28|AMY1A|AMY2A|AMY2B|ANG|CCL8|HCRT|IGLC1|KRTAP5-2|TFF2|VEGFA	dermatology	xerosis cutis
+polydatin	Phase 2	ICAM1 expression inhibitor	ICAM1		
+ponatinib	Launched	Bcr-Abl kinase inhibitor|FLT3 inhibitor|PDGFR tyrosine kinase receptor inhibitor	ABL1|BCR|FGFR1|FGFR2|FGFR3|FGFR4|FLT3|KDR|KIT|LCK|LYN|PDGFRA|RET|SRC|TEK	hematologic malignancy	chronic myeloid leukemia (CML)|acute lymphoblastic leukemia (ALL)
+PP-1	Preclinical	src inhibitor	HCK|RET		
+PP-121	Preclinical	protein tyrosine kinase inhibitor	ABL1|EGFR|HCK|KDR|MTOR|PDGFRA|PIK3CA|PIK3CB|PIK3CD|PIK3CG|PRKDC|SRC		
+PP-2	Preclinical	src inhibitor	ABL1|LCK|LYN|RIPK2|SRC		
+prasugrel	Launched	purinergic receptor antagonist	P2RY12	cardiology	myocardial infarction|acute coronary syndrome (ACS)
+procaine	Launched	HMGCR inhibitor	CHRNA2|GRIN3A|HTR3A|KCNMA1|KCNMB1|KCNMB2|KCNMB3|KCNMB4|KCNN1|KCNN2|KCNN3|KCNN4|MAOA|MAOB|RYR1|RYR2|SCN10A|SLC6A3	neurology/psychiatry	anesthetic
+puromycin	Preclinical	protein synthesis inhibitor	NHP2L1|RPL10L|RPL11|RPL13A|RPL15|RPL19|RPL23|RPL23A|RPL26L1|RPL3|RPL37|RPL8|RSL24D1		
+purvalanol-a	Preclinical	CDK inhibitor	CDK1|CDK2|CDK4|CDK5|CSNK1G3|RPS6KA1|SRC		
+pyrrolidine-dithiocarbamate	Preclinical	NFkB pathway inhibitor	HSD11B1|RELA		
+quinidine	Launched	sodium channel blocker	KCNA5|KCNA7|KCNH1|KCNH2|KCNH5|KCNK1|KCNK6|SCN5A|SLC29A4	infectious disease|cardiology	malaria|atrial fibrillation (AF)|ventricular arrhythmias
+quinine	Launched	hemozoin biocrystallization inhibitor	GP9|KCNB2|KCNN4|SLC29A4	infectious disease	malaria
+racecadotril	Launched	enkephalinase inhibitor	MME	gastroenterology	diarrhea
+regorafenib	Launched	FGFR inhibitor|KIT inhibitor|PDGFR tyrosine kinase receptor inhibitor|RAF inhibitor|RET tyrosine kinase inhibitor|VEGFR inhibitor	ABL1|BRAF|DDR2|EPHA2|FGFR1|FGFR2|FLT1|FLT4|FRK|KDR|KIT|MAPK11|NTRK1|PDGFRA|PDGFRB|RAF1|RET|TEK	oncology	colorectal cancer|gastrointestinal stromal tumors (GIST)
+RGB-286638	Phase 1	CDK inhibitor	CDK1|CDK2|CDK3|CDK4|CDK5|CDK6|CDK7|CDK9|FLT3|GSK3B|JAK2|MAP3K7|MAPK9		
+RGFP966	Preclinical	HDAC inhibitor	HDAC3		
+rifamycin	Launched	DNA directed RNA polymerase inhibitor	SLCO1A2|SLCO1B1|SLCO1B3|SLCO2B1	infectious disease	tuberculosis|leprosy
+riociguat	Launched	guanylate cyclase stimulant	GUCY1A2|GUCY1A3|GUCY1B2|GUCY1B3	cardiology	hypertension
+RKI-1447	Preclinical	rho associated kinase inhibitor	CDC42BPA|DMPK|LIMK1|MYLK|PAK1|PKN1|ROCK1|ROCK2		
+Ro-1138452	Preclinical	prostanoid receptor antagonist	PTGIR		
+Ro-20-1724	Preclinical	phosphodiesterase inhibitor	PDE3A|PDE4A|PDE4B|PDE4C|PDE4D		
+romidepsin	Launched	HDAC inhibitor	HDAC1|HDAC2|HDAC3|HDAC4|HDAC5|HDAC6|HDAC7|HDAC8|HDAC9	hematologic malignancy	cutaneous T-cell lymphoma (CTCL)
+ruxolitinib	Launched	JAK inhibitor	JAK1|JAK2|JAK3|TYK2	hematologic malignancy|hematology	myelofibrosis|polycythemia vera
+RX-821002	Preclinical	adrenergic receptor antagonist	ADRA1A|ADRA1B|ADRA1D|ADRA2A|ADRA2B|ADRA2C		
+ryuvidine	Preclinical	histone lysine methyltransferase inhibitor	CDK2|CDK4		
+saclofen	Preclinical	GABA receptor antagonist	GABBR1|GABBR2|KCTD12|KCTD16|KCTD8		
+sacubitril	Launched	neprilysin inhibitor	MME	cardiology	congestive heart failure
+salicylic-acid	Launched	cyclooxygenase inhibitor	AKR1C1|PTGS1|PTGS2	dermatology	acne vulgaris (AV)
+SB-202190	Preclinical	p38 MAPK inhibitor	AKT1|ALOX5|CHEK1|GSK3B|LCK|MAPK1|MAPK11|MAPK12|MAPK14|MAPK8|PRKCA|ROCK1|RPS6KB1|SGK1		
+SB-203580	Preclinical	p38 MAPK inhibitor	AKT1|ALOX5|CHEK1|CYP2D6|CYP3A4|GAK|GSK3B|LCK|MAPK1|MAPK10|MAPK11|MAPK12|MAPK14|MAPK8|MAPK9|PRKCA|RAF1|RIPK2|ROCK1|RPS6KB1|SGK1|SRC|TNF		
+SB-505124	Preclinical	ALK tyrosine kinase receptor inhibitor	TGFBR1		
+SGX523	Phase 1	hepatocyte growth factor receptor inhibitor	MET		
+simvastatin	Launched	HMGCR inhibitor	HMGCR|ITGB2	endocrinology|cardiology|neurology/psychiatry	hypercholesterolemia|coronary heart disease|myocardial infarction|stroke|hyperlipidemia
+SirReal-2	Preclinical	SIRT inhibitor	SIRT2		
+SKLB1002	Preclinical	VEGFR inhibitor	KDR		
+sodium-butyrate	Phase 2	HDAC inhibitor	BCHE|FFAR2|FFAR3|HDAC1|HDAC2|HDAC3|HDAC8		
+somatostatin	Launched	somatostatin receptor agonist	OPRD1|OPRM1|SSTR1|SSTR2|SSTR3|SSTR4|SSTR5	hematology	hemorrhage
+sorbinil	Phase 3	aldose reductase inhibitor	AKR1B1		
+sotrastaurin	Phase 2	PKC inhibitor	PRKCA|PRKCB|PRKCD|PRKCE|PRKCH|PRKCQ		
+spiroxatrine	Preclinical	serotonin receptor antagonist	ADRA1A|ADRA1B|ADRA1D|ADRA2A|ADRA2B|ADRA2C|HTR1A|HTR2B		
+SRC-kinase-inhibitor-I	Preclinical	src inhibitor	CSK|LCK|RIPK2		
+sulfasalazine	Launched	cyclooxygenase inhibitor	ACAT1|ALOX5|CHUK|IKBKB|PLA2G1B|PPARG|PTGS1|PTGS2|SLC46A1|SLC7A11|TBXAS1	gastroenterology	ulcerative colitis
+sulfinpyrazone	Launched	uricosuric blocker	ABCC1|ABCC2|FPR1|SLC22A12	rheumatology	gout
+SU3327	Preclinical	JNK inhibitor	MAPK8		
+taladegib	Phase 2	smoothened receptor antagonist	DHH|IHH|SMO		
+TC-S-7004	Preclinical	DYRK inhibitor	DYRK1A|DYRK1B		
+TCN201	Preclinical	glutamate receptor antagonist	GRIN2A		
+terazosin	Launched	adrenergic receptor antagonist	ADRA1A|ADRA1B|ADRA1D|KCNH2|KCNH6|KCNH7	urology|cardiology	benign prostatic hyperplasia (BPH)|hypertension
+TFC-007	Preclinical	prostaglandin inhibitor	HPGDS		
+TG-003	Preclinical	CLK inhibitor	CLK1|CLK4|DYRK1A|DYRK1B		
+TG-02	Phase 1	CDK inhibitor|FLT3 inhibitor|JAK inhibitor	CDK1|CDK2|CDK7|CDK9|FLT3|JAK2		
+TG-101348	Phase 3	FLT3 inhibitor|JAK inhibitor	BRD4|JAK1|JAK2|JAK3|TYK2		
+thioguanine	Launched	purine antagonist	IMPDH1|IMPDH2	hematologic malignancy	acute myeloid leukemia (AML)
+thiostrepton	Launched	FOXM1 inhibitor|protein synthesis inhibitor	FOXM1	obstetrics/gynecology	mastitis
+torcitabine	Phase 2	DNA polymerase inhibitor	DCK|TK2		
+tranilast	Launched	angiogenesis inhibitor	HPGDS|HRH1	pulmonary	asthma
+trazodone	Launched	adrenergic receptor antagonist|serotonin receptor antagonist|serotonin reuptake inhibitor	ADRA1A|ADRA2A|HRH1|HTR1A|HTR2A|HTR2B|HTR2C|SLC6A4	neurology/psychiatry	depression
+triamterene	Launched	sodium channel blocker	SCNN1A|SCNN1B|SCNN1D|SCNN1G	endocrinology|cardiology	hypokalemia|hypertension|edema
+trihexyphenidyl	Launched	acetylcholine receptor antagonist	CHRM1|CHRM2|CHRM3|CHRM4|CHRM5	neurology/psychiatry	parkinsonism
+trometamol	Launched		AMD1|CANT1|DCN|NEIL1|VEGFA		
+TUG-891	Preclinical	free fatty acid receptor agonist	FFAR4		
+U-0521	Preclinical	catechol O methyltransferase inhibitor	COMT		
+UNC1999	Preclinical	histone lysine methyltransferase inhibitor	EZH2		
+UNC2025	Preclinical	MER tyrosine kinase inhibitor|FLT3 inhibitor	FLT3|MERTK		
+vitamin-E	Phase 2/Phase 3	PKC inhibitor|LDL oxidation inhibitor	ALOX5|DGKA|NR1I2|PPP2CA|PPP2CB|PRKCA|PRKCB|SEC14L2|SEC14L3|SEC14L4		
+VU591	Preclinical	potassium channel blocker	KCNJ1		
+WH-4-023	Preclinical	src inhibitor	LCK|SRC		
+xanomeline	Phase 3	acetylcholine receptor agonist	CHRM1|CHRM2|CHRM3|CHRM4|CHRM5|HTR1A|HTR1B|HTR1D|HTR1E|HTR1F|HTR2A|HTR2B|HTR2C|HTR6|HTR7		
+YC-1	Preclinical	guanylyl cyclase activator	GUCY1A2|GUCY1A3|GUCY1B3|HIF1A		
+zamifenacin	Phase 3	acetylcholine receptor antagonist	CHRM3		
+zaprinast	Phase 2	phosphodiesterase inhibitor	GPR35|PDE1A|PDE4D|PDE5A|PDE9A		
+ZK-93423	Phase 3	benzodiazepine receptor agonist	GABRA1|GABRA2|GABRA3|GABRA5|GABRB2|GABRG2		
+ZK811752	Phase 2	CC chemokine receptor antagonist	CCR1		
+ZM-336372	Preclinical	RAF inhibitor	BRAF|LCK|MAPK14|RAF1		
+1-EBIO	Preclinical	potassium channel activator	KCNN1|KCNN2|KCNN3|KCNN4		
+1-octanol	Phase 2		GJA1|GJA10|GJA3|GJA4|GJA5|GJA8|GJA9|GJB1|GJB2|GJB3|GJB4|GJB5|GJB6|GJB7|GJC1|GJC2|GJC3|GJD2|GJD3|GJD4|GJE1		
+2,5-furandimethanol	Phase 2	hemoglobin modulator	HBB		
+2-Oleoylglycerol	Phase 1	glucose dependent insulinotropic receptor ligand	GPR119		
+4-CMTB	Preclinical	free fatty acid receptor agonist	FFAR2		
+4-methylhistamine	Preclinical	histamine receptor agonist	HRH4		
+7-hydroxystaurosporine	Phase 2	CDK inhibitor|CHK inhibitor|PKC inhibitor	CHEK1|MARK3|PDPK1		
