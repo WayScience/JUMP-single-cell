@@ -98,7 +98,7 @@ for control_type in ["negcon", "anomalous"]:
     platedf = platedf[merge_cols + anomalyze_model.feature_names_in_.tolist()]
 
     morphologyonlydf = pd.merge(platedf, morphologydf, on=merge_cols, how="inner")
-    metadf = morphologyonlydf.copy().filter(like="Metadata")
+    meta_resultdf = morphologyonlydf.copy().filter(regex="Metadata|Result")
     morphologyonlydf = morphologyonlydf[anomalyze_model.feature_names_in_.tolist()]
 
     result = IsoforestFeatureImportance(
@@ -107,8 +107,8 @@ for control_type in ["negcon", "anomalous"]:
         num_train_samples_per_tree=anomalyze_model.max_samples_,
     )()
 
-    metadf = metadf[metadf.columns.difference(result.columns)]
-    result = result.join(metadf, how="inner")
+    meta_resultdf = meta_resultdf[meta_resultdf.columns.difference(result.columns)]
+    result = result.join(meta_resultdf, how="inner")
 
     feature_importancesdf.append(result)
 
