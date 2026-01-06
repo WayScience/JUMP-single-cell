@@ -93,7 +93,7 @@ plate_mappingdf.rename(
 )
 
 for anomaly_dataset in anomaly_datasets_path.iterdir():
-    if "normal" in anomaly_dataset.stem or "qc" in anomaly_dataset.stem:
+    if "normal" in anomaly_dataset.stem or "qc" not in anomaly_dataset.stem:
         continue
 
     anomaly_model_name = anomaly_dataset.stem + model_suffix_name
