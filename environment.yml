@@ -23,7 +23,8 @@ dependencies:
   - conda-forge::pycytominer
   - conda-forge::hvplot
   - conda-forge::plotly
-  - conda-forge::umap-learn
+  # pin to version compatible with scikit-learn 1.1.1
+  - conda-forge::umap-learn==0.5.3
   - conda-forge::ipywidgets
   - conda-forge::fsspec
   - conda-forge::s3fs
