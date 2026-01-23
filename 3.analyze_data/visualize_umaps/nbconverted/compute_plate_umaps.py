@@ -8,13 +8,9 @@
 
 
 import pathlib
-import sys
 
-import matplotlib
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import umap
 
 
@@ -26,7 +22,6 @@ import umap
 root_path = pathlib.Path("../../")
 big_drive_path = root_path / "big_drive"
 feature_data_path = big_drive_path / "feature_selected_sc_qc_data"
-anomaly_data_path = big_drive_path / "sc_anomaly_data/feature_selected_sc_qc_data"
 plate_to_treat_typedf = pd.read_csv(
     (root_path / "reference_plate_data/barcode_platemap.csv").resolve(strict=True)
 )
@@ -123,8 +118,8 @@ for plate_path in feature_data_path.iterdir():
         ~scdf["Metadata_control_type"].isin(["negcon"]), "Metadata_control_type"
     ] = "other"
 
-    scdf = scdf.groupby(["Metadata_control_type"], group_keys=False).sample(
-        n=250, random_state=0
+    scdf = scdf.groupby(["Metadata_control_type"], group_keys=False).apply(
+        lambda grp: grp.sample(n=min(250, len(grp)), random_state=0)
     )
 
     umapdf.append(scdf)
