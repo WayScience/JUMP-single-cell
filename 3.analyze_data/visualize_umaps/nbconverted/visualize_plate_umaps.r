@@ -1,7 +1,5 @@
 suppressPackageStartupMessages(library(ggplot2))
-suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(arrow))
-suppressPackageStartupMessages(library(stringr))
 
 
 # Find the root of the git repo
@@ -11,7 +9,7 @@ project_root <- normalizePath(
     mustWork = TRUE
 )
 
-big_drive_dir <- file.path(project_root, "big_drive")
+big_drive_dir <- file.path(project_root, "../../../../mnt", "big_drive")
 umap_anomaly_path <- file.path(big_drive_dir, "umap_data", "feature_selected_sc_qc_data")
 output_fig_dir <- file.path(project_root, "3.analyze_data", "visualize_umaps", "figures")
 dir.create(output_fig_dir, recursive = TRUE, showWarnings = FALSE)
@@ -19,6 +17,18 @@ dir.create(output_fig_dir, recursive = TRUE, showWarnings = FALSE)
 # Set directory and file structure
 umap_path <- file.path(umap_anomaly_path, "umap_feature_selected_sc_qc_data.parquet")
 umap_df <- read_parquet(umap_path)
+
+umap_axisless_theme <- theme_bw(base_size = 16) +
+    theme(
+        plot.title = element_text(size = 18, face = "bold"),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 12),
+        axis.title = element_text(size = 14),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.line = element_blank(),
+        panel.grid = element_blank()
+    )
 
 
 umap_figure <-
@@ -29,8 +39,7 @@ umap_figure <-
         values = c("compound" = "#FF6347", "orf" = "#4169E1", "crispr" = "#90EE90")
     ) +
     labs(title = "UMAP Labeled with Treatment Type", x = "UMAP1", y = "UMAP2") +
-    theme_bw()
-
+    umap_axisless_theme
 umap_plot_fig <- file.path(output_fig_dir, "treatment_type_umap.png")
 
 # Save the plot to a file (e.g., in PNG format)
@@ -48,7 +57,7 @@ umap_figure <-
         name = "Anomaly Score"
     ) +
     labs(title = "UMAP Labeled with Anomaly Score", x = "UMAP1", y = "UMAP2") +
-    theme_bw()
+    umap_axisless_theme
 
 umap_plot_fig <- file.path(output_fig_dir, "anomaly_score_umap.png")
 
@@ -66,7 +75,7 @@ umap_figure <-
         values = c("other" = "#190744", "negcon" = "#d60101")
     ) +
     labs(title = "UMAP Labeled with Control Type", x = "UMAP1", y = "UMAP2") +
-    theme_bw()
+    umap_axisless_theme
 
 umap_plot_fig <- file.path(output_fig_dir, "control_type_umap.png")
 

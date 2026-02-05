@@ -19,11 +19,11 @@ import umap
 # In[2]:
 
 
-root_path = pathlib.Path("../../")
-big_drive_path = root_path / "big_drive"
+git_root_path = pathlib.Path("../../")
+big_drive_path = pathlib.Path("/mnt/big_drive").resolve(strict=True)
 feature_data_path = big_drive_path / "feature_selected_sc_qc_data"
 plate_to_treat_typedf = pd.read_csv(
-    (root_path / "reference_plate_data/barcode_platemap.csv").resolve(strict=True)
+    (git_root_path / "reference_plate_data/barcode_platemap.csv").resolve(strict=True)
 )
 plate_to_treat_typedf = plate_to_treat_typedf.rename(
     columns={
@@ -47,11 +47,11 @@ umap_data_path.mkdir(parents=True, exist_ok=True)
 # In[4]:
 
 
-replacements = {
-    "crispr": "crispr",
-    "orf": "orf",
-    "compound": "compound",
-}
+replacements = [
+    "crispr",
+    "orf",
+    "compound",
+]
 
 conditions = [
     plate_to_treat_typedf["Metadata_Treatment_Type"].str.contains(
@@ -59,10 +59,9 @@ conditions = [
     )
     for k in replacements
 ]
-choices = list(replacements.values())
 
 plate_to_treat_typedf["Metadata_Treatment_Type"] = np.select(
-    conditions, choices, default=plate_to_treat_typedf["Metadata_Treatment_Type"]
+    conditions, replacements, default=plate_to_treat_typedf["Metadata_Treatment_Type"]
 )
 
 
@@ -118,9 +117,16 @@ for plate_path in feature_data_path.iterdir():
         ~scdf["Metadata_control_type"].isin(["negcon"]), "Metadata_control_type"
     ] = "other"
 
-    scdf = scdf.groupby(["Metadata_control_type"], group_keys=False).apply(
-        lambda grp: grp.sample(n=min(250, len(grp)), random_state=0)
+    group_sizes = scdf["Metadata_control_type"].value_counts()
+    large_groups = group_sizes[group_sizes > 250].index
+    small_groups = group_sizes[group_sizes <= 250].index
+    sampled_large = (
+        scdf[scdf["Metadata_control_type"].isin(large_groups)]
+        .groupby("Metadata_control_type", group_keys=False)
+        .sample(n=250, random_state=0)
     )
+    small = scdf[scdf["Metadata_control_type"].isin(small_groups)]
+    scdf = pd.concat([sampled_large, small], axis=0)
 
     umapdf.append(scdf)
 
@@ -128,7 +134,7 @@ umapdf = pd.concat(umapdf, axis=0)
 umapdf = umapdf.dropna(axis=1, how="any")
 
 print("Shape of plate data after sampling:", umapdf.shape)
-umapdf["Metadata_control_type"].unique()
+print(umapdf["Metadata_control_type"].unique())
 
 
 # # Compute UMAP Components
@@ -145,10 +151,8 @@ def compute_umap_components(umapdf: pd.DataFrame):
     umapdf = umapdf.sample(frac=1, random_state=0)
     reducer = umap.UMAP(n_components=2, random_state=0)
     umap_data = reducer.fit_transform(umapdf.drop(columns=umap_drop_cols))
-    umapdf["umap_0"], umapdf["umap_1"] = (
-        umap_data[:, 0],
-        umap_data[:, 1],
-    )
+    umapdf = umapdf.copy()
+    umapdf[["umap_0", "umap_1"]] = umap_data[:, :2]
 
     return umapdf[umap_drop_cols + ["umap_0", "umap_1"]]
 
