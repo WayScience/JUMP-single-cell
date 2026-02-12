@@ -49,3 +49,4 @@ for plate_dir in "${plate_paths[@]}"; do
 done
 
 /usr/bin/time -v python3 "$pypath/compute_sc_feature_importance_data.py"
+/usr/bin/time -v python3 "$pypath/compute_aggregate_treatment_anomaly_data.py"
