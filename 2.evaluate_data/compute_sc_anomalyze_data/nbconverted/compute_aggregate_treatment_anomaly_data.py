@@ -6,7 +6,7 @@
 # aggregating cellprofiler data to the treatment level, and
 # then computing anomaly scores and feature importances for later analysis.
 
-# In[1]:
+# In[ ]:
 
 
 import pathlib
@@ -28,7 +28,7 @@ from isolation_forest_data_feature_importance import IsoforestFeatureImportance
 
 # ## Inputs
 
-# In[2]:
+# In[ ]:
 
 
 root_dir = pathlib.Path("../../").resolve(strict=True)
@@ -45,7 +45,7 @@ exp_meta = pd.read_csv(
 
 # ## Outputs
 
-# In[3]:
+# In[ ]:
 
 
 agg_treatment_anomaly_data_path = big_drive_path / "aggregated_anomaly_data"
@@ -56,7 +56,7 @@ agg_treatment_anomaly_data_path.mkdir(parents=True, exist_ok=True)
 # Aggregate the treatment profiles per plate, while
 # also taking the intersection of all cellprofiler features.
 
-# In[4]:
+# In[ ]:
 
 
 exp_meta = exp_meta[["Assay_Plate_Barcode", "Perturbation"]]
@@ -75,7 +75,7 @@ for sc_plate_path in agg_anomaly_data_path.rglob("*.parquet"):
     else:
         feat_cols &= plate_feat_cols
 
-    agg_mapping = dict.fromkeys(feat_cols, "sum")
+    agg_mapping = dict.fromkeys(feat_cols, "mean")
     morph_platedf = morph_platedf.assign(Metadata_group_size=1)
     agg_mapping |= {"Metadata_group_size": "size", "Metadata_Plate": "first"}
 
@@ -87,13 +87,13 @@ for sc_plate_path in agg_anomaly_data_path.rglob("*.parquet"):
         morph_platedf.groupby(treatment_col_name).agg(agg_mapping).reset_index()
     )
 
-feat_cols = list(feat_cols)
+feat_cols = sorted(feat_cols)
 agg_platedf = pd.concat(agg_platedf, axis=0)
 
 
 # ## Merging and Processing Aggregate Profiles
 
-# In[5]:
+# In[ ]:
 
 
 agg_platedf = pd.merge(
@@ -111,7 +111,7 @@ agg_platedf = agg_platedf.rename(columns={"Perturbation": "Metadata_Perturbation
 # Isolation forest reference:
 # https://ieeexplore.ieee.org/document/4781136
 
-# In[6]:
+# In[ ]:
 
 
 isofor = IsolationForest(n_estimators=1_000, random_state=0, n_jobs=-1)
@@ -126,7 +126,7 @@ agg_platedf = agg_platedf.assign(
 # ## Compute Feature Importances
 # Computes sample feature importances using anomaly scores per sample.
 
-# In[7]:
+# In[ ]:
 
 
 metadf = agg_platedf.copy().filter(regex="Metadata|Result")
@@ -139,7 +139,7 @@ result = IsoforestFeatureImportance(
 
 # ## Combine Anomaly Results and Metadata
 
-# In[8]:
+# In[ ]:
 
 
 meta_resultdf = metadf[metadf.columns.difference(result.columns)]
@@ -148,10 +148,10 @@ result = result.join(meta_resultdf, how="inner")
 
 # ## Save Aggregate Anomaly Data
 
-# In[9]:
+# In[ ]:
 
 
-agg_platedf.to_parquet(
+result.to_parquet(
     agg_treatment_anomaly_data_path / "aggregated_treatment_anomaly_data.parquet"
 )
 

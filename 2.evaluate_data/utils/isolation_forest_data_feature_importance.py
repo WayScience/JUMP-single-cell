@@ -13,8 +13,8 @@ from sklearn.tree import DecisionTreeRegressor, _tree
 def isoforest_expected_length(node_sample_counts: np.ndarray) -> np.ndarray:
     """
     Compute expected path length c(n) for an array of node sizes, where c(n)
-    is the average path length of an unsuccessful Binary Search Tree (BST) search (same as the
-    iForest remaining-path normalizer and leaf correction term).
+    is the average path length of an unsuccessful Binary Search Tree (BST) search
+    (same as the iForest remaining-path normalizer and leaf correction term).
 
     Parameters
     ----------
