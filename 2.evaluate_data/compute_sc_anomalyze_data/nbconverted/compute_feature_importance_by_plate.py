@@ -104,7 +104,6 @@ for control_type in ["negcon", "anomalous"]:
     result = IsoforestFeatureImportance(
         estimators=anomalyze_model.estimators_,
         morphology_data=morphologyonlydf,
-        num_train_samples_per_tree=anomalyze_model.max_samples_,
     )()
 
     meta_resultdf = meta_resultdf[meta_resultdf.columns.difference(result.columns)]
@@ -116,4 +115,3 @@ if feature_importancesdf:
     pd.concat(feature_importancesdf, axis=0, ignore_index=True).to_parquet(
         feature_importances_output_path / f"{args.plate}.parquet"
     )
-
