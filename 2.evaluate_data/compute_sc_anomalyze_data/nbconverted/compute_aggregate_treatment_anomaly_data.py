@@ -47,7 +47,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "--big_drive_path",
     type=pathlib.Path,
-    default=pathlib.Path("/mnt/big_drive"),
+    default=root_dir / "big_drive",
 )
 args = parser.parse_args()
 
