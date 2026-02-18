@@ -13,8 +13,8 @@ py_path="nbconverted"
 jupyter nbconvert --to python --output-dir="${py_path}/" ./*.ipynb
 
 iso_forest_paths="${git_root}/2.evaluate_data/train_sc_anomalyze_models/isolation_forest_models"
-big_drive_path="/mnt/big_drive"
-anomaly_data_path="${big_drive_path}/sc_anomaly_data"
+big_drive_path="${1:-/mnt/big_drive}"
+anomaly_data_path="${2:-${big_drive_path}/sc_anomaly_data}"
 
 
 # Get the single-cell data path (with multiple plates)
