@@ -9,6 +9,7 @@
 # In[ ]:
 
 
+import argparse
 import pathlib
 import sys
 
@@ -31,8 +32,16 @@ from isolation_forest_data_feature_importance import IsoforestFeatureImportance
 # In[ ]:
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--big_drive_path",
+    type=pathlib.Path,
+    default=pathlib.Path("/mnt/big_drive"),
+)
+args = parser.parse_args()
+
 root_dir = pathlib.Path("../../").resolve(strict=True)
-big_drive_path = pathlib.Path("/mnt/big_drive").resolve(strict=True)
+big_drive_path = args.big_drive_path.resolve(strict=True)
 
 agg_anomaly_data_path = (big_drive_path / "feature_selected_sc_qc_data").resolve(
     strict=True
@@ -154,4 +163,3 @@ result = result.join(meta_resultdf, how="inner")
 result.to_parquet(
     agg_treatment_anomaly_data_path / "aggregated_treatment_anomaly_data.parquet"
 )
-

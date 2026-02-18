@@ -7,6 +7,7 @@
 # In[ ]:
 
 
+import argparse
 import pathlib
 import subprocess
 import sys
@@ -39,6 +40,14 @@ else:
 if root_dir is None:
     raise FileNotFoundError("No Git root directory found.")
 
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--big_drive_path",
+    type=pathlib.Path,
+    default=pathlib.Path("/mnt/big_drive"),
+)
+args = parser.parse_args()
+
 
 # # Inputs
 
@@ -46,7 +55,7 @@ if root_dir is None:
 
 
 # Replace with your data storage path here
-big_drive_path = root_dir / "big_drive"
+big_drive_path = args.big_drive_path.resolve(strict=True)
 anomaly_datasets_path = (big_drive_path / "sc_anomaly_data").resolve(strict=True)
 
 anomalyze_models_path = (big_drive_path / "isolation_forest_models").resolve(
@@ -134,4 +143,3 @@ for anomaly_dataset in anomaly_datasets_path.iterdir():
                     "nbconverted/compute_feature_importance_by_plate.py",
                 ]
             )
-

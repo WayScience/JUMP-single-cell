@@ -13,15 +13,16 @@ py_path="nbconverted"
 jupyter nbconvert --to python --output-dir="${py_path}/" ./*.ipynb
 
 iso_forest_paths="${git_root}/2.evaluate_data/train_sc_anomalyze_models/isolation_forest_models"
-anomaly_data_path="${git_root}/big_drive/sc_anomaly_data"
+big_drive_path="/mnt/big_drive"
+anomaly_data_path="${big_drive_path}/sc_anomaly_data"
 
 
 # Get the single-cell data path (with multiple plates)
 plate_paths=(
-    "${git_root}/big_drive/feature_selected_sc_qc_data"
-    "${git_root}/big_drive/normalized_sc_qc_data"
-    "${git_root}/big_drive/feature_selected_sc_data"
-    "${git_root}/big_drive/normalized_sc_data"
+    "${big_drive_path}/feature_selected_sc_qc_data"
+    "${big_drive_path}/normalized_sc_qc_data"
+    "${big_drive_path}/feature_selected_sc_data"
+    "${big_drive_path}/normalized_sc_data"
 )
 
 for plate_dir in "${plate_paths[@]}"; do
@@ -48,5 +49,5 @@ for plate_dir in "${plate_paths[@]}"; do
 
 done
 
-/usr/bin/time -v python3 "$py_path/compute_sc_feature_importance_data.py"
-/usr/bin/time -v python3 "$py_path/compute_aggregate_treatment_anomaly_data.py"
+/usr/bin/time -v python3 "$py_path/compute_sc_feature_importance_data.py" --big_drive_path "$big_drive_path"
+/usr/bin/time -v python3 "$py_path/compute_aggregate_treatment_anomaly_data.py" --big_drive_path "$big_drive_path"
