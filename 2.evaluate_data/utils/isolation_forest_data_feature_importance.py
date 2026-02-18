@@ -1,5 +1,8 @@
-from collections import defaultdict
-from typing import Optional, Union
+# Learn more about the methods used in this module
+# by reading the isolation forest paper:
+# https://doi.org/10.1109/ICDM.2008.17
+
+from typing import Iterable, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -7,34 +10,71 @@ from joblib import Parallel, delayed
 from sklearn.tree import DecisionTreeRegressor, _tree
 
 
+def isoforest_expected_length(node_sample_counts: np.ndarray) -> np.ndarray:
+    """
+    Compute expected path length c(n) for an array of node sizes, where c(n)
+    is the average path length of an unsuccessful Binary Search Tree (BST) search
+    (same as the iForest remaining-path normalizer and leaf correction term).
+
+    Parameters
+    ----------
+    node_sample_counts : np.ndarray
+        Number of training samples in each node.
+
+    Returns
+    -------
+    np.ndarray
+        Expected path length for each input node size.
+    """
+
+    node_sample_counts = np.asarray(node_sample_counts)
+    out = np.zeros_like(node_sample_counts, dtype=float)
+    mask_1 = node_sample_counts <= 1
+    mask_2 = node_sample_counts == 2
+    mask_rest = ~(mask_1 | mask_2)
+
+    out[mask_1] = 0.0
+    out[mask_2] = 1.0
+    remaining_node_counts = node_sample_counts[mask_rest].astype(float)
+
+    # This equation came from the paper to compute c(n)
+    out[mask_rest] = 2.0 * (
+        np.log(remaining_node_counts - 1.0) + np.euler_gamma
+    ) - 2.0 * ((remaining_node_counts - 1.0) / remaining_node_counts)
+
+    return out
+
+
 class IsoforestFeatureImportance:
     """
-    Computes Isolation Forest (Scikit-learn) feature importances from a subset of data.
-    Feature importances were derived from the Isolation Forest paper.
-    See https://doi.org/10.1109/ICDM.2008.17 for more details.
-    This approach assumes each feature between a sample's leaf node and root node
-    is equally important in isolating that sample for a given isolation tree estimator.
+    Per-sample Isolation Forest feature contributions using split gain.
+    For each point x and tree t, contributions sum the split gains
+    g(v, x) = c(n_p) - [1 + c(n_c)] along the path x takes, then
+    average over trees.
+    Higher values indicate a feature was more important for isolating a sample.
     """
 
     def __init__(
         self,
         estimators: list[DecisionTreeRegressor],
         morphology_data: pd.DataFrame,
-        num_train_samples_per_tree: int,
+        estimators_features: Optional[Iterable[np.ndarray]] = None,
     ):
         """
         Parameters
         ----------
-        _estimators: Scikit-learn decision tree regressor estimators.
-        _morphology_data: Data with only numerical morphology data (without metadata).
+        estimators : list[DecisionTreeRegressor]
+            Fitted isolation trees (e.g., from IsolationForest.estimators_).
+        morphology_data : pd.DataFrame
+            Feature matrix to explain; columns must match the model features.
+        estimators_features : Iterable[np.ndarray] | None
+            Optional per-tree feature index subsets (IsolationForest.estimators_features_).
         """
 
         self._estimators = estimators
+        self._estimators_features = estimators_features
         self._morphology_data = morphology_data
         self._isoforest_importances = None
-        self._norm_factor = self._compute_norm_factor(
-            _num_features_per_forest=num_train_samples_per_tree
-        )
 
     @property
     def isoforest_importances(self) -> pd.DataFrame:
@@ -43,134 +83,127 @@ class IsoforestFeatureImportance:
 
         return self._isoforest_importances
 
-    def _compute_norm_factor(self, _num_features_per_forest: int) -> float:
-        """
-        Used to compute the anomaly score in an isolation forest.
-        """
-
-        harmonic_approx = np.log(_num_features_per_forest - 1) + np.euler_gamma
-
-        return (
-            2 * harmonic_approx
-            - 2 * (_num_features_per_forest - 1) / _num_features_per_forest
-        )
-
-    def save_tree_feature_depths(
+    def _compute_tree_gains(
         self,
-        _tree_obj: _tree.Tree,
-        _leaf_id: int,
-        _sample_idx: int,
-    ) -> dict[dict[str, float]]:
+        estimator: DecisionTreeRegressor,
+        X_data: np.ndarray,
+        feat_subset: np.ndarray,
+    ) -> np.ndarray:
         """
-        Returns sample depths per feature.
+        Compute per-sample, per-feature gains for a single tree.
 
         Parameters
-        _tree_obj: Object for traversing tree.
-        _leaf_id: Leaf node for the sample in the tree.
-        _sample_idx: Sample location in the dataframe.
+        ----------
+        estimator : DecisionTreeRegressor
+            The fitted isolation tree to traverse.
+        X_data : np.ndarray
+            Feature matrix (float) aligned to the model's feature order.
+        feat_subset : np.ndarray
+            Global feature indices used by this tree (from estimators_features_).
+
+        Returns
+        -------
+        np.ndarray
+            Array of shape (n_samples, n_features) with split-gain contributions
+            for this tree.
         """
 
-        node_id = 0  # Start at the root node
-        depth = 0
-        num_features = defaultdict(int)
-        morphology_features = self._morphology_data.loc[_sample_idx]
+        tree = estimator.tree_
+        num_samples, _ = X_data.shape
 
-        while node_id != _leaf_id:
-            feature_idx = _tree_obj.feature[node_id]
+        left_children = tree.children_left
+        right_children = tree.children_right
+        tree_feats = tree.feature
+        feat_thresholds = tree.threshold
 
-            if feature_idx >= 0:  # Ignore leaf nodes (-2)
-                # Indicates if a feature is present in a tree (1)
-                num_features[self._morphology_data.columns[feature_idx]] += 1
+        node_lengths = isoforest_expected_length(tree.n_node_samples)
+        total_tree_gain = np.zeros_like(X_data, dtype=float)
 
-            if morphology_features.iloc[feature_idx] <= _tree_obj.threshold[node_id]:
-                node_id = _tree_obj.children_left[node_id]
-            else:
-                node_id = _tree_obj.children_right[node_id]
+        for sample_idx in range(num_samples):
+            sample_node = 0
+            while tree_feats[sample_node] != _tree.TREE_UNDEFINED:
+                tree_feat_idx = tree_feats[sample_node]
+                rel_feat_idx = feat_subset[tree_feat_idx]
 
-            depth += 1
+                if X_data[sample_idx, rel_feat_idx] <= feat_thresholds[sample_node]:
+                    child = left_children[sample_node]
+                else:
+                    child = right_children[sample_node]
 
-        return {
-            _sample_idx: {feature: [depth] * count}
-            for feature, count in num_features.items()
-        }
+                # Subtracting 1, because the expected path length is one less
+                # once the next step was taken (to the child node).
+                # The child node will sometimes be a leaf node as some samples may
+                # not be isolated.
+                sample_tree_gain = node_lengths[sample_node] - 1.0 - node_lengths[child]
+                total_tree_gain[sample_idx, rel_feat_idx] += sample_tree_gain
+                sample_node = child
+
+        return total_tree_gain
 
     def compute_isoforest_importances(self) -> pd.DataFrame:
-        # Computes feature importances for all features and samples (if they exist) using lazy parallelization.
+        """
+        Compute per-sample, per-feature split-gain contributions averaged over trees.
 
-        with Parallel(n_jobs=-1) as parallel:
-            isotree_sample_importances = parallel(
-                delayed(self.save_tree_feature_depths)(
-                    _tree_obj=estimator.tree_,
-                    _leaf_id=estimator.tree_.apply(
-                        row.values.astype(np.float32).reshape(1, -1)
-                    )[0],
-                    _sample_idx=sample_id,
-                )
-                for estimator in self._estimators
-                for sample_id, row in self._morphology_data.iterrows()
-            )
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame of averaged contributions with sample index matching
+            `morphology_data` and columns matching feature names.
+        """
 
-        isotree_sample_importances = [
-            tree_sample
-            for tree_sample in isotree_sample_importances
-            if tree_sample is not None
-        ]
+        feature_names = list(self._morphology_data.columns)
+        X = self._morphology_data[feature_names].to_numpy(dtype=float, copy=False)
 
-        sample_isoforest_importances = defaultdict(lambda: defaultdict(list))
+        feat_subsets: list[np.ndarray] = (
+            [np.asarray(fs, dtype=int) for fs in self._estimators_features]
+            if self._estimators_features is not None
+            else [np.arange(X.shape[1], dtype=int)] * len(self._estimators)
+        )
 
-        # Converting data from list of tree dictionaries to dictionary of samples
-        for isotree_sample in isotree_sample_importances:
-            for sample, sample_isotree_feature_counts in isotree_sample.items():
-                for feature, depths in sample_isotree_feature_counts.items():
-                    sample_isoforest_importances[sample][feature].extend(depths)
+        average_tree_gains = np.zeros_like(X, dtype=float)
 
-        isoforest_importances = defaultdict(dict)
+        all_tree_gains = Parallel(n_jobs=-1)(
+            delayed(self._compute_tree_gains)(estimator, X, subset)
+            for estimator, subset in zip(self._estimators, feat_subsets)
+        )
 
-        # Computes the feature importance across all trees that
-        # split using the corresponding feature.
-        # This is similar to the anomaly score for samples, but for
-        # each (sample,feature) pair.
-        for (
-            sample,
-            sample_isotree_feature_counts,
-        ) in sample_isoforest_importances.items():
-            for feature, depths in sample_isotree_feature_counts.items():
-                num_features = len(depths)
+        for total_tree_gain in all_tree_gains:
+            average_tree_gains += total_tree_gain
 
-                isoforest_importances[sample][feature] = np.prod(
-                    [
-                        2 ** -(depth / (num_features * self._norm_factor))
-                        for depth in depths
-                    ]
-                )
+        average_tree_gains /= len(self._estimators)
 
-        self._isoforest_importances = pd.DataFrame.from_dict(
-            isoforest_importances, orient="index"
+        self._isoforest_importances = pd.DataFrame(
+            average_tree_gains, columns=feature_names, index=self._morphology_data.index
         )
 
         return self._isoforest_importances
 
     def get_filtered_isoforest_importances(
         self, features: Union[str, list[str]]
-    ) -> dict[str, float]:
+    ) -> dict[str, list[float]]:
         """
         Return feature importances without NaNs.
 
         Parameters
         ----------
-        _features: Morphology feature names.
+        features: Morphology feature names.
+
+        Returns
+        -------
+        dict[str, list[float]]
+            A mapping from feature name to a list of non-NaN importance values.
         """
 
         features = [features] if isinstance(features, str) else features
 
         if self._isoforest_importances is None:
             filtered_morphology_data = self.compute_isoforest_importances()
-
         else:
             filtered_morphology_data = self._isoforest_importances[features].copy()
 
         return filtered_morphology_data.apply(lambda x: x.dropna().tolist()).to_dict()
 
     def __call__(self) -> pd.DataFrame:
-        # Return the final dataframe (likely with NaNs)
+        """Compute or return cached per-sample, per-feature importances."""
+
         return self.compute_isoforest_importances()
