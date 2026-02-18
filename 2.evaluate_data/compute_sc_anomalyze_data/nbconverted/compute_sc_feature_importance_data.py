@@ -12,8 +12,6 @@ import pathlib
 import subprocess
 import sys
 
-sys.path.append(str((pathlib.Path.cwd().parent / "utils").resolve(strict=True)))
-
 import joblib
 import pandas as pd
 
@@ -39,6 +37,8 @@ else:
 # Check if a Git root directory was found
 if root_dir is None:
     raise FileNotFoundError("No Git root directory found.")
+
+sys.path.append(str((root_dir / "2.evaluate_data" / "utils").resolve(strict=True)))
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

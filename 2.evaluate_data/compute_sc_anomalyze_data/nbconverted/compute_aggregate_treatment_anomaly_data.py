@@ -17,13 +17,24 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 
-script_dir = (
-    pathlib.Path(__file__).resolve().parent
-    if "__file__" in globals()
-    else pathlib.Path.cwd()
-)
-utils_dir = (script_dir.parent / "utils").resolve(strict=True)
-sys.path.append(str(utils_dir))
+# Get the current working directory
+cwd = pathlib.Path.cwd()
+
+if (cwd / ".git").is_dir():
+    root_dir = cwd
+
+else:
+    root_dir = None
+    for parent in cwd.parents:
+        if (parent / ".git").is_dir():
+            root_dir = parent
+            break
+
+# Check if a Git root directory was found
+if root_dir is None:
+    raise FileNotFoundError("No Git root directory found.")
+
+sys.path.append(str((root_dir / "2.evaluate_data" / "utils").resolve(strict=True)))
 from isolation_forest_data_feature_importance import IsoforestFeatureImportance
 
 
@@ -40,7 +51,6 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-root_dir = pathlib.Path("../../").resolve(strict=True)
 big_drive_path = args.big_drive_path.resolve(strict=True)
 
 agg_anomaly_data_path = (big_drive_path / "feature_selected_sc_qc_data").resolve(
