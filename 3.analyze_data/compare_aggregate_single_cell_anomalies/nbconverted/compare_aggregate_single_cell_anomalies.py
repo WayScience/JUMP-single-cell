@@ -17,33 +17,12 @@ import numpy as np
 import pandas as pd
 
 
-# ## Find the root of the git repo on the host system
+# ## Inputs
 
 # In[2]:
 
 
-# Get the current working directory
-cwd = pathlib.Path.cwd()
-
-if (cwd / ".git").is_dir():
-    root_dir = cwd
-
-else:
-    root_dir = None
-    for parent in cwd.parents:
-        if (parent / ".git").is_dir():
-            root_dir = parent
-            break
-
-# Check if a Git root directory was found
-if root_dir is None:
-    raise FileNotFoundError("No Git root directory found.")
-
-
-# ## Inputs
-
-# In[3]:
-
+root_dir = pathlib.Path("../../").resolve(strict=True)
 
 agg_anomdf = pd.read_parquet(
     root_dir
@@ -57,7 +36,7 @@ sc_anom_paths = (
 
 # ## Outputs
 
-# In[4]:
+# In[3]:
 
 
 figures_path = pathlib.Path("figures")
@@ -66,7 +45,7 @@ figures_path.mkdir(parents=True, exist_ok=True)
 
 # ## Aggregate Anomaly Scores to Treatment Level
 
-# In[5]:
+# In[4]:
 
 
 agg_platedf = []
@@ -100,7 +79,7 @@ agg_platedf = pd.concat(agg_platedf, axis=0)
 
 # ## Merge Aggregated Anomaly Data
 
-# In[6]:
+# In[5]:
 
 
 all_anomdf = pd.merge(
@@ -114,7 +93,7 @@ all_anomdf = pd.merge(
 
 # ## Plot Anomaly Scores according to Aggregation Order
 
-# In[7]:
+# In[6]:
 
 
 x_col = "Result_anomaly_score_aggregated_anomaly_score"
