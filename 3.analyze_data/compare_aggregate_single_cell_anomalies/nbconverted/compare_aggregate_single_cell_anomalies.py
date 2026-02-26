@@ -15,6 +15,7 @@ import pathlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.stats import gaussian_kde
 
 
 # ## Inputs
@@ -56,7 +57,7 @@ for plate_path in sc_anom_paths.iterdir():
     platedf = pd.concat(
         [
             pd.read_parquet(data_path)
-            for data_path in list(plate_path.rglob("*.parquet"))
+            for data_path in plate_path.rglob("*.parquet")
         ],
         axis=0,
     )
@@ -103,22 +104,28 @@ plot_df = all_anomdf[[x_col, y_col]].dropna()
 x = plot_df[x_col].to_numpy()
 y = plot_df[y_col].to_numpy()
 
-# Reference line: y = x (slope=1, intercept=0)
+# Reference line: y = x
 y_identity = x
 
-# R^2 scores
+# R^2 vs identity
 ss_res = np.sum((y - y_identity) ** 2)
 ss_tot = np.sum((y - y.mean()) ** 2)
 r2 = 1 - (ss_res / ss_tot)
 
-# Error metrics against the identity line
+# Error metrics vs identity
 mse = np.mean((y - y_identity) ** 2)
 mae = np.mean(np.abs(y - y_identity))
 
-plt.figure(figsize=(7, 6))
-plt.scatter(x, y, s=20, alpha=0.6, edgecolor="none", label="Treatments")
+# Plot limits for identity line and for placing KDEs
 line_min = min(x.min(), y.min())
 line_max = max(x.max(), y.max())
+
+plt.figure(figsize=(7, 6))
+
+# Scatter
+plt.scatter(x, y, s=20, alpha=0.6, edgecolor="none", label="Treatments")
+
+# Identity line
 plt.plot(
     [line_min, line_max],
     [line_min, line_max],
@@ -127,12 +134,63 @@ plt.plot(
     linestyle="--",
     label="Reference line (y = x)",
 )
+
+# ----------------------------
+# Axis-attached 1D KDE overlays
+# ----------------------------
+# Grids
+x_grid = np.linspace(x.min(), x.max(), 300)
+y_grid = np.linspace(y.min(), y.max(), 300)
+
+# KDEs
+x_kde = gaussian_kde(x)
+y_kde = gaussian_kde(y)
+
+x_dens = x_kde(x_grid)
+y_dens = y_kde(y_grid)
+
+# Normalize to [0, 1] so we can scale into a small band on the axes
+x_dens = x_dens / x_dens.max() if x_dens.max() > 0 else x_dens
+y_dens = y_dens / y_dens.max() if y_dens.max() > 0 else y_dens
+
+# Scale KDE size relative to the data ranges (tweak these)
+x_range = line_max - line_min
+y_range = line_max - line_min
+kde_height = 0.08 * y_range  # vertical thickness of bottom KDE band
+kde_width = 0.08 * x_range  # horizontal thickness of left KDE band
+
+# Bottom KDE (distribution of x)
+plt.fill_between(
+    x_grid,
+    line_min,
+    line_min + x_dens * kde_height,
+    color="gray",
+    alpha=0.25,
+    linewidth=0,
+)
+
+# Left KDE (distribution of y)
+plt.fill_betweenx(
+    y_grid,
+    line_min,
+    line_min + y_dens * kde_width,
+    color="gray",
+    alpha=0.25,
+    linewidth=0,
+)
+
+# Keep the plot limits aligned with the identity line bounds
+plt.xlim(line_min, line_max)
+plt.ylim(line_min, line_max)
+
 plt.xlabel("Aggregated Anomaly Scores")
 plt.ylabel("Aggregated Profile Anomaly Scores")
 plt.title("Aggregated Profile Anomaly Scores vs Aggregated Anomaly Scores")
 plt.legend()
 plt.tight_layout()
-plt.savefig(figures_path / "anomaly_comparisons.png", dpi=300, bbox_inches="tight")
+
+out_path = figures_path / "anomaly_comparisons.png"
+plt.savefig(out_path, dpi=300, bbox_inches="tight")
 plt.show()
 
 print(
