@@ -1,21 +1,15 @@
-#!/usr/bin/env python
-# coding: utf-8
-
+# %% [markdown]
 # # Download and Save Image Metadata
-
-# In[1]:
-
+# %%
 
 from pathlib import Path, PurePosixPath
 
 import pandas as pd
 import s3fs
 
-
+# %% [markdown]
 # ## Paths and Names
-
-# In[2]:
-
+# %%
 
 bucket = "cellpainting-gallery"
 run_name = "2020_11_04_CPJUMP1"
@@ -25,12 +19,9 @@ output_path = Path(f"image_metadata/{run_name}_all_plates.parquet")
 
 s3_glob = f"{bucket}/{prefix}/*/load_data.csv"
 
-
+# %% [markdown]
 # ## Download and Concatenate Metadata
-
-# In[3]:
-
-
+# %%
 storage_options = {"anon": True}
 
 fs = s3fs.S3FileSystem(anon=True)
@@ -54,10 +45,7 @@ for key in csv_keys:
 
 meta_img_df = pd.concat(meta_img_df, axis=0, ignore_index=True)
 
-
-# In[4]:
-
-
+# %%
 col_mask = meta_img_df.columns.str.contains("URL")
 url_cols = meta_img_df.columns[col_mask].tolist()
 
@@ -70,15 +58,11 @@ meta_img_df = meta_img_df.melt(
     value_name="Metadata_FileUrl",
 )
 
-
+# %% [markdown]
 # ## Save Metadata
-
-# In[5]:
-
-
+# %%
 output_path.parent.mkdir(parents=True, exist_ok=True)
 meta_img_df.to_parquet(output_path, index=False)
 
 print(f"Saved merged Parquet to: {output_path}")
 print(f"Merged shape: {meta_img_df.shape}")
-
