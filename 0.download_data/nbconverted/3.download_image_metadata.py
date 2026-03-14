@@ -55,6 +55,9 @@ for key in csv_keys:
 meta_img_df = pd.concat(meta_img_df, axis=0, ignore_index=True)
 
 
+# ## Format Metadata
+# Format the metadata to use better channel names and specify one url per line
+
 # In[4]:
 
 
@@ -68,6 +71,19 @@ meta_img_df = meta_img_df.melt(
     value_vars=url_cols,
     var_name="Metadata_ChannelURLName",
     value_name="Metadata_FileUrl",
+)
+
+meta_img_df["Metadata_ChannelName"] = meta_img_df["Metadata_ChannelURLName"].map(
+    {
+        "URL_OrigER": "ER",
+        "URL_OrigAGP": "AGP",
+        "URL_OrigMito": "Mito",
+        "URL_OrigDNA": "DNA",
+        "URL_OrigRNA": "RNA",
+        "URL_OrigBrightfield": "BF",
+        "URL_OrigHighZBF": "HZ_BF",
+        "URL_OrigLowZBF": "LZ_BF",
+    }
 )
 
 
