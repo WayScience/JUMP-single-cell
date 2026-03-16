@@ -31,9 +31,9 @@ s3_glob = f"{bucket}/{prefix}/*/load_data.csv"
 # In[3]:
 
 
-storage_options = {"anon": True}
+storage_options = {"anon": True}  # Read public s3:// files without AWS credentials
 
-fs = s3fs.S3FileSystem(anon=True)
+fs = s3fs.S3FileSystem(anon=True)  # List public S3 keys without AWS credentials
 csv_keys = sorted(fs.glob(s3_glob))
 
 if not csv_keys:
@@ -85,6 +85,21 @@ meta_img_df["Metadata_ChannelName"] = meta_img_df["Metadata_ChannelURLName"].map
         "URL_OrigLowZBF": "LZ_BF",
     }
 )
+
+meta_img_df["Metadata_StainName"] = meta_img_df["Metadata_ChannelURLName"].map(
+    {
+        "URL_OrigER": "Alexa 488",
+        "URL_OrigAGP": "Alexa 568",
+        "URL_OrigMito": "Alexa 647",
+        "URL_OrigDNA": "Hoechst 33342",
+        "URL_OrigRNA": "Alexa 488 long",
+        "URL_OrigBrightfield": "NA",
+        "URL_OrigHighZBF": "NA",
+        "URL_OrigLowZBF": "NA",
+    }
+)
+
+meta_img_df["Metadata_Filename"] = meta_img_df["Metadata_FileUrl"].str.split("/").str[-1]
 
 
 # ## Save Metadata
