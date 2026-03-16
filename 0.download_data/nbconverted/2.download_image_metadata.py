@@ -21,7 +21,7 @@ bucket = "cellpainting-gallery"
 run_name = "2020_11_04_CPJUMP1"
 prefix = f"cpg0000-jump-pilot/source_4/workspace/load_data_csv/{run_name}"
 
-output_path = Path(f"image_metadata/{run_name}_all_plates.parquet")
+output_path = Path(f"data/{run_name}_all_plates.parquet")
 
 s3_glob = f"{bucket}/{prefix}/*/load_data.csv"
 
