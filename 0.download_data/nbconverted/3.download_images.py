@@ -7,7 +7,7 @@
 # In[1]:
 
 
-import runpy
+from utils.download_images_from_metadata import download_images_with_metadata
 
 import pandas as pd
 
@@ -17,8 +17,6 @@ import pandas as pd
 # In[2]:
 
 
-mod = runpy.run_path("utils/download_images_from_metadata.py")
-download_images_with_metadata = mod["download_images_with_metadata"]
 img_metadf = pd.read_parquet("data/2020_11_04_CPJUMP1_all_plates.parquet")
 
 
@@ -41,4 +39,3 @@ summary = download_images_with_metadata(
     workers=16,
 )
 print(summary)
-
