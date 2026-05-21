@@ -33,7 +33,6 @@ Specifically, the benefits of single-cell phenotyping include:
 | Module | Purpose | Description |
 | :--- | :--- | :--- |
 | [0.download_data](./0.download_data/) | Download JUMP-Target SQLite files and process them with [CytoTable](https://github.com/cytomining/CytoTable) | Downloads CellProfiler SQLite outputs for 51 plates from AWS and processes them into Parquet files that combine compartment and image metadata in one table. |
-| [0.5.quality_control](./0.5.quality_control/) | Perform quality control on downloaded and processed data | Runs quality control scripts used between download and feature processing stages. |
 | [1.process_data](./1.process_data/) | Process SQLite files | Uses pycytominer on SQLite outputs to merge single cells, normalize features, and produce downstream-ready data. |
 | [2.evaluate_data](./2.evaluate_data/) | Apply phenotypic profiling model | Runs class-balanced logistic regression prediction workflows to generate single-cell phenotype probabilities. |
 | [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | Performs analyses to validate predicted phenotypic classes for perturbations compared to controls. |
@@ -76,8 +75,6 @@ Individual steps:
 # run step 0.download_data
 just run-step-0
 
-# run step 0.5.quality_control
-just run-step-0-5
 ```
 
 Module-specific scripts are also available in each workflow directory when you need direct execution.
