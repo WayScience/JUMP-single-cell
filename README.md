@@ -36,7 +36,6 @@ Specifically, the benefits of single-cell phenotyping include:
 | [1.process_data](./1.process_data/) | Process SQLite files | Uses CytoTable on SQLite outputs to merge single cells, coSMicQC for single-cell filtering, and pycytominer to normalize features, and produce downstream-ready data. |
 | [2.evaluate_data](./2.evaluate_data/) | Apply phenotypic profiling model | Runs class-balanced logistic regression prediction workflows to generate single-cell phenotype probabilities. |
 | [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | Performs analyses to validate predicted phenotypic classes for perturbations compared to controls. |
-| [4.validate_data](./4.validate_data/) | Validate phenotype-level findings | Contains validation scripts for compound and phenotype-level enrichment analyses. |
 | [reference_plate_data](./reference_plate_data/) | Platemaps and metadata | Holds platemap files, metadata by perturbation type, and barcode platemap mappings. |
 
 ## Development
