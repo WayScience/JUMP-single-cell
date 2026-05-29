@@ -4,12 +4,12 @@
 
 ## Data
 
-In this repository, we apply the [phenotypic profiling model](https://github.com/WayScience/phenotypic_profiling_model), which predicts phenotypic class of single cells using nuclei features, to the [JUMP-Target pilot data](https://github.com/jump-cellpainting/JUMP-Target) from the [JUMP consortium](https://jump-cellpainting.broadinstitute.org/).
+In this repository, we apply the [phenotypic profiling model](https://github.com/WayScience/phenotypic_profiling_model), which predicts the phenotypic class of single cells using nuclei features, to the [JUMP-Target pilot data](https://github.com/jump-cellpainting/JUMP-Target) from the [JUMP consortium](https://jump-cellpainting.broadinstitute.org/).
 
 In this dataset, there are 51 plates with one of three perturbation types (Clustered Regularly Interspaced Short Palindromic Repeats \[CRISPR\], Open Reading Frame \[ORF\], and Compound) for two cell lines (A549 and U2OS).
 
-Each perturbation type has it's own platemap and metadata file that can be found in the [reference_plate_data](./reference_plate_data/) folder.
-A barcode platemap is include which associates each plate to the correct platemap file.
+Each perturbation type has its own platemap and metadata file in the [reference_plate_data](./reference_plate_data/) folder.
+A barcode platemap is included to associate each plate with the correct platemap file.
 
 We segment a total of **20,959,860 single cells** in all plates.
 
@@ -30,13 +30,13 @@ Specifically, the benefits of single-cell phenotyping include:
 
 ## Repository Structure
 
-| Module                                          | Purpose                                                                                                      | Description                                                                                                                                                            |
-| :---------------------------------------------- | :----------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [0.download_data](./0.download_data/)           | Download JUMP-Target SQLite files and process them with [CytoTable](https://github.com/cytomining/CytoTable) | We download the CellProfiler SQLite outputs for 51 plates from AWS and process them into Parquet files which combine compartment and image metadata as a single table. |
-| [1.process_data](./1.process_data/)             | Process SQLite files                                                                                         | We use pycytominer on the SQLite outputs to merge single-cells and normalize features                                                                                  |
-| [2.evaluate_data](./2.evaluate_data/)           | Apply phenotypic profiling model                                                                             | We generate phenotypic predictions for single-cells using the phenotypic profiling model                                                                               |
-| [3.analyze_data](./3.analyze_data/)             | Analyze phenotypic predictions                                                                               | We perform multiple analyses to validate the phenotypic predicted class for each perturbation compared to control                                                      |
-| [reference_plate_data](./reference_plate_data/) | Platemaps per perturbation type                                                                              | This folder holds the platemap files with metadata based on perturbation type and the barcode platemap file                                                            |
+| Module | Purpose | Description |
+| :--- | :--- | :--- |
+| [0.download_data](./0.download_data/) | Download JUMP-Target SQLite files and process them with [CytoTable](https://github.com/cytomining/CytoTable) | Downloads CellProfiler SQLite outputs for 51 plates from AWS and processes them into Parquet files that combine compartment and image metadata in one table. |
+| [1.process_data](./1.process_data/) | Process SQLite files | Uses CytoTable on SQLite outputs to merge single cells, coSMicQC for single-cell filtering, and pycytominer to normalize features, and produce downstream-ready data. |
+| [2.evaluate_data](./2.evaluate_data/) | Apply phenotypic profiling model | Runs class-balanced logistic regression prediction workflows to generate single-cell phenotype probabilities. |
+| [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | Performs analyses to validate predicted phenotypic classes for perturbations compared to controls. |
+| [reference_plate_data](./reference_plate_data/) | Platemaps and metadata | Holds platemap files, metadata by perturbation type, and barcode platemap mappings. |
 
 ## Development
 
@@ -45,13 +45,14 @@ Please see [`just` installation details](https://just.systems/man/en/packages.ht
 
 ### Environment
 
-For all modules, we use conda environments that includes all necessary packages.
+For all modules, we use conda environments that include the required packages.
 
-To create the environment from terminal, run the code line below:
+To create the environments from terminal, run the commands below:
 
 ```bash
-# Make sure you are in the same directory as the environment file
-conda env create -f environment.yml
+# Make sure you are in the repository root
+conda env create -n jump_sc -f environment.yml
+conda env create -n R_jump_sc -f R_environment.yml
 ```
 
 Alternatively, use the following `just` command.
@@ -63,19 +64,15 @@ just setup-conda-envs
 
 ## Running Code from this Project
 
-`just` commands are provided for processing each step.
-There also is a command which can run all processing steps.
+`just` commands are provided to run project tasks from the repository root.
+These commands are an entrypoint separate from directly invoking module shell scripts.
 
 Individual steps:
 
 ```bash
 # run step 0.download_data
 just run-step-0
+
 ```
 
-Run all steps:
-
-```bash
-# run all steps
-just run-all-steps
-```
+Module-specific scripts are also available in each workflow directory when you need direct execution.
