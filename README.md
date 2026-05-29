@@ -37,7 +37,6 @@ Specifically, the benefits of single-cell phenotyping include:
 | [2.evaluate_data](./2.evaluate_data/) | Apply phenotypic profiling model | Runs class-balanced logistic regression prediction workflows to generate single-cell phenotype probabilities. |
 | [3.analyze_data](./3.analyze_data/) | Analyze phenotypic predictions | Performs analyses to validate predicted phenotypic classes for perturbations compared to controls. |
 | [4.validate_data](./4.validate_data/) | Validate phenotype-level findings | Contains validation scripts for compound and phenotype-level enrichment analyses. |
-| [4.visualize_data](./4.visualize_data/) | Visualize analysis outputs | Contains visualization scripts for downstream interpretation and reporting. |
 | [reference_plate_data](./reference_plate_data/) | Platemaps and metadata | Holds platemap files, metadata by perturbation type, and barcode platemap mappings. |
 
 ## Development
